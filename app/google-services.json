@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "528724779300",
+    "firebase_url": "https://my-pantry-app.firebaseio.com",
+    "project_id": "my-pantry-app",
+    "storage_bucket": "my-pantry-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528724779300:android:c2d171c14d6d5604aa93b1",
+        "android_client_info": {
+          "package_name": "com.example.mypantryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "528724779300-ukb4vv5v5b00aqgotd51nutgbgerluif.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-wPBvGHIube7m_Y1ZsGOMn2zY7GbU--4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "528724779300-ukb4vv5v5b00aqgotd51nutgbgerluif.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
