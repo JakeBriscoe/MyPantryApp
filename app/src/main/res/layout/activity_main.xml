@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<!--    In a separate file simply for readability-->
     <include android:id="@+id/navigation_drawer"
         layout="@layout/navigation_drawer"/>
 

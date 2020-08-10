@@ -24,7 +24,7 @@ This file contains the clickable items in the navigation drawer.
         <item android:id="@+id/nav_add_pantry"
             android:title="@string/add_pantry"
             app:showAsAction="always"
-            android:icon="@drawable/ic_baseline_add_24" />
+            android:icon="@drawable/ic_add" />
 
         <!--This is here to separate the pantry's from the settings + logout. This is not a good
         fix since the user will be able to click on it. Need to find a solution at some point.-->
