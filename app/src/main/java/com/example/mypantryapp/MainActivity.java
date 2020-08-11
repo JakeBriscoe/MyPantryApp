@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_pantry2:
                 // This case is just to demonstrate that we want to be able to create multiple
                 // pantry's for one user. No actual functionality atm.
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new HomeFragment()).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                        new HomeFragment()).commit();
                 // Need to make sure the bottom navigation corresponds
                 bottomNav.setSelectedItemId(R.id.nav_home);
                 break;
