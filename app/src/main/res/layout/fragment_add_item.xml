@@ -13,13 +13,13 @@
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_barcode"
-        app:layout_constraintEnd_toStartOf="@+id/addManuallyIcon"
+        app:layout_constraintEnd_toStartOf="@+id/addManuallyButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageButton
-        android:id="@+id/addManuallyIcon"
+        android:id="@+id/addManuallyButton"
         android:layout_width="120dp"
         android:layout_height="35dp"
         android:layout_marginTop="100dp"

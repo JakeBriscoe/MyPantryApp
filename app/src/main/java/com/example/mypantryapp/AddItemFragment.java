@@ -31,8 +31,19 @@ public class AddItemFragment extends Fragment {
 
             }
         });
+        //Add Manual Button Selected:
+        ImageButton manualButton = (ImageButton) v.findViewById(R.id.addManuallyButton);
+        manualButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually()).addToBackStack(null).commit();
+            }
+        });
+
+
 
         return v;
     }
+
 
 }
