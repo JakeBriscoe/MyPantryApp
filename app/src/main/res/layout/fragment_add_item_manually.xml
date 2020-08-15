@@ -95,6 +95,7 @@
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
                 android:hint="Barcode"
+                android:text="93226"
                 android:inputType="number"
                 android:selectAllOnFocus="true" />
 

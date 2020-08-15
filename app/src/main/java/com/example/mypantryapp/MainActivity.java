@@ -2,6 +2,8 @@ package com.example.mypantryapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private EditText editTextCategory;
     private EditText editTextDietary;
 
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -62,16 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.fragment_add_item_manually);
-        editTextName =  (EditText) findViewById(R.id.productNameInputMan);
-        editTextBrand =  (EditText) findViewById(R.id.brandInputMan);
-        editTextBarcode =  (EditText) findViewById(R.id.barcodeInputMan);
-        editTextDescription = (EditText) findViewById(R.id.descriptionInputMan);
-        editTextQuantity = (EditText) findViewById(R.id.QuantityInputMan);
-        //editTextCategory = findViewById(R.id.CategorySpinMan);
-        //editTextDietary = findViewById(R.id.DietSpinMan);
-
         setContentView(R.layout.activity_main);
 
 
@@ -107,6 +100,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void addItemMan(View v) {
+
+        editTextName =  (EditText) findViewById(R.id.productNameInputMan);
+        editTextBrand =  (EditText) findViewById(R.id.brandInputMan);
+        editTextBarcode =  (EditText) findViewById(R.id.barcodeInputMan);
+        editTextDescription = (EditText) findViewById(R.id.descriptionInputMan);
+        editTextQuantity = (EditText) findViewById(R.id.QuantityInputMan);
+        //editTextCategory = (EditText) findViewById(R.id.CategorySpinMan);
+        //editTextDietary = (EditText) findViewById(R.id.DietSpinMan);
+
+
+
         String name = editTextName.getText().toString();
         String brand = editTextBrand.getText().toString();
         String barcode = editTextBarcode.getText().toString();
@@ -114,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String quantity = editTextQuantity.getText().toString();
 //        String category = editTextCategory.getText().toString();
 //        String dietary = editTextDietary.getText().toString();
+        setContentView(R.layout.activity_main);
 
         Map<String, Object> item = new HashMap<>();
         item.put(KEY_NAME, name);
@@ -138,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Log.d(TAG, e.toString());
                     }
                 });
+        setContentView(R.layout.activity_main);
     }
 
     /**
