@@ -45,12 +45,12 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productNameInput"
+                android:id="@+id/productNameInputMan"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="text"
                 android:selectAllOnFocus="true"
                 android:textColorHighlight="#A6009688"
                 android:textSize="18sp"
@@ -67,12 +67,12 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/brandInput"
+                android:id="@+id/brandInputMan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="text"
                 android:selectAllOnFocus="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.491"
@@ -87,7 +87,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/barcodeInput"
+                android:id="@+id/barcodeInputMan"
                 android:layout_width="404dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
@@ -103,7 +103,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextTextMultiLine3"
+                android:id="@+id/descriptionInputMan"
                 android:layout_width="match_parent"
                 android:layout_height="74dp"
                 android:backgroundTint="#BAB8B2B2"
@@ -119,7 +119,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/weightInput"
+                android:id="@+id/QuantityInputMan"
                 android:layout_width="159dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
@@ -139,7 +139,7 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/spinner3"
+                android:id="@+id/CategorySpinMan"
                 android:layout_width="match_parent"
                 android:layout_height="43dp" />
 
@@ -151,7 +151,7 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/DietSpinMan"
                 android:layout_width="match_parent"
                 android:layout_height="42dp" />
 
@@ -161,7 +161,8 @@
                 android:layout_height="wrap_content"
                 android:background="#2A9815EA"
                 android:text="Add"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="addItemMan"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -173,7 +174,8 @@
                 android:layout_height="wrap_content"
                 android:background="#00E5EAE0"
                 android:backgroundTint="#D63E3E"
-                android:text="Cancel" />
+                android:text="Cancel"/>
+          <!-- Add an OnClick to go back -->
 
             <Space
                 android:layout_width="match_parent"
