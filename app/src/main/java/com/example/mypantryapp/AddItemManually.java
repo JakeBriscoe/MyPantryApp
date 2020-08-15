@@ -60,6 +60,8 @@ public class AddItemManually extends Fragment {
                 editTextCategory = getActivity().findViewById(R.id.CategorySpinMan);
                 editTextDietary = getActivity().findViewById(R.id.DietSpinMan);
         */
+
+
         // Show bottom navigation
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);

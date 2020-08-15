@@ -62,7 +62,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.fragment_add_item_manually);
+        editTextName =  (EditText) findViewById(R.id.productNameInputMan);
+        editTextBrand =  (EditText) findViewById(R.id.brandInputMan);
+        editTextBarcode =  (EditText) findViewById(R.id.barcodeInputMan);
+        editTextDescription = (EditText) findViewById(R.id.descriptionInputMan);
+        editTextQuantity = (EditText) findViewById(R.id.QuantityInputMan);
+        //editTextCategory = findViewById(R.id.CategorySpinMan);
+        //editTextDietary = findViewById(R.id.DietSpinMan);
+
         setContentView(R.layout.activity_main);
+
+
 
         // Set listeners for the navigation options
         bottomNav = findViewById(R.id.bottom_navigation_drawer);
@@ -87,25 +99,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new HomeFragment()).addToBackStack(null).commit();
             navigationView.setCheckedItem(R.id.nav_pantry1);
         }
-        editTextName = findViewById(R.id.productNameInputMan);
-        editTextBrand = findViewById(R.id.brandInputMan);
-        editTextBarcode = findViewById(R.id.barcodeInputMan);
-        editTextDescription = findViewById(R.id.descriptionInputMan);
-        editTextQuantity = findViewById(R.id.QuantityInputMan);
-        //editTextCategory = findViewById(R.id.CategorySpinMan);
-       // editTextDietary = findViewById(R.id.DietSpinMan);
+
 
 
 
     }
+
+
     public void addItemMan(View v) {
         String name = editTextName.getText().toString();
         String brand = editTextBrand.getText().toString();
         String barcode = editTextBarcode.getText().toString();
         String description = editTextDescription.getText().toString();
         String quantity = editTextQuantity.getText().toString();
-        String category = editTextCategory.getText().toString();
-        String dietary = editTextDietary.getText().toString();
+//        String category = editTextCategory.getText().toString();
+//        String dietary = editTextDietary.getText().toString();
 
         Map<String, Object> item = new HashMap<>();
         item.put(KEY_NAME, name);
@@ -113,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.put(KEY_BARCODE, barcode);
         item.put(KEY_DESCRIPTION, description);
         item.put(KEY_QUANTITY, quantity);
-        item.put(KEY_CATEGORY, category);
-        item.put(KEY_DIETARY, dietary);
+//        item.put(KEY_CATEGORY, category);
+//        item.put(KEY_DIETARY, dietary);
 
         db.collection("products").document().set(item)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

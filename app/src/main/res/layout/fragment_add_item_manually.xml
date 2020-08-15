@@ -50,6 +50,7 @@
                 android:layout_height="42dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:hint="Name"
                 android:inputType="text"
                 android:selectAllOnFocus="true"
                 android:textColorHighlight="#A6009688"
@@ -72,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:hint="Brand"
                 android:inputType="text"
                 android:selectAllOnFocus="true"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -92,6 +94,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:hint="Barcode"
                 android:inputType="number"
                 android:selectAllOnFocus="true" />
 
@@ -108,6 +111,7 @@
                 android:layout_height="74dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:hint="Description"
                 android:gravity="start|top"
                 android:inputType="textMultiLine" />
 
@@ -124,6 +128,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:hint="Quantity"
                 android:inputType="numberDecimal"
                 android:selectAllOnFocus="true" />
 
