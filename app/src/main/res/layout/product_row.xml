@@ -10,5 +10,6 @@
         android:gravity="center"
         android:layout_gravity="center_vertical"
         android:text="@string/app_name"
+        android:textSize="20sp"
         android:id="@+id/product_name"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

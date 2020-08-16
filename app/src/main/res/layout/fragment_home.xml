@@ -7,10 +7,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/product_recycler_view"
-        android:layout_width="410dp"
-        android:layout_height="737dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.288"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
