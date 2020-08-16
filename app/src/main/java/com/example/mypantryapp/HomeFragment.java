@@ -48,10 +48,10 @@ public class HomeFragment extends Fragment implements ProductAdapter.ItemClickLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         RecyclerView recyclerView = view.findViewById(R.id.product_recycler_view);
         productAdapter = new ProductAdapter(getContext());
-//        productAdapter.setClickListener(this);
+        productAdapter.setClickListener(this);
         recyclerView.setAdapter(productAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setVisibility(View.VISIBLE);
+        //recyclerView.setVisibility(View.VISIBLE);
 
         super.onViewCreated(view, savedInstanceState);
     }
