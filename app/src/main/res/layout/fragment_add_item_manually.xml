@@ -47,18 +47,15 @@
             <EditText
                 android:id="@+id/productNameInputMan"
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
-                android:ems="10"
                 android:hint="Name"
                 android:inputType="text"
                 android:selectAllOnFocus="true"
                 android:textColorHighlight="#A6009688"
-                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.491"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="90dp" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView19"
@@ -95,32 +92,14 @@
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
                 android:hint="Barcode"
-                android:text="93226"
                 android:inputType="number"
                 android:selectAllOnFocus="true" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Description"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/descriptionInputMan"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
-                android:backgroundTint="#BAB8B2B2"
-                android:ems="10"
-                android:hint="Description"
-                android:gravity="start|top"
-                android:inputType="textMultiLine" />
 
             <TextView
                 android:id="@+id/textView22"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Weight(Kg)"
+                android:text="Volume"
                 android:textStyle="bold" />
 
             <EditText
@@ -129,9 +108,27 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
-                android:hint="Quantity"
+                android:hint="Volume"
                 android:inputType="numberDecimal"
                 android:selectAllOnFocus="true" />
+
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shelf Life"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/shelfLifeInputMan"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:backgroundTint="#BAB8B2B2"
+                android:ems="10"
+                android:hint="shelf Life in days"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
 
             <Space
                 android:layout_width="match_parent"
@@ -161,27 +158,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="42dp" />
 
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Allergens"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/AllergenSpinMan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp" />
+
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/button_save_man"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#2A9815EA"
                 android:text="Add"
-                android:textStyle="bold"
-                android:onClick="addItemMan"/>
+                android:textStyle="bold" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="11dp" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/button_cancel_man"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00E5EAE0"
                 android:backgroundTint="#D63E3E"
                 android:text="Cancel"/>
-          <!-- Add an OnClick to go back -->
 
             <Space
                 android:layout_width="match_parent"

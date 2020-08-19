@@ -2,14 +2,9 @@ package com.example.mypantryapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,14 +15,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * For clarification:
@@ -37,25 +28,6 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
-
-
-    private static final String TAG = "AddItemManually";
-    private static final String KEY_NAME= "name";
-    private static final String KEY_BRAND = "brand";
-    private static final String KEY_BARCODE = "barcode";
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_QUANTITY = "quantity";
-    private  static final String KEY_CATEGORY = "category";
-    private static final String KEY_DIETARY = "dietary";
-
-
-    private EditText editTextName;
-    private EditText editTextBrand;
-    private EditText editTextBarcode;
-    private EditText editTextDescription;
-    private EditText editTextQuantity;
-    private EditText editTextCategory;
-    private EditText editTextDietary;
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -98,53 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-    public void addItemMan(View v) {
-
-        editTextName =  (EditText) findViewById(R.id.productNameInputMan);
-        editTextBrand =  (EditText) findViewById(R.id.brandInputMan);
-        editTextBarcode =  (EditText) findViewById(R.id.barcodeInputMan);
-        editTextDescription = (EditText) findViewById(R.id.descriptionInputMan);
-        editTextQuantity = (EditText) findViewById(R.id.QuantityInputMan);
-        //editTextCategory = (EditText) findViewById(R.id.CategorySpinMan);
-        //editTextDietary = (EditText) findViewById(R.id.DietSpinMan);
-
-
-
-        String name = editTextName.getText().toString();
-        String brand = editTextBrand.getText().toString();
-        String barcode = editTextBarcode.getText().toString();
-        String description = editTextDescription.getText().toString();
-        String quantity = editTextQuantity.getText().toString();
-//        String category = editTextCategory.getText().toString();
-//        String dietary = editTextDietary.getText().toString();
-        setContentView(R.layout.activity_main);
-
-        Map<String, Object> item = new HashMap<>();
-        item.put(KEY_NAME, name);
-        item.put(KEY_BRAND, brand);
-        item.put(KEY_BARCODE, barcode);
-        item.put(KEY_DESCRIPTION, description);
-        item.put(KEY_QUANTITY, quantity);
-//        item.put(KEY_CATEGORY, category);
-//        item.put(KEY_DIETARY, dietary);
-
-        db.collection("products").document().set(item)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(MainActivity.this, "Item Added", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, e.toString());
-                    }
-                });
-        setContentView(R.layout.activity_main);
-    }
 
     /**
      * This method determines what will happen when an item is selected in the navigation menu.
