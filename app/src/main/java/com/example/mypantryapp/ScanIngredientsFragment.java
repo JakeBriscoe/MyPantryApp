@@ -40,14 +40,17 @@ public class ScanIngredientsFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        mCameraView = getActivity().findViewById(R.id.surfaceView);
-        mTextView = getActivity().findViewById(R.id.text_view);
+//        mCameraView = getActivity().findViewById(R.id.surfaceView);
+//        mTextView = getActivity().findViewById(R.id.text_view);
 
         return inflater.inflate(R.layout.fragment_scan_ingredients, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        mCameraView = getActivity().findViewById(R.id.surfaceView);
+        mTextView = getActivity().findViewById(R.id.text_view);
 
         //Create the TextRecognizer
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity().getApplicationContext()).build();
