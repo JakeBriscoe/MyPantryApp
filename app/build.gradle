@@ -44,4 +44,5 @@ dependencies {
     implementation 'com.android.support:support-annotations:+'
     // FirebaseUI for Firebase Realtime Database
     implementation 'com.firebaseui:firebase-ui-database:6.3.0'
+    implementation 'com.google.android.gms:play-services-vision:20.1.1'
 }
