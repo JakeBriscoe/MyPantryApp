@@ -130,6 +130,22 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine" />
 
+            <TextView
+                android:id="@+id/ingredientsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_camera"
+                android:text="Ingredients"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/enterIngredientsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Please list ingredients separated by a comma or take a photo using the camera icon above."
+                android:inputType="textMultiLine" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />

@@ -119,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (currentFragment instanceof ScanBarcodeFragment) {
+        } else if (currentFragment instanceof ScanBarcodeFragment ||
+                        currentFragment instanceof AddItemManually ||
+                        currentFragment instanceof ScanIngredientsFragment) {
             getFragmentManager().popBackStack();
             super.onBackPressed();
         } else {

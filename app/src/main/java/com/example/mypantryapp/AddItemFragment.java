@@ -1,5 +1,6 @@
 package com.example.mypantryapp;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AddItemFragment extends Fragment {
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,15 +34,13 @@ public class AddItemFragment extends Fragment {
             }
         });
         //Add Manual Button Selected:
-        ImageButton manualButton = (ImageButton) v.findViewById(R.id.addManuallyButton);
+        ImageButton manualButton = v.findViewById(R.id.addManuallyButton);
         manualButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually()).addToBackStack(null).commit();
             }
         });
-
-
 
         return v;
     }
