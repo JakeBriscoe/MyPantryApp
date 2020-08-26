@@ -17,4 +17,26 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="categories">
+        <item>Fruit</item>
+        <item>Meat</item>
+        <item>Vegetables</item>
+        <item>Pasta</item>
+        <item>Rice</item>
+        <item>Dairy</item>
+        <item>Sweets</item>
+        <item>Greens</item>
+        <item>Soup</item>
+        <item>Spreads</item>
+        <item>Cereals</item>
+        <item>Drinks</item>
+        <item>Herbs/Spices</item>
+        <item>Cans</item>
+        <item>Pet</item>
+        <item>Snacks</item>
+        <item>Frozen</item>
+        <item>International</item>
+        <item>Desserts</item>
+    </string-array>
 </resources>

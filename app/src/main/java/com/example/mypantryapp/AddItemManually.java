@@ -1,38 +1,35 @@
 package com.example.mypantryapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 public class AddItemManually extends Fragment {
+
+
     private Spinner spinner;
     private DatabaseReference mDatabase;
 
@@ -57,18 +54,17 @@ public class AddItemManually extends Fragment {
 //    private Spinner spinnerAllergy;
 
     private Button saveButton;
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-   ArrayAdapter array_adapt;
-    FragmentActivity listener;
+
+
+
+
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Activity){
-            this.listener = (FragmentActivity) context;
-        }
-    }
+            }
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,7 +95,7 @@ public class AddItemManually extends Fragment {
         editTextBarcode =  (EditText) view.findViewById(R.id.barcodeInputMan);
         editTextShelfLife = (EditText) view.findViewById(R.id.shelfLifeInputMan);
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
-//        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
+//        spinnerCategory = (Spinner) view.findViewById(R.id.CategorySpinMan);
 //        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
 //        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
 
@@ -151,8 +147,9 @@ public class AddItemManually extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-
     }
 
 
 }
+
+
