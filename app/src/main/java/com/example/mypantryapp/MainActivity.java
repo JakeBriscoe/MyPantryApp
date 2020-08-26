@@ -2,6 +2,7 @@ package com.example.mypantryapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 // Placeholder
                 Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+            default:
+                Log.e("TAG", "Unrecognized section: " + item.getItemId());
+
         }
 
         drawer.closeDrawer(GravityCompat.START);
