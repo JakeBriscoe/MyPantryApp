@@ -38,7 +38,7 @@ public class AddItemManually extends Fragment {
     private static final String KEY_BRAND = "brand";
     private static final String KEY_BARCODE = "barcodeNum";
     private static final String KEY_SHELFLIFE = "shelfLife";
-    private static final String KEY_QUANTITY = "quantity";
+    private static final String KEY_VOLUME = "volume";
 //    private  static final String KEY_CATEGORY = "categoryName";
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
@@ -107,7 +107,7 @@ public class AddItemManually extends Fragment {
                 String brand = editTextBrand.getText().toString();
                 String barcode = editTextBarcode.getText().toString();
                 String shelfLife = editTextShelfLife.getText().toString();
-                String quantity = editTextQuantity.getText().toString();
+                String volume = editTextQuantity.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
 //              String dietary =spinnerDietary.getSelectedItem().toString()
 //              String allergy =spinnerAllergy.getSelectedItem().toString();
@@ -118,7 +118,7 @@ public class AddItemManually extends Fragment {
                 item.put(KEY_BRAND, brand);
                 item.put(KEY_BARCODE, barcode);
                 item.put(KEY_SHELFLIFE, shelfLife);
-                item.put(KEY_QUANTITY, quantity);
+                item.put(KEY_VOLUME, volume);
                 //        item.put(KEY_CATEGORY, category);
                 //        item.put(KEY_DIETARY, dietary);
                 //        item.put(KEY_ALLERGY, allergy);
