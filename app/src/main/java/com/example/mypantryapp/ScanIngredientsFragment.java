@@ -1,6 +1,7 @@
 package com.example.mypantryapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ public class ScanIngredientsFragment extends Fragment {
     private TextView mTextView;
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
+    private StringBuilder stringBuilder = new StringBuilder();
 
     @Nullable
     @Override
@@ -40,9 +43,6 @@ public class ScanIngredientsFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-//        mCameraView = getActivity().findViewById(R.id.surfaceView);
-//        mTextView = getActivity().findViewById(R.id.text_view);
-
         return inflater.inflate(R.layout.fragment_scan_ingredients, container, false);
     }
 
@@ -50,7 +50,7 @@ public class ScanIngredientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         mCameraView = getActivity().findViewById(R.id.surfaceView);
-        mTextView = getActivity().findViewById(R.id.text_view);
+        final Button takeSnapshot = getActivity().findViewById(R.id.btnTakePicture);
 
         //Create the TextRecognizer
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity().getApplicationContext()).build();
@@ -118,22 +118,52 @@ public class ScanIngredientsFragment extends Fragment {
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
                     if (items.size() != 0) {
 
-                        mTextView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                StringBuilder stringBuilder = new StringBuilder();
-                                for (int i = 0; i < items.size(); i++) {
-                                    TextBlock item = items.valueAt(i);
-                                    stringBuilder.append(item.getValue());
-                                    stringBuilder.append("\n");
-                                }
-                                mTextView.setText(stringBuilder.toString());
-                            }
-                        });
+                        for (int i = 0; i < items.size(); i++) {
+                            TextBlock item = items.valueAt(i);
+                            stringBuilder.append(item.getValue());
+                            stringBuilder.append("\n");
+                        }
+
                     }
                 }
             });
+
+            // When the barcode icon is selected, the user should be navigated to the barcode fragment.
+            takeSnapshot.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View v) {
+
+                    Button btnConfirm = getActivity().findViewById(R.id.btnConfirm);
+
+                    if (takeSnapshot.getText().equals("Take Picture")) {
+                        mCameraSource.stop();
+                        takeSnapshot.setText("Retry");
+                        // Show button for user to confirm
+                        btnConfirm.setVisibility(View.VISIBLE);
+                    } else if (takeSnapshot.getText().equals("Retry")) {
+                        try {
+
+                            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        requestPermissionID);
+                                return;
+                            }
+                            mCameraSource.start(mCameraView.getHolder());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        takeSnapshot.setText("Take Picture");
+                        btnConfirm.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+
         }
+
     }
 
 

@@ -33,6 +33,7 @@ public class AddItemFragment extends Fragment {
 
             }
         });
+
         //Add Manual Button Selected:
         ImageButton manualButton = v.findViewById(R.id.addManuallyButton);
         manualButton.setOnClickListener(new View.OnClickListener(){
