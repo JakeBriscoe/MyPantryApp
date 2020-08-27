@@ -34,6 +34,7 @@ public class ScanIngredientsFragment extends Fragment {
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
     private StringBuilder stringBuilder = new StringBuilder();
+    private Button btnConfirm;
 
     @Nullable
     @Override
@@ -128,20 +129,20 @@ public class ScanIngredientsFragment extends Fragment {
                 }
             });
 
+            btnConfirm = getActivity().findViewById(R.id.btnConfirm);
+
             // When the barcode icon is selected, the user should be navigated to the barcode fragment.
             takeSnapshot.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
 
-                    Button btnConfirm = getActivity().findViewById(R.id.btnConfirm);
-
                     if (takeSnapshot.getText().equals("Take Picture")) {
                         mCameraSource.stop();
-                        takeSnapshot.setText("Retry");
+                        takeSnapshot.setText("Try Again");
                         // Show button for user to confirm
                         btnConfirm.setVisibility(View.VISIBLE);
-                    } else if (takeSnapshot.getText().equals("Retry")) {
+                    } else if (takeSnapshot.getText().equals("Try Again")) {
                         try {
 
                             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
@@ -159,6 +160,15 @@ public class ScanIngredientsFragment extends Fragment {
                         takeSnapshot.setText("Take Picture");
                         btnConfirm.setVisibility(View.INVISIBLE);
                     }
+                }
+            });
+
+            btnConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually()).addToBackStack(null).commit();
+                    assert getFragmentManager() != null;
+                    getFragmentManager().popBackStack();
                 }
             });
 
