@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
 
 
 
@@ -165,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 }
             };
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

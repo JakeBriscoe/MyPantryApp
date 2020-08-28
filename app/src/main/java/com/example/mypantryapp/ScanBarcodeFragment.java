@@ -50,6 +50,7 @@ public class ScanBarcodeFragment extends Fragment {
     public static final int requestPermissionID = 100;// . or any other value
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class ScanBarcodeFragment extends Fragment {
 
         mCameraView = getActivity().findViewById(R.id.scanBarSufview);
         mTextView = getActivity().findViewById(R.id.text_view2);
+
 
         //Create the Barcode Detector
         BarcodeDetector detector =
@@ -140,8 +142,10 @@ public class ScanBarcodeFragment extends Fragment {
                         mTextView.post(new Runnable() {
                             @Override
                             public void run() {
+                                mCameraSource.stop();
                                 //Update barcode value to TextView
                                 mTextView.setText(String.valueOf((barcodes.valueAt(0).displayValue)));
+
                             }
 
                         });
