@@ -64,7 +64,6 @@ public class AddItemFragment extends Fragment {
                         textViewData.setText(data);
 
                     }
-
     });
 
     }

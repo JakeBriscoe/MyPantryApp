@@ -17,7 +17,7 @@ public class Product {
     private String allergens;
     private String ingredients;
 
-
+//Domain datatype attribute has been changed, database only takes a string at the moment.
 
     public Product(String productId, String weight, long barcodeNum, String shelfLife, String name, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
         this.productId = productId;
@@ -35,11 +35,6 @@ public class Product {
 
     public Product(){
 
-    }
-
-
-    public Product(String productName){
-        this.name = name;
     }
 
 
