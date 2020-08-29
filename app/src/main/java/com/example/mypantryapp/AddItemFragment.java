@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,10 +38,11 @@ public class AddItemFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //Field for collection of products in the firebase.
     private CollectionReference productRef = db.collection("products");
-    @NonNull
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
+
+
+  //  public void onAttach(Context context) {
+   //     super.onAttach(context);
+    //}
 
     //Display list of product name from firebase
     public void onStart(){
@@ -56,8 +58,7 @@ public class AddItemFragment extends Fragment {
 
                             String name = product.getName();
 
-                            bld.append("Product Name: " + name + "\n" + "\n");
-
+                            bld.append("Product Name: ").append(name).append("\n"). append("\n");
 
                         }
                     //Set the get(attributes) to the textview
@@ -71,29 +72,30 @@ public class AddItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Ensure that bottom navigation is visible
+        @Nullable
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
         View v = inflater.inflate(R.layout.fragment_add_item, container, false);
 
         // When the barcode icon is selected, the user should be navigated to the barcode fragment.
-        ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
+        final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
         barcodeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
 
             }
 
         });
         //----------------------------------------------This was used for testing,  Will need to remove code below-------------------------------------
         //Add Manual Button Selected:
-        ImageButton manualButton = v.findViewById(R.id.downloadInfo);
+        ImageButton manualButton = v.findViewById(R.id.addManuallyButton);
         manualButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually()).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually()).addToBackStack(null).commit();
 
             }
         });
@@ -109,16 +111,16 @@ public class AddItemFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                String data = "";
+                                StringBuilder bld = new StringBuilder();
                                 for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                                     Product product = documentSnapshot.toObject(Product.class);
 
                                     String name = product.getName();
 
-                                    data+="Product Name: " + name + "\n";
+                                    bld.append("Product Name: ").append(name).append("\n"). append("\n");
 
                                 }
-                                textViewData.setText(data);
+                                textViewData.setText(bld);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
