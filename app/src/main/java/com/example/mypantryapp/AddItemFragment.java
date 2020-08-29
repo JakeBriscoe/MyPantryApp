@@ -35,14 +35,14 @@ public class AddItemFragment extends Fragment {
     private TextView textViewData;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    //Field for collection of products in the firebase.
     private CollectionReference productRef = db.collection("products");
 
     public void onAttach(Context context) {
         super.onAttach(context);
     }
 
-
+    //Display list of product name from firebase
     public void onStart(){
         super.onStart();
 
@@ -59,11 +59,9 @@ public class AddItemFragment extends Fragment {
                             data+="Product Name: " + name + "\n";
 
 
-
                         }
-
+                    //Set the get(attributes) to the textview
                         textViewData.setText(data);
-
 
                     }
 
@@ -76,10 +74,6 @@ public class AddItemFragment extends Fragment {
         // Ensure that bottom navigation is visible
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
-
-
-
-
 
         View v = inflater.inflate(R.layout.fragment_add_item, container, false);
 
@@ -94,7 +88,7 @@ public class AddItemFragment extends Fragment {
             }
 
         });
-
+        //----------------------------------------------This was used for testing,  Will need to remove code below-------------------------------------
         //Add Manual Button Selected:
         ImageButton manualButton = v.findViewById(R.id.downloadInfo);
         manualButton.setOnClickListener(new View.OnClickListener() {
@@ -124,13 +118,8 @@ public class AddItemFragment extends Fragment {
 
                                     data+="Product Name: " + name + "\n";
 
-
-
                                 }
-
                                 textViewData.setText(data);
-
-
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -138,20 +127,10 @@ public class AddItemFragment extends Fragment {
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(getActivity(), "Error!", Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, toString());
-
                             }
                         });
-
-
             }
-
-
-
-
-
         });
         return v;
-
     }
-
 }
