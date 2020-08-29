@@ -37,7 +37,7 @@ public class AddItemFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //Field for collection of products in the firebase.
     private CollectionReference productRef = db.collection("products");
-
+    @NonNull
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -50,18 +50,18 @@ public class AddItemFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        String data = "";
+                        StringBuilder bld = new StringBuilder();
                         for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                             Product product = documentSnapshot.toObject(Product.class);
 
                             String name = product.getName();
 
-                            data+="Product Name: " + name + "\n";
+                            bld.append("Product Name: " + name + "\n" + "\n");
 
 
                         }
                     //Set the get(attributes) to the textview
-                        textViewData.setText(data);
+                        textViewData.setText(bld);
 
                     }
     });
