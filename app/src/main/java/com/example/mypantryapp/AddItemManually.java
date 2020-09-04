@@ -7,15 +7,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,24 +69,43 @@ public class AddItemManually extends Fragment {
 
 
 
-
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
             }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        View v = inflater.inflate(R.layout.fragment_add_item_manually, container, false);
 
         // Show bottom navigation
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
+        // When the camera icon is selected, the user should be navigated to the scan ingredients fragment.
+        final TextView ingredientsTitle = v.findViewById(R.id.ingredientsTitle);
+        ingredientsTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int[] textLocation = new int[2];
+                    ingredientsTitle.getLocationOnScreen(textLocation);
+                    if (event.getRawX() >= textLocation[0] + ingredientsTitle.getWidth() - ingredientsTitle.getTotalPaddingRight()){
 
-        return inflater.inflate(R.layout.fragment_add_item_manually, container, false);
+                        // Right drawable was tapped
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanIngredientsFragment()).addToBackStack(null).commit();
+                        return true;
+                    }
+                }
+                return true;
+            }
+        });
+
+
+        return v;
 
     }
     // This method is called after the parent Activity's onCreate() method has completed.
@@ -151,5 +181,3 @@ public class AddItemManually extends Fragment {
 
 
 }
-
-

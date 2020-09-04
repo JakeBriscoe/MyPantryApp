@@ -12,38 +12,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
-
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-
-
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
-public class ScanBarcodeFragment extends Fragment {
+public class ScanIngredientsFragment extends Fragment {
     private CameraSource mCameraSource;
     private SurfaceView mCameraView;
     private TextView mTextView;
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
 
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
 
         // Show bottom navigation
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
@@ -52,30 +43,24 @@ public class ScanBarcodeFragment extends Fragment {
 //        mCameraView = getActivity().findViewById(R.id.surfaceView);
 //        mTextView = getActivity().findViewById(R.id.text_view);
 
-        return inflater.inflate(R.layout.fragment_scan_barcode, container, false);
+        return inflater.inflate(R.layout.fragment_scan_ingredients, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        mCameraView = getActivity().findViewById(R.id.surfaceView);
+        mTextView = getActivity().findViewById(R.id.text_view);
 
-        mCameraView = getActivity().findViewById(R.id.scanBarSufview);
-        mTextView = getActivity().findViewById(R.id.text_view2);
+        //Create the TextRecognizer
+        final TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity().getApplicationContext()).build();
 
-
-        //Create the Barcode Detector
-        BarcodeDetector detector =
-                new BarcodeDetector.Builder(getActivity().getApplicationContext())
-                        .setBarcodeFormats(Barcode.ALL_FORMATS)
-                        .build();
-
-        if (!detector.isOperational()) {
+        if (!textRecognizer.isOperational()) {
             Log.w(TAG, "Detector dependencies not loaded yet");
-            return;
         } else {
 
             //Initialize camerasource to use high resolution and set Autofocus on.
-            mCameraSource = new CameraSource.Builder(getActivity().getApplicationContext(), detector)
+            mCameraSource = new CameraSource.Builder(getActivity().getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
                     .setAutoFocusEnabled(true)
@@ -118,34 +103,38 @@ public class ScanBarcodeFragment extends Fragment {
                 }
             });
 
-            detector.setProcessor(new Detector.Processor<Barcode>() {
+            //Set the TextRecognizer's Processor.
+            textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
                 @Override
                 public void release() {
-
                 }
 
+                /**
+                 * Detect all the text from camera using TextBlock and the values into a stringBuilder
+                 * which will then be set to the textView.
+                 * */
                 @Override
-                public void receiveDetections(Detector.Detections<Barcode> detections) {
-                    final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                    if (barcodes.size() > 0) {
+                public void receiveDetections(Detector.Detections<TextBlock> detections) {
+                    final SparseArray<TextBlock> items = detections.getDetectedItems();
+                    if (items.size() != 0) {
+
                         mTextView.post(new Runnable() {
                             @Override
                             public void run() {
-                                mCameraSource.stop();
-                                //Update barcode value to TextView
-                                mTextView.setText(String.valueOf((barcodes.valueAt(0).displayValue)));
-
+                                StringBuilder stringBuilder = new StringBuilder();
+                                for (int i = 0; i < items.size(); i++) {
+                                    TextBlock item = items.valueAt(i);
+                                    stringBuilder.append(item.getValue());
+                                    stringBuilder.append("\n");
+                                }
+                                mTextView.setText(stringBuilder.toString());
                             }
-
                         });
-
-
                     }
-
-
                 }
             });
-
         }
     }
+
+
 }

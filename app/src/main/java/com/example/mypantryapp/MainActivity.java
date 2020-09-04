@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import androidx.annotation.VisibleForTesting;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -37,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (currentFragment instanceof ScanBarcodeFragment) {
+        } else if (currentFragment instanceof ScanBarcodeFragment ||
+                        currentFragment instanceof AddItemManually ||
+                        currentFragment instanceof ScanIngredientsFragment) {
             getFragmentManager().popBackStack();
             super.onBackPressed();
         } else {
@@ -166,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 }
             };
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
