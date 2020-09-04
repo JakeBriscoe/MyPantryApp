@@ -69,9 +69,6 @@ public class AddItemManually extends Fragment {
 
 
 
-
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
