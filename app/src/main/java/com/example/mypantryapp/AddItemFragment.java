@@ -1,7 +1,6 @@
 package com.example.mypantryapp;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,20 +76,26 @@ public class AddItemFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_add_item, container, false);
 
-        // When the barcode icon is selected, the user should be navigated to the barcode fragment.
+        // When the barcode icon or text is selected, the user should be navigated to the barcode fragment.
         final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
         barcodeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
-
             }
 
         });
-        //----------------------------------------------This was used for testing,  Will need to remove code below-------------------------------------
-        //Add Manual Button Selected:
-        ImageButton manualButton = v.findViewById(R.id.addManuallyButton);
+        final TextView barcodeText = v.findViewById(R.id.textScanBarcode);
+        barcodeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+            }
+
+        });
+
+        // When the add manually icon or text is selected, the user should be navigated to the add item manually fragment.
+        final ImageButton manualButton = v.findViewById(R.id.addManuallyButton);
         manualButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +103,16 @@ public class AddItemFragment extends Fragment {
 
             }
         });
+        final TextView textAddManually = v.findViewById(R.id.textAddManually);
+        textAddManually.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually()).addToBackStack(null).commit();
+
+            }
+        });
+
+        //----------------------------------------------This was used for testing,  Will need to remove code below-------------------------------------
 
         textViewData = v.findViewById(R.id.text_view_products);
         ImageButton downloadButton = v.findViewById(R.id.downloadInfo);
