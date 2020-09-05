@@ -35,6 +35,8 @@ public class AddItemManually extends Fragment {
     private Spinner spinner;
     private DatabaseReference mDatabase;
 
+    EditText enterIngredientsText;
+
     private static final String TAG = "AddItemManually";
     private static final String KEY_NAME= "name";
     private static final String KEY_BRAND = "brand";
@@ -114,12 +116,17 @@ public class AddItemManually extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         // Setup any handles to view objects here
         editTextName =  (EditText) view.findViewById(R.id.productNameInputMan);
         editTextBrand =  (EditText) view.findViewById(R.id.brandInputMan);
         editTextBarcode =  (EditText) view.findViewById(R.id.barcodeInputMan);
         editTextShelfLife = (EditText) view.findViewById(R.id.shelfLifeInputMan);
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
+
+        enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
+
 //        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
 //        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
 //        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
@@ -168,11 +175,9 @@ public class AddItemManually extends Fragment {
 
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-
-
+    protected void displayReceivedData(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        enterIngredientsText.setText(message);
     }
 
 

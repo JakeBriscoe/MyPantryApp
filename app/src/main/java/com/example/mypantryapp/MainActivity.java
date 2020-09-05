@@ -25,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * navigation drawer = the menu that pulls out from the left side of the screen,
  * bottom navigation = the menu that remains on the bottom of the screen.
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ScanIngredientsFragment.SendMessage{
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
 
@@ -167,6 +167,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
         return true;
+    }
+
+    @Override
+    public void sendData(String message) {
+//        AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentById(R.id.scaningredientslayout);
+        AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
+        assert f != null;
+        f.displayReceivedData(message);
     }
 
 }

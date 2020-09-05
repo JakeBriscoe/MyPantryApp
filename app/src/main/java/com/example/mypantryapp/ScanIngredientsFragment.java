@@ -2,6 +2,7 @@ package com.example.mypantryapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,8 @@ public class ScanIngredientsFragment extends Fragment {
     private StringBuilder stringBuilder = new StringBuilder();
     private Button btnConfirm;
 
+    SendMessage SM;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class ScanIngredientsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mCameraView = getActivity().findViewById(R.id.surfaceView);
         final Button takeSnapshot = getActivity().findViewById(R.id.btnTakePicture);
@@ -166,9 +170,9 @@ public class ScanIngredientsFragment extends Fragment {
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually()).addToBackStack(null).commit();
                     assert getFragmentManager() != null;
                     getFragmentManager().popBackStack();
+                    SM.sendData(stringBuilder.toString().trim());
                 }
             });
 
@@ -176,5 +180,19 @@ public class ScanIngredientsFragment extends Fragment {
 
     }
 
+    interface SendMessage {
+        void sendData(String message);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            SM = (SendMessage) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+    }
 
 }
