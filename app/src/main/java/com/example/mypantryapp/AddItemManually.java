@@ -36,6 +36,7 @@ public class AddItemManually extends Fragment {
     private DatabaseReference mDatabase;
 
     EditText enterIngredientsText;
+    String updateIngredientsText;
 
     private static final String TAG = "AddItemManually";
     private static final String KEY_NAME= "name";
@@ -175,9 +176,24 @@ public class AddItemManually extends Fragment {
 
     }
 
+    /**
+     * Update the ingredients field in onResume to ensure it is displayed
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (updateIngredientsText != null) {
+            enterIngredientsText.setText(updateIngredientsText);
+        }
+    }
+
+    /**
+     * Here to get data from another fragment
+     * @param message the result of camera in ScanIngredientsFragment
+     */
     protected void displayReceivedData(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        enterIngredientsText.setText(message);
+        updateIngredientsText = message;
     }
 
 
