@@ -2,8 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    tools:context="com.example.mypantryapp.LogInActivity">
+
+    <TextView
+        android:id="@+id/titleLogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="My Pantry App"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/LogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="Please Log-in to continue"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        />
 
     <EditText
         android:id="@+id/loginEmail"
@@ -30,7 +54,7 @@
         android:textSize="25dp" />
 
     <TextView
-        android:id="@+id/TVSignIn"
+        android:id="@+id/TVSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"

@@ -27,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.sign_up);
             firebaseAuth = FirebaseAuth.getInstance();
             emailId = findViewById(R.id.ETemail);
             passwd = findViewById(R.id.ETpassword);

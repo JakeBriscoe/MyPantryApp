@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,38 +41,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        FirebaseUser user = mAuth.getCurrentUser();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Set listeners for the navigation options
-        bottomNav = findViewById(R.id.bottom_navigation_drawer);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-        drawer = findViewById(R.id.navigation_drawer);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Replace automatic toolbar with our own toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Add listener so we can toggle between the menu drawer being open and closed
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeFragment()).addToBackStack(null).commit();
-            navigationView.setCheckedItem(R.id.nav_pantry1);
+        if (user == null){
+            Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+            startActivity(intent);
         }
+        else {
 
+            setContentView(R.layout.activity_main);
 
+            // Set listeners for the navigation options
+            bottomNav = findViewById(R.id.bottom_navigation_drawer);
+            bottomNav.setOnNavigationItemSelectedListener(navListener);
+            drawer = findViewById(R.id.navigation_drawer);
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            // Replace automatic toolbar with our own toolbar
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            // Add listener so we can toggle between the menu drawer being open and closed
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                    R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HomeFragment()).addToBackStack(null).commit();
+                navigationView.setCheckedItem(R.id.nav_pantry1);
+            }
+
+        }
 
 
     }

@@ -33,7 +33,7 @@ public class LogInActivity extends AppCompatActivity {
         loginEmailId = findViewById(R.id.loginEmail);
         logInpasswd = findViewById(R.id.loginpaswd);
         btnLogIn = findViewById(R.id.btnLogIn);
-        signup = findViewById(R.id.TVSignIn);
+        signup = findViewById(R.id.TVSignUp);
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -50,7 +50,7 @@ public class LogInActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent I = new Intent(LogInActivity.this, MainActivity.class);
+                Intent I = new Intent(LogInActivity.this, SignUpActivity.class);
                 startActivity(I);
             }
         });
@@ -60,10 +60,10 @@ public class LogInActivity extends AppCompatActivity {
                 String userEmail = loginEmailId.getText().toString();
                 String userPaswd = logInpasswd.getText().toString();
                 if (userEmail.isEmpty()) {
-                    loginEmailId.setError("Provide your Email first!");
+                    loginEmailId.setError("Provide your Email first");
                     loginEmailId.requestFocus();
                 } else if (userPaswd.isEmpty()) {
-                    logInpasswd.setError("Enter Password!");
+                    logInpasswd.setError("Enter Password");
                     logInpasswd.requestFocus();
                 } else if (userEmail.isEmpty() && userPaswd.isEmpty()) {
                     Toast.makeText(LogInActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
@@ -72,7 +72,7 @@ public class LogInActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(LogInActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LogInActivity.this, "Not successful", Toast.LENGTH_SHORT).show();
                             } else {
                                 startActivity(new Intent(LogInActivity.this, MainActivity.class));
                             }
