@@ -22,6 +22,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
         else {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            boolean emailVerified = user.isEmailVerified();
 
             setContentView(R.layout.activity_main);
 
@@ -78,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new HomeFragment()).addToBackStack(null).commit();
                 navigationView.setCheckedItem(R.id.nav_pantry1);
             }
+            Toast.makeText(MainActivity.this, currentUser.getEmail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
 
         }
 
@@ -113,7 +119,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 // Placeholder
+                mAuth.signOut();
                 Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(intent);
             default:
                 Log.e("TAG", "Unrecognized section: " + item.getItemId());
 

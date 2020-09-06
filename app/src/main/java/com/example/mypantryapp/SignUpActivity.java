@@ -2,6 +2,7 @@ package com.example.mypantryapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 
 public class SignUpActivity extends AppCompatActivity {
@@ -44,8 +47,6 @@ public class SignUpActivity extends AppCompatActivity {
                     } else if (paswd.isEmpty()) {
                         passwd.setError("Set your password");
                         passwd.requestFocus();
-                    } else if (emailID.isEmpty() && paswd.isEmpty()) {
-                        Toast.makeText(SignUpActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
                     } else if (!(emailID.isEmpty() && paswd.isEmpty())) {
                         firebaseAuth.createUserWithEmailAndPassword(emailID, paswd).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener() {
                             @Override
