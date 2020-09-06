@@ -1,14 +1,10 @@
 package com.example.mypantryapp.domain;
 
-import com.google.firebase.Timestamp;
-
-import java.util.Date;
-
 public class Product {
     private String productId;
     private String weight;
     private long barcodeNum;
-    private String shelfLife; // in days
+    private int shelfLife; // in days, using 10000 if n/a
     private String name;
     private String description;
     private String brand;
@@ -19,7 +15,7 @@ public class Product {
 
 //Domain datatype attribute has been changed, database only takes a string at the moment.
 
-    public Product(String productId, String weight, long barcodeNum, String shelfLife, String name, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
+    public Product(String productId, String weight, long barcodeNum, int shelfLife, String name, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
         this.productId = productId;
         this.weight = weight;
         this.barcodeNum = barcodeNum;
@@ -50,7 +46,7 @@ public class Product {
         return barcodeNum;
     }
 
-    public String getShelfLife() {
+    public int getShelfLife() {
         return shelfLife;
     }
 
