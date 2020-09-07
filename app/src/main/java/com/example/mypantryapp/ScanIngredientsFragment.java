@@ -17,13 +17,20 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScanIngredientsFragment extends Fragment {
     private CameraSource mCameraSource;
@@ -31,6 +38,9 @@ public class ScanIngredientsFragment extends Fragment {
     private TextView mTextView;
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
+    public String ingredients;
+    public ArrayList<String> dietWarnings;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Nullable
     @Override
@@ -127,10 +137,38 @@ public class ScanIngredientsFragment extends Fragment {
                                     stringBuilder.append(item.getValue());
                                     stringBuilder.append("\n");
                                 }
-                                mTextView.setText(stringBuilder.toString());
+                                ingredients = stringBuilder.toString();
+                                mTextView.setText(ingredients);
                             }
                         });
                     }
+                }
+
+                public void checkIngredients() {
+                    final String[] ingrs = ingredients.split("/n");
+                    db.collection("dietary")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        docLoop:
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Log.d(TAG, document.getId() + " => " + document.getData());
+                                            String name = document.getString("name");
+                                            List<String> blacklist = (List<String>) document.get("blacklist");
+                                            for(String ingr: ingrs) {
+                                                if(blacklist.contains(ingr)) {
+                                                    dietWarnings.add(name);
+                                                    continue docLoop; // skips to the next diet
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
                 }
             });
         }
