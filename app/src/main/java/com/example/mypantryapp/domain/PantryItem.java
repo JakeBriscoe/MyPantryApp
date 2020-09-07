@@ -14,7 +14,7 @@ public class PantryItem {
     public PantryItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
-        this.expiry =System.currentTimeMillis() + (product.getShelfLife() * 86400000L); // the date from now + shelf life in days
+
     }
 
     public PantryItem(Product product, long expiry, int quantity) {

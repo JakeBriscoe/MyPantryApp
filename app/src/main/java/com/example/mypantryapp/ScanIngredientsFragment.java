@@ -60,7 +60,6 @@ public class ScanIngredientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         mCameraView = getActivity().findViewById(R.id.surfaceView);
-        mTextView = getActivity().findViewById(R.id.text_view);
 
         //Create the TextRecognizer
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity().getApplicationContext()).build();

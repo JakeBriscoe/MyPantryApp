@@ -1,15 +1,11 @@
 package com.example.mypantryapp.domain;
 
-import com.google.firebase.Timestamp;
-
-import java.util.Date;
-
 public class Product {
-    private long productId;
-    private float weight;
+    private String productId;
+    private String weight;
     private long barcodeNum;
-    private long shelfLife; // in days
-    private String productName;
+    private int shelfLife; // in days, using 10000 if n/a
+    private String name;
     private String description;
     private String brand;
     private String categoryName;
@@ -17,12 +13,14 @@ public class Product {
     private String allergens;
     private String ingredients;
 
-    public Product(long productId, float weight, long barcodeNum, String productName, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
+//Domain datatype attribute has been changed, database only takes a string at the moment.
+
+    public Product(String productId, String weight, long barcodeNum, int shelfLife, String name, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
         this.productId = productId;
         this.weight = weight;
         this.barcodeNum = barcodeNum;
-        this.shelfLife = 7;
-        this.productName = productName;
+        this.shelfLife = shelfLife;
+        this.name = name;
         this.description = description;
         this.brand = brand;
         this.categoryName = categoryName;
@@ -31,16 +29,16 @@ public class Product {
         this.ingredients = ingredients;
     }
 
-    public Product(long productId, float weight, long barcodeNum, long shelfLife, String productName, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
-        this(productId, weight, barcodeNum, productName, description, brand, categoryName, dietaryType, allergens, ingredients);
-        this.shelfLife = shelfLife;
+    public Product(){
+
     }
 
-    public long getProductId() {
+
+    public String getProductId() {
         return productId;
     }
 
-    public float getWeight() {
+    public String getWeight() {
         return weight;
     }
 
@@ -48,12 +46,12 @@ public class Product {
         return barcodeNum;
     }
 
-    public long getShelfLife() {
+    public int getShelfLife() {
         return shelfLife;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {

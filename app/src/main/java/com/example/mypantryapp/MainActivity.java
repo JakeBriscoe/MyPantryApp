@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +168,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             };
 
+
+    /**
+     * Replace the automatic toolbar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -173,4 +181,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Dictate what happens when each toolbar option is selected
+     * @param item the item selected
+     * @return true
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.toolbarScan:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ScanBarcodeFragment()).addToBackStack(null).commit();
+                return true;
+            case R.id.toolbarShare:
+                Toast.makeText(this, "Share Pantry", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.toolbarDelete:
+                Toast.makeText(this, "Delete Pantry", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
