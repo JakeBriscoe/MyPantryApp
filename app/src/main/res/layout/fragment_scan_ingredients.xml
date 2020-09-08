@@ -11,26 +11,26 @@
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="75dp"
         android:layout_weight="4"
-        app:layout_constraintBottom_toTopOf="@+id/btnTakePicture"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtScanTitle" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnTakePicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:background="@android:color/white"
         android:text="Take Picture"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surfaceView" />
+        tools:layout_editor_absoluteY="600dp" />
 
     <Button
         android:id="@+id/btnConfirm"
@@ -49,14 +49,19 @@
         app:layout_constraintTop_toBottomOf="@+id/btnTakePicture" />
 
     <TextView
-        android:id="@+id/txtScanTitle"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="75dp"
-        android:text="Scan Ingredients"
-        android:textSize="30sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="For best results, please ensure the image is clear and that there is only one instance of the word 'Ingredients'. "
+        android:textAlignment="center"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnTakePicture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/surfaceView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
