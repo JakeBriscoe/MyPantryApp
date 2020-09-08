@@ -193,7 +193,109 @@ public class AddItemManually extends Fragment {
      * @param message the result of camera in ScanIngredientsFragment
      */
     protected void displayReceivedData(String message) {
-        updateIngredientsText = message;
+        updateIngredientsText = transformMessage(message);
+    }
+
+    /**
+     * Modify the message passed so that unnecessary words are ignored
+     *
+     * ASSUMPTIONS
+     * ------------------------
+     * The format will include "Ingredients ...", "May contain ..." and "Contains ..."
+     * There is only one occurrence of 'Ingredients' in the snapshot taken
+     * The camera picks up the full stops
+     *
+     * TODO: consider "May be present: ..."
+     *
+     * @param data the result from scan ingredients
+     * @return the modified string
+     */
+    protected String transformMessage(String data) {
+
+        // Start string after "Ingredients"
+        // Get two substrings: "Contains ..." and "May contain ..." based on occurrence and consequent full stop.
+        // If "Contains ..." and "May contain ..." doesn't exist, return without altering
+        // Otherwise, get rid of everything after the first occurrence, and concatenate the two substrings
+
+        int iIngredients; // This should be at the last occurrence of 'Ingredients'
+
+        // Need to consider the case where the word ingredients is in capitals
+        int iLower = data.lastIndexOf("Ingredients");
+        int iUpper = data.lastIndexOf("INGREDIENTS");
+        if (iLower > iUpper) {
+            iIngredients = iLower;
+        } else {
+            iIngredients = iUpper;
+        }
+
+        // If there is no occurrence of 'Ingredients', then there are no ingredients to identify
+        if (iIngredients == -1) {
+            Toast.makeText(getActivity(), "No ingredients identified", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        // Fix formatting issues
+        // Need to account for the word 'Ingredients'
+        String ingredients = data.substring(iIngredients + 11).replace("\n", " ");
+
+        // Start our result at the first occurrence of a letter
+        // To account for cases such as "Ingredients: ..." as well as "Ingredients ..."
+        ingredients = ingredients.substring(findFirstLetterPosition(ingredients));
+
+        // Get indexes of "May contain ..." and "Contains ..."
+        int iMayContain = ingredients.indexOf("May contain");
+        int iContains = ingredients.indexOf("Contains");
+        String mayContain;
+        String contains;
+
+        // Get substrings which contain the "May contain ..." and "Contains ..." information.
+        // This is done by taking a substring of ingredients from the trigger word until the next full stop.
+        // Need to make sure that the indices are viable.
+        if (iMayContain == -1) {
+            mayContain = "";
+        } else {
+            mayContain = ingredients.substring(iMayContain, ingredients.indexOf(".", iMayContain) + 1);
+        }
+
+        if (iContains == -1) {
+            contains = "";
+        } else {
+            contains = ingredients.substring(iContains, ingredients.indexOf(".", iContains) + 1);
+        }
+
+        // Now decide where to finish the ingredients string based on "Contains ..." and "May contain ..."
+        if (iMayContain < iContains && iMayContain != -1) {
+            // Both exist, and "May contain ..." comes first
+            ingredients = ingredients.substring(0, iMayContain);
+        } else if (iContains < iMayContain && iContains != -1) {
+            // Both exist, and "Contains ..." comes first
+            ingredients = ingredients.substring(0, iContains);
+        } else if (iMayContain == -1 && iContains == -1) {
+            // Neither exist
+            ingredients = ingredients.substring(0, ingredients.indexOf("."));
+        } else if (iMayContain != -1) {
+            // Only "May contain ..." exists
+            ingredients = ingredients.substring(0, iMayContain);
+        } else {
+            // Only "Contains ..." exists
+            ingredients = ingredients.substring(0, iContains);
+        }
+
+        return ingredients + "\n\n" + contains + "\n\n" + mayContain;
+    }
+
+    /**
+     * Helper function
+     * @param input the message
+     * @return Occurrence of first alphabetical character
+     */
+    public int findFirstLetterPosition(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            if (Character.isLetter(input.charAt(i))) {
+                return i;
+            }
+        }
+        return -1; // not found
     }
 
 
