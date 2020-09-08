@@ -127,8 +127,8 @@ public class AddItemManually extends Fragment {
             public void onClick(View v) {
                 String name = editTextName.getText().toString();
                 String brand = editTextBrand.getText().toString();
-                String barcode = editTextBarcode.getText().toString();
-                String shelfLife = editTextShelfLife.getText().toString();
+                Integer barcode = Integer.parseInt(editTextBarcode.getText().toString());
+                Integer shelfLife = Integer.parseInt(editTextShelfLife.getText().toString());
                 String volume = editTextQuantity.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
 //              String dietary =spinnerDietary.getSelectedItem().toString()

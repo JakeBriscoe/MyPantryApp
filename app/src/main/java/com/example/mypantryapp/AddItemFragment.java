@@ -80,6 +80,8 @@ public class AddItemFragment extends Fragment {
         final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
         barcodeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
+
+
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
             }
