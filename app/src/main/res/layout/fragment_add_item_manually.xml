@@ -127,8 +127,8 @@
                 android:layout_height="74dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
-                android:hint="shelf Life in days"
                 android:gravity="start|top"
+                android:hint="Shelf life in days"
                 android:inputType="textMultiLine" />
 
             <TextView
