@@ -193,6 +193,21 @@ public class ScanIngredientsFragment extends Fragment {
 
     }
 
+    interface SendMessage {
+        void sendData(String message);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            SM = (SendMessage) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+    }
+
     /**
      * Modify the message passed so that unnecessary words are ignored
      *
@@ -232,22 +247,28 @@ public class ScanIngredientsFragment extends Fragment {
         }
 
         // Fix formatting issues
-        // Need to account for the word 'Ingredients'
         String ingredients = data.substring(iIngredients + 11).replace("\n", " ");
 
         // Start our result at the first occurrence of a letter
         // To account for cases such as "Ingredients: ..." as well as "Ingredients ..."
         ingredients = ingredients.substring(findFirstLetterPosition(ingredients));
 
-        // Get indexes of "May contain ..." and "Contains ..."
-        int iMayContain = ingredients.indexOf("May contain");
-        int iContains = ingredients.indexOf("Contains");
-        String mayContain;
-        String contains;
+        // Get indexes of "May contain ..." and "Contains ...". Account for capitals.
+        int iMayContain = ingredients.indexOf("MAY CONTAIN");
+        int iContains = ingredients.indexOf("CONTAINS");
+        if (iMayContain == -1) {
+            iMayContain = ingredients.indexOf("May contain");
+        }
+        if (iContains == -1) {
+            iContains = ingredients.indexOf("Contains");
+        }
 
         // Get substrings which contain the "May contain ..." and "Contains ..." information.
         // This is done by taking a substring of ingredients from the trigger word until the next full stop.
         // Need to make sure that the indices are viable.
+        String mayContain;
+        String contains;
+
         if (iMayContain == -1) {
             mayContain = "";
         } else {
@@ -263,24 +284,24 @@ public class ScanIngredientsFragment extends Fragment {
         String result;
 
         // Now decide where to finish the ingredients string based on "Contains ..." and "May contain ..."
-        if (iMayContain < iContains && iMayContain != -1) {
-            // Both exist, and "May contain ..." comes first
+        if (iMayContain < iContains && iMayContain != -1) { // Both exist, and "May contain ..." comes first
             ingredients = ingredients.substring(0, iMayContain);
             result = ingredients + "\n\n" + contains + "\n\n" + mayContain;
-        } else if (iContains < iMayContain && iContains != -1) {
-            // Both exist, and "Contains ..." comes first
+        } else if (iContains < iMayContain && iContains != -1) { // Both exist, and "Contains ..." comes first
             ingredients = ingredients.substring(0, iContains);
             result = ingredients + "\n\n" + contains + "\n\n" + mayContain;
-        } else if (iMayContain == -1 && iContains == -1) {
-            // Neither exist
+        } else if (iMayContain == -1 && iContains == -1) { // Neither exist
+            int stop = ingredients.indexOf(".");
+            // While the full stop is due to a decimal, continue looking for the final full stop.
+            while (ingredients.substring(stop-1, stop).matches("\\d+") && ingredients.substring(stop+1, stop+2).matches("\\d+")) {
+                stop = ingredients.indexOf(".", stop+1);
+            }
             ingredients = ingredients.substring(0, ingredients.indexOf(".") + 1);
             result = ingredients;
-        } else if (iMayContain != -1) {
-            // Only "May contain ..." exists
+        } else if (iMayContain != -1) { // Only "May contain ..." exists
             ingredients = ingredients.substring(0, iMayContain);
             result = ingredients + "\n\n" + mayContain;
-        } else {
-            // Only "Contain  s ..." exists
+        } else { // Only "Contain  s ..." exists
             ingredients = ingredients.substring(0, iContains);
             result = ingredients + "\n\n" + contains;
         }
@@ -300,21 +321,6 @@ public class ScanIngredientsFragment extends Fragment {
             }
         }
         return -1; // not found
-    }
-
-    interface SendMessage {
-        void sendData(String message);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            SM = (SendMessage) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Error in retrieving data. Please try again");
-        }
     }
 
 }
