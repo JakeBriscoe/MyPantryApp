@@ -79,6 +79,8 @@ public class AddItemFragment extends Fragment {
         // When the barcode icon or text is selected, the user should be navigated to the barcode fragment.
         final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
         barcodeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+
 
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
