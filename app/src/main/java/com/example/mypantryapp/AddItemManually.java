@@ -1,25 +1,24 @@
 package com.example.mypantryapp;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.annotation.SuppressLint;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +31,8 @@ import java.util.Map;
 
 
 public class AddItemManually extends Fragment {
+
+
     private Spinner spinner;
     private DatabaseReference mDatabase;
 
@@ -43,7 +44,7 @@ public class AddItemManually extends Fragment {
     private static final String KEY_BRAND = "brand";
     private static final String KEY_BARCODE = "barcodeNum";
     private static final String KEY_SHELFLIFE = "shelfLife";
-    private static final String KEY_QUANTITY = "quantity";
+    private static final String KEY_VOLUME = "volume";
 //    private  static final String KEY_CATEGORY = "categoryName";
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
@@ -59,18 +60,14 @@ public class AddItemManually extends Fragment {
 //    private Spinner spinnerAllergy;
 
     private Button saveButton;
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-   ArrayAdapter array_adapt;
-    FragmentActivity listener;
+
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Activity){
-            this.listener = (FragmentActivity) context;
-        }
-    }
+            }
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -138,9 +135,9 @@ public class AddItemManually extends Fragment {
             public void onClick(View v) {
                 String name = editTextName.getText().toString();
                 String brand = editTextBrand.getText().toString();
-                String barcode = editTextBarcode.getText().toString();
-                String shelfLife = editTextShelfLife.getText().toString();
-                String quantity = editTextQuantity.getText().toString();
+                Integer barcode = Integer.parseInt(editTextBarcode.getText().toString());
+                Integer shelfLife = Integer.parseInt(editTextShelfLife.getText().toString());
+                String volume = editTextQuantity.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
 //              String dietary =spinnerDietary.getSelectedItem().toString()
 //              String allergy =spinnerAllergy.getSelectedItem().toString();
@@ -151,7 +148,7 @@ public class AddItemManually extends Fragment {
                 item.put(KEY_BRAND, brand);
                 item.put(KEY_BARCODE, barcode);
                 item.put(KEY_SHELFLIFE, shelfLife);
-                item.put(KEY_QUANTITY, quantity);
+                item.put(KEY_VOLUME, volume);
                 //        item.put(KEY_CATEGORY, category);
                 //        item.put(KEY_DIETARY, dietary);
                 //        item.put(KEY_ALLERGY, allergy);

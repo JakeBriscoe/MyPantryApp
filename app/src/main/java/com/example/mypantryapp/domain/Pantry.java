@@ -1,49 +1,54 @@
 package com.example.mypantryapp.domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Pantry {
-    private long productId;
-    private String productName;
-    private int quantity;
-    private Date expiry;
+    private List<PantryItem> items;
+    private String name;
+    private List<String> userIds;
 
-    public Pantry(long productId, String productName, int quantity, Date expiry) {
-        this.productId = productId;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.expiry = expiry;
+    /**
+     * Create a Pantry with multiple user.
+     *
+     * @param name the name of the pantry
+     * @param items the items to add to the pantry
+     * @param userIds the IDs of the users to add to the pantry
+     */
+    public Pantry(String name, List<PantryItem> items, String... userIds) {
+        this.name = name;
+        this.userIds.addAll(Arrays.asList(userIds));
+        this.items = items;
     }
 
-    public long getProductId() {
-        return productId;
+    /**
+     * Create a Pantry with a single user.
+     *
+     * @param name the name of the pantry
+     * @param items the items to add to the pantry
+     * @param userId the ID of the user to add to the pantry
+     */
+    public Pantry(String name, List<PantryItem> items, String userId) {
+        this.name = name;
+        this.userIds.add(userId);
+        this.items = items;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public List<PantryItem> getItems() {
+        return items;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public List<String> getUserIds() {
+        return userIds;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Date getExpiry() {
-        return expiry;
-    }
-
-    public void setExpiry(Date expiry) {
-        this.expiry = expiry;
+    public void addItem(PantryItem item) {
+        this.items.add(item);
     }
 }

@@ -1,10 +1,11 @@
 package com.example.mypantryapp.domain;
 
 public class Product {
-    private long productId;
-    private float weight;
+    private String productId;
+    private String weight;
     private long barcodeNum;
-    private String productName;
+    private int shelfLife; // in days, using 10000 if n/a
+    private String name;
     private String description;
     private String brand;
     private String categoryName;
@@ -12,11 +13,14 @@ public class Product {
     private String allergens;
     private String ingredients;
 
-    public Product(long productId, float weight, long barcodeNum, String productName, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
+//Domain datatype attribute has been changed, database only takes a string at the moment.
+
+    public Product(String productId, String weight, long barcodeNum, int shelfLife, String name, String description, String brand, String categoryName, String dietaryType, String allergens, String ingredients) {
         this.productId = productId;
         this.weight = weight;
         this.barcodeNum = barcodeNum;
-        this.productName = productName;
+        this.shelfLife = shelfLife;
+        this.name = name;
         this.description = description;
         this.brand = brand;
         this.categoryName = categoryName;
@@ -25,83 +29,52 @@ public class Product {
         this.ingredients = ingredients;
     }
 
-    public long getProductId() {
+    public Product(){
+
+    }
+
+
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
-
-    public float getWeight() {
+    public String getWeight() {
         return weight;
-    }
-
-    public void setWeight(float weight) {
-        this.weight = weight;
     }
 
     public long getBarcodeNum() {
         return barcodeNum;
     }
 
-    public void setBarcodeNum(long barcodeNum) {
-        this.barcodeNum = barcodeNum;
+    public int getShelfLife() {
+        return shelfLife;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getBrand() {
         return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public String getCategoryName() {
         return categoryName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
     public String getDietaryType() {
         return dietaryType;
-    }
-
-    public void setDietaryType(String dietaryType) {
-        this.dietaryType = dietaryType;
     }
 
     public String getAllergens() {
         return allergens;
     }
 
-    public void setAllergens(String allergens) {
-        this.allergens = allergens;
-    }
-
     public String getIngredients() {
         return ingredients;
-    }
-
-    public void setIngredients(String ingredients) {
-        this.ingredients = ingredients;
     }
 }
