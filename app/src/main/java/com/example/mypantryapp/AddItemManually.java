@@ -1,17 +1,8 @@
 package com.example.mypantryapp;
 
-import android.content.Context;
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,6 +33,9 @@ public class AddItemManually extends Fragment {
 
     private Spinner spinner;
     private DatabaseReference mDatabase;
+
+    EditText enterIngredientsText;
+    String updateIngredientsText;
 
     private static final String TAG = "AddItemManually";
     private static final String KEY_NAME= "name";
@@ -119,13 +112,18 @@ public class AddItemManually extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         // Setup any handles to view objects here
         editTextName =  (EditText) view.findViewById(R.id.productNameInputMan);
         editTextBrand =  (EditText) view.findViewById(R.id.brandInputMan);
         editTextBarcode =  (EditText) view.findViewById(R.id.barcodeInputMan);
         editTextShelfLife = (EditText) view.findViewById(R.id.shelfLifeInputMan);
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
-//        spinnerCategory = (Spinner) view.findViewById(R.id.CategorySpinMan);
+
+        enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
+
+//        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
 //        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
 //        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
 
@@ -135,8 +133,8 @@ public class AddItemManually extends Fragment {
             public void onClick(View v) {
                 String name = editTextName.getText().toString();
                 String brand = editTextBrand.getText().toString();
-                String barcode = editTextBarcode.getText().toString();
-                String shelfLife = editTextShelfLife.getText().toString();
+                Integer barcode = Integer.parseInt(editTextBarcode.getText().toString());
+                Integer shelfLife = Integer.parseInt(editTextShelfLife.getText().toString());
                 String volume = editTextQuantity.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
 //              String dietary =spinnerDietary.getSelectedItem().toString()
@@ -173,11 +171,24 @@ public class AddItemManually extends Fragment {
 
     }
 
+    /**
+     * Update the ingredients field in onResume to ensure it is displayed
+     */
     @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
+        if (updateIngredientsText != null) {
+            enterIngredientsText.setText(updateIngredientsText);
+        }
     }
 
+    /**
+     * Here to get data from another fragment
+     * @param message the result of camera in ScanIngredientsFragment
+     */
+    protected void displayReceivedData(String message) {
+        updateIngredientsText = message;
+    }
 
 }

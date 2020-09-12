@@ -1,6 +1,8 @@
 package com.example.mypantryapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +12,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,9 +42,11 @@ public class ScanIngredientsFragment extends Fragment {
     private TextView mTextView;
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
-    public String ingredients;
-    public ArrayList<String> dietWarnings;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private StringBuilder stringBuilder = new StringBuilder();
+    private Button btnConfirm;
+
+    SendMessage SM;
+    String message;
 
     @Nullable
     @Override
@@ -50,16 +56,15 @@ public class ScanIngredientsFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-//        mCameraView = getActivity().findViewById(R.id.surfaceView);
-//        mTextView = getActivity().findViewById(R.id.text_view);
-
         return inflater.inflate(R.layout.fragment_scan_ingredients, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mCameraView = getActivity().findViewById(R.id.surfaceView);
+        final Button takeSnapshot = getActivity().findViewById(R.id.btnTakePicture);
 
         //Create the TextRecognizer
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getActivity().getApplicationContext()).build();
@@ -127,19 +132,66 @@ public class ScanIngredientsFragment extends Fragment {
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
                     if (items.size() != 0) {
 
-                        mTextView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                StringBuilder stringBuilder = new StringBuilder();
-                                for (int i = 0; i < items.size(); i++) {
-                                    TextBlock item = items.valueAt(i);
-                                    stringBuilder.append(item.getValue());
-                                    stringBuilder.append("\n");
-                                }
-                                ingredients = stringBuilder.toString();
-                                mTextView.setText(ingredients);
+                        for (int i = 0; i < items.size(); i++) {
+                            TextBlock item = items.valueAt(i);
+                            stringBuilder.append(item.getValue());
+                            stringBuilder.append("\n");
+                        }
+
+                    }
+                }
+            });
+
+            btnConfirm = getActivity().findViewById(R.id.btnConfirm);
+
+            // When the barcode icon is selected, the user should be navigated to the barcode fragment.
+            takeSnapshot.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View v) {
+
+                    if (takeSnapshot.getText().equals("Take Picture")) {
+                        mCameraSource.stop();
+                        takeSnapshot.setText("Try Again");
+                        // Show button for user to confirm
+                        btnConfirm.setVisibility(View.VISIBLE);
+                    } else if (takeSnapshot.getText().equals("Try Again")) {
+                        try {
+
+                            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        requestPermissionID);
+                                return;
                             }
-                        });
+                            mCameraSource.start(mCameraView.getHolder());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        takeSnapshot.setText("Take Picture");
+                        btnConfirm.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+
+            btnConfirm.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View v) {
+
+                    try {
+
+                        message = transformMessage(stringBuilder.toString().trim());
+                        SM.sendData(message);
+                        assert getFragmentManager() != null;
+                        getFragmentManager().popBackStack();
+
+                    } catch (ArrayIndexOutOfBoundsException exception) {
+                        Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
+                        btnConfirm.setVisibility(View.VISIBLE);
+                        takeSnapshot.setText("Take Picture");
                     }
                 }
 
@@ -170,8 +222,139 @@ public class ScanIngredientsFragment extends Fragment {
                             });
                 }
             });
+
+        }
+
+    }
+
+    interface SendMessage {
+        void sendData(String message);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            SM = (SendMessage) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
         }
     }
 
+    /**
+     * Modify the message passed so that unnecessary words are ignored
+     *
+     * ASSUMPTIONS
+     * ------------------------
+     * The format will include "Ingredients ...", "May contain ..." and "Contains ..."
+     * There is only one occurrence of 'Ingredients' in the snapshot taken
+     * The camera picks up the full stops
+     *
+     * TODO: consider "May be present: ..."
+     *
+     * @param data the result from scan ingredients
+     * @return the modified string
+     */
+    protected String transformMessage(String data) {
+
+        // Start string after "Ingredients"
+        // Get two substrings: "Contains ..." and "May contain ..." based on occurrence and consequent full stop.
+        // If "Contains ..." and "May contain ..." doesn't exist, return without altering
+        // Otherwise, get rid of everything after the first occurrence, and concatenate the two substrings
+
+        int iIngredients; // This should be at the last occurrence of 'Ingredients'
+
+        // Need to consider the case where the word ingredients is in capitals
+        int iLower = data.lastIndexOf("Ingredients");
+        int iUpper = data.lastIndexOf("INGREDIENTS");
+        if (iLower > iUpper) {
+            iIngredients = iLower;
+        } else {
+            iIngredients = iUpper;
+        }
+
+        // If there is no occurrence of 'Ingredients', then there are no ingredients to identify
+        if (iIngredients == -1) {
+            Toast.makeText(getActivity(), "No ingredients identified", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        // Fix formatting issues
+        String ingredients = data.substring(iIngredients + 11).replace("\n", " ");
+
+        // Start our result at the first occurrence of a letter
+        // To account for cases such as "Ingredients: ..." as well as "Ingredients ..."
+        ingredients = ingredients.substring(findFirstLetterPosition(ingredients));
+
+        // Get indexes of "May contain ..." and "Contains ...". Account for capitals.
+        int iMayContain = ingredients.indexOf("MAY CONTAIN");
+        int iContains = ingredients.indexOf("CONTAINS");
+        if (iMayContain == -1) {
+            iMayContain = ingredients.indexOf("May contain");
+        }
+        if (iContains == -1) {
+            iContains = ingredients.indexOf("Contains");
+        }
+
+        // Get substrings which contain the "May contain ..." and "Contains ..." information.
+        // This is done by taking a substring of ingredients from the trigger word until the next full stop.
+        // Need to make sure that the indices are viable.
+        String mayContain;
+        String contains;
+
+        if (iMayContain == -1) {
+            mayContain = "";
+        } else {
+            mayContain = ingredients.substring(iMayContain, ingredients.indexOf(".", iMayContain) + 1);
+        }
+
+        if (iContains == -1) {
+            contains = "";
+        } else {
+            contains = ingredients.substring(iContains, ingredients.indexOf(".", iContains) + 1);
+        }
+
+        String result;
+
+        // Now decide where to finish the ingredients string based on "Contains ..." and "May contain ..."
+        if (iMayContain < iContains && iMayContain != -1) { // Both exist, and "May contain ..." comes first
+            ingredients = ingredients.substring(0, iMayContain);
+            result = ingredients + "\n\n" + contains + "\n\n" + mayContain;
+        } else if (iContains < iMayContain && iContains != -1) { // Both exist, and "Contains ..." comes first
+            ingredients = ingredients.substring(0, iContains);
+            result = ingredients + "\n\n" + contains + "\n\n" + mayContain;
+        } else if (iMayContain == -1 && iContains == -1) { // Neither exist
+            int stop = ingredients.indexOf(".");
+            // While the full stop is due to a decimal, continue looking for the final full stop.
+            while (ingredients.substring(stop-1, stop).matches("\\d+") && ingredients.substring(stop+1, stop+2).matches("\\d+")) {
+                stop = ingredients.indexOf(".", stop+1);
+            }
+            ingredients = ingredients.substring(0, ingredients.indexOf(".") + 1);
+            result = ingredients;
+        } else if (iMayContain != -1) { // Only "May contain ..." exists
+            ingredients = ingredients.substring(0, iMayContain);
+            result = ingredients + "\n\n" + mayContain;
+        } else { // Only "Contain  s ..." exists
+            ingredients = ingredients.substring(0, iContains);
+            result = ingredients + "\n\n" + contains;
+        }
+
+        return result;
+    }
+
+    /**
+     * Helper function
+     * @param input the message
+     * @return Occurrence of first alphabetical character
+     */
+    public int findFirstLetterPosition(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            if (Character.isLetter(input.charAt(i))) {
+                return i;
+            }
+        }
+        return -1; // not found
+    }
 
 }

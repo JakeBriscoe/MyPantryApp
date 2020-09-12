@@ -7,6 +7,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
+import androidx.annotation.VisibleForTesting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,8 +21,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -26,49 +36,55 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * navigation drawer = the menu that pulls out from the left side of the screen,
  * bottom navigation = the menu that remains on the bottom of the screen.
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ScanIngredientsFragment.SendMessage{
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-
-
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseUser user = mAuth.getCurrentUser();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
-
-        // Set listeners for the navigation options
-        bottomNav = findViewById(R.id.bottom_navigation_drawer);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-        drawer = findViewById(R.id.navigation_drawer);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Replace automatic toolbar with our own toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Add listener so we can toggle between the menu drawer being open and closed
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeFragment()).addToBackStack(null).commit();
-            navigationView.setCheckedItem(R.id.nav_pantry1);
+        if (user == null){
+            Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+            startActivity(intent);
         }
+        else {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            boolean emailVerified = user.isEmailVerified();
 
+            setContentView(R.layout.activity_main);
 
+            // Set listeners for the navigation options
+            bottomNav = findViewById(R.id.bottom_navigation_drawer);
+            bottomNav.setOnNavigationItemSelectedListener(navListener);
+            drawer = findViewById(R.id.navigation_drawer);
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            // Replace automatic toolbar with our own toolbar
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            // Add listener so we can toggle between the menu drawer being open and closed
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                    R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HomeFragment()).addToBackStack(null).commit();
+                navigationView.setCheckedItem(R.id.nav_pantry1);
+            }
+            Toast.makeText(MainActivity.this, currentUser.getEmail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+
+        }
 
 
     }
@@ -102,7 +118,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 // Placeholder
+                mAuth.signOut();
                 Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(intent);
             default:
                 Log.e("TAG", "Unrecognized section: " + item.getItemId());
 
@@ -179,6 +198,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
         return true;
+    }
+
+    @Override
+    public void sendData(String message) {
+//        AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentById(R.id.scaningredientslayout);
+        AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
+        assert f != null;
+        f.displayReceivedData(message);
     }
 
     /**

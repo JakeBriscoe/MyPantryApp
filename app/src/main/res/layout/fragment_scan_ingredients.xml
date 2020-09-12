@@ -10,13 +10,13 @@
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="555dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="4"
         app:layout_constraintBottom_toTopOf="@+id/btnTakePicture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txtScanTitle" />
 
     <Button
         android:id="@+id/btnTakePicture"
@@ -47,5 +47,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnTakePicture" />
+
+    <TextView
+        android:id="@+id/txtScanTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="75dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="For best results, please ensure the image is clear and that there is only one occurrence of the word 'Ingredients'."
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
