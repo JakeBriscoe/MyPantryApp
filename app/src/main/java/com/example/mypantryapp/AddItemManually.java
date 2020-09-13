@@ -156,6 +156,12 @@ public class AddItemManually extends Fragment {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
+                                editTextName.setText("");
+                                editTextBrand.setText("");
+                                editTextBarcode.setText("");
+                                editTextShelfLife.setText("");
+                                editTextQuantity.setText("");
+                                enterIngredientsText.setText("");
 
                             }
                         })
