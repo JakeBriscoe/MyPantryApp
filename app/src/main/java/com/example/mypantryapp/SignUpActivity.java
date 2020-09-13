@@ -58,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             "SignUp unsuccessful: " + task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    startActivity(new Intent(SignUpActivity.this, PantrySetUpActivity.class));
+                                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                                 }
                             }
                         });
