@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mypantryapp.domain.PantrySetUpActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -57,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             "SignUp unsuccessful: " + task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                    startActivity(new Intent(SignUpActivity.this, PantrySetUpActivity.class));
                                 }
                             }
                         });
