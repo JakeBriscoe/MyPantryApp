@@ -1,4 +1,7 @@
 package com.example.mypantryapp;
 
-public class PantrySetUpActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class PantrySetUpActivity extends AppCompatActivity {
+
 }
