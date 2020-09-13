@@ -4,19 +4,19 @@ public class User {
     private boolean isAdmin;
     private String username;
     private String email;
-    private String password;
     private String firstName;
     private String lastName;
     private String country;
+    private String userAuthId;
 
-    public User(boolean isAdmin, String username, String email, String password, String firstName, String lastName, String country) {
+    public User(boolean isAdmin, String username, String email, String firstName, String lastName, String country, String userAuthId) {
         this.isAdmin = isAdmin;
         this.username = username;
         this.email = email;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.country = country;
+        this.userAuthId = userAuthId;
     }
 
     public boolean getAdmin() {
@@ -31,13 +31,11 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getFirstName() {
         return firstName;
     }
+
+    public String getUserAuthId() {return userAuthId;}
 
     public String getLastName() {
         return lastName;
@@ -55,10 +53,6 @@ public class User {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -71,16 +65,18 @@ public class User {
         this.country = country;
     }
 
+    public void setUserAuthId(String userAuthId) {this.userAuthId = userAuthId; }
+
     @Override
     public String toString() {
         return "User{" +
                 "isAdmin=" + isAdmin +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", country='" + country + '\'' +
+                ", userAuthId='" + userAuthId + '\'' +
                 '}';
     }
 }

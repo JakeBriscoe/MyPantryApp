@@ -1,14 +1,18 @@
 package com.example.mypantryapp.domain;
 
+import java.util.List;
+
 public class Dietary {
     private long dietaryId;
     private String dietaryType;
     private String description;
+    private List<String> blacklist;
 
-    public Dietary(long dietaryId, String dietaryType, String description) {
+    public Dietary(long dietaryId, String dietaryType, String description, List<String> blacklist) {
         this.dietaryId = dietaryId;
         this.dietaryType = dietaryType;
         this.description = description;
+        this.blacklist = blacklist;
     }
 
     public long getDietaryId() {
@@ -34,4 +38,7 @@ public class Dietary {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public List<String> getBlacklist() { return blacklist; }
+    public void setBlacklist(List<String> blacklist) { this.blacklist = blacklist; }
 }

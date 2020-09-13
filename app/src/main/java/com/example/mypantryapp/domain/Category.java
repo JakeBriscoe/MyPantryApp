@@ -3,12 +3,10 @@ package com.example.mypantryapp.domain;
 public class Category {
     private long categoryId;
     private String categoryName;
-    private String description;
 
-    public Category(long categoryId, String categoryName, String description) {
+    public Category(long categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-        this.description = description;
     }
 
     public long getCategoryId() {
@@ -25,13 +23,5 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
