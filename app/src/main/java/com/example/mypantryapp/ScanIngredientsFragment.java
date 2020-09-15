@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -44,6 +45,10 @@ public class ScanIngredientsFragment extends Fragment {
     public static final int requestPermissionID = 100;// . or any other value
     private StringBuilder stringBuilder = new StringBuilder();
     private Button btnConfirm;
+    public String ingredients;
+    public ArrayList<String> dietWarnings;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private View view;
 
     SendMessage SM;
     String message;
@@ -62,6 +67,7 @@ public class ScanIngredientsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
 
         mCameraView = getActivity().findViewById(R.id.surfaceView);
         final Button takeSnapshot = getActivity().findViewById(R.id.btnTakePicture);
@@ -137,9 +143,12 @@ public class ScanIngredientsFragment extends Fragment {
                             stringBuilder.append(item.getValue());
                             stringBuilder.append("\n");
                         }
+                        //might need to change where this is
+                        transformMessage(stringBuilder.toString().trim());
 
                     }
                 }
+                //maybe will need else set colour blank
             });
 
             btnConfirm = getActivity().findViewById(R.id.btnConfirm);
@@ -193,33 +202,6 @@ public class ScanIngredientsFragment extends Fragment {
                         btnConfirm.setVisibility(View.VISIBLE);
                         takeSnapshot.setText("Take Picture");
                     }
-                }
-
-                public void checkIngredients() {
-                    final String[] ingrs = ingredients.split("/n");
-                    db.collection("dietary")
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        docLoop:
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Log.d(TAG, document.getId() + " => " + document.getData());
-                                            String name = document.getString("name");
-                                            List<String> blacklist = (List<String>) document.get("blacklist");
-                                            for(String ingr: ingrs) {
-                                                if(blacklist.contains(ingr)) {
-                                                    dietWarnings.add(name);
-                                                    continue docLoop; // skips to the next diet
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        Log.d(TAG, "Error getting documents: ", task.getException());
-                                    }
-                                }
-                            });
                 }
             });
 
@@ -307,6 +289,7 @@ public class ScanIngredientsFragment extends Fragment {
             mayContain = "";
         } else {
             mayContain = ingredients.substring(iMayContain, ingredients.indexOf(".", iMayContain) + 1);
+            //may contain ingredients (ingredients type, may need to add in firebase)
         }
 
         if (iContains == -1) {
@@ -355,6 +338,51 @@ public class ScanIngredientsFragment extends Fragment {
             }
         }
         return -1; // not found
+    }
+
+    /**
+     * Checks if a products ingredients do not match a users diet and updates the background color
+     * accordingly
+     * @param ingrs ingredients list
+     */
+    public void checkIngredients(final String[] ingrs, final boolean mayContain, final boolean finalPic) {
+        dietWarnings = new ArrayList<>();
+        db.collection("dietary")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            docLoop:
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                String name = document.getString("name");
+                                List<String> blacklist = (List<String>) document.get("blacklist");
+                                for(String ingr: ingrs) {
+                                    if(blacklist.contains(ingr)) {
+                                        if(mayContain) {
+                                            view.setBackgroundColor(Color.YELLOW);
+                                        } else {
+                                            view.setBackgroundColor(Color.RED);
+                                        }
+                                        // add formating here, mb \n name:
+                                        if (!dietWarnings.contains(name)) {
+                                            dietWarnings.add(name);
+                                        }
+                                        dietWarnings.add(ingr);
+                                    }
+                            }
+                            if(dietWarnings.size() == 0) {
+                                view.setBackgroundColor(Color.GREEN);
+                            }
+                            if(finalPic) {
+                                SM.sendData(dietWarnings);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
 }
