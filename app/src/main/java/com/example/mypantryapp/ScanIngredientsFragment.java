@@ -34,7 +34,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ScanIngredientsFragment extends Fragment {
@@ -46,7 +45,6 @@ public class ScanIngredientsFragment extends Fragment {
     private StringBuilder stringBuilder = new StringBuilder();
     private Button btnConfirm;
     public String ingredients;
-    public ArrayList<String> dietWarnings;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private View view;
 
@@ -346,37 +344,43 @@ public class ScanIngredientsFragment extends Fragment {
      * @param ingrs ingredients list
      */
     public void checkIngredients(final String[] ingrs, final boolean mayContain, final boolean finalPic) {
-        dietWarnings = new ArrayList<>();
         db.collection("dietary")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        String dietWarnings = "";
                         if (task.isSuccessful()) {
-                            docLoop:
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 String name = document.getString("name");
                                 List<String> blacklist = (List<String>) document.get("blacklist");
-                                for(String ingr: ingrs) {
-                                    if(blacklist.contains(ingr)) {
-                                        if(mayContain) {
+                                for (String ingr : ingrs) {
+                                    if (blacklist.contains(ingr)) {
+                                        if (mayContain) {
                                             view.setBackgroundColor(Color.YELLOW);
                                         } else {
                                             view.setBackgroundColor(Color.RED);
                                         }
-                                        // add formating here, mb \n name:
                                         if (!dietWarnings.contains(name)) {
-                                            dietWarnings.add(name);
+                                            if (dietWarnings.length() != 0) {
+                                                // removes unwanted ", " doesn't work for last line
+                                                dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
+                                                dietWarnings += "\n";
+                                            }
+                                            dietWarnings += name + ": ";
                                         }
-                                        dietWarnings.add(ingr);
+                                        dietWarnings += ingr + ", ";
                                     }
-                            }
-                            if(dietWarnings.size() == 0) {
-                                view.setBackgroundColor(Color.GREEN);
-                            }
-                            if(finalPic) {
-                                SM.sendData(dietWarnings);
+                                }
+                                if (dietWarnings.length() == 0) {
+                                    view.setBackgroundColor(Color.GREEN);
+                                } else {
+                                    dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
+                                }
+                                if (finalPic) {
+                                    SM.sendData(dietWarnings);
+                                }
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -384,5 +388,4 @@ public class ScanIngredientsFragment extends Fragment {
                     }
                 });
     }
-
 }
