@@ -42,14 +42,17 @@ public class ScanIngredientsFragment extends Fragment {
     private TextView mTextView;
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
-    private StringBuilder stringBuilder = new StringBuilder();
     private Button btnConfirm;
     public String ingredients;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private View view;
 
+    private StringBuilder stringBuilder = new StringBuilder();
     SendMessage SM;
-    String message;
+
+    // TODO: This is the variable that can be used for dietary checks in the takeSnapshot button listener.
+    // TODO: Make sure it is in the case of "Take picture"
+    String message; // Ingredients in the correct form
 
     @Nullable
     @Override
@@ -66,6 +69,8 @@ public class ScanIngredientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
+
+        view.setBackgroundColor(Color.GREEN);
 
         mCameraView = getActivity().findViewById(R.id.surfaceView);
         final Button takeSnapshot = getActivity().findViewById(R.id.btnTakePicture);
@@ -130,6 +135,7 @@ public class ScanIngredientsFragment extends Fragment {
                 /**
                  * Detect all the text from camera using TextBlock and the values into a stringBuilder
                  * which will then be set to the textView.
+                 * This is in real-time
                  * */
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
