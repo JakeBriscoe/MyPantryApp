@@ -188,6 +188,8 @@ public class AddItemManually extends Fragment {
      * @param message the result of camera in ScanIngredientsFragment
      */
     protected void displayReceivedData(String message) {
+
+        // TODO: If-else statement goes here to determine if the string is for ingredients or diet
         updateIngredientsText = message;
     }
 
