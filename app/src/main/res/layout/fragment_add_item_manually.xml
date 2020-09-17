@@ -167,11 +167,18 @@
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dietary Type"
+                android:text="Dietary Breach"
                 android:textStyle="bold" />
 
+            <EditText
+                android:id="@+id/enterContainsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine" />
+
             <Spinner
-                android:id="@+id/DietSpinMan"
+                android:id="@+id/DietContainsSpinMan"
                 android:layout_width="match_parent"
                 android:layout_height="42dp" />
 
@@ -179,11 +186,18 @@
                 android:id="@+id/textView15"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Allergens"
+                android:text="Dietary Warning"
                 android:textStyle="bold" />
 
+            <EditText
+                android:id="@+id/enterMayContainText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine" />
+
             <Spinner
-                android:id="@+id/AllergenSpinMan"
+                android:id="@+id/DietWarningSpinMan"
                 android:layout_width="match_parent"
                 android:layout_height="42dp" />
 

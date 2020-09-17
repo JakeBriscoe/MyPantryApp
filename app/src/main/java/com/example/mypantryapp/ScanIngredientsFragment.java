@@ -326,7 +326,7 @@ public class ScanIngredientsFragment extends Fragment {
             result = ingredients + "\n\n" + contains;
         }
 
-        return result;
+        return "I" + result;
     }
 
     /**
@@ -390,11 +390,11 @@ public class ScanIngredientsFragment extends Fragment {
                                     // removes last ", "
                                     dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
                                 }
-//                                if (mayContain) {
-//                                    SM.sendData("may " + dietWarnings);
-//                                } else {
-//                                    SM.sendData("contains " + dietWarnings);
-//                                }
+                                if (mayContain) {
+                                    SM.sendData("M" + dietWarnings);
+                                } else {
+                                    SM.sendData("C" + dietWarnings);
+                                }
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

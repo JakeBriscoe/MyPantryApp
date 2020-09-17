@@ -36,6 +36,10 @@ public class AddItemManually extends Fragment {
 
     EditText enterIngredientsText;
     String updateIngredientsText;
+    EditText enterMayContainText;
+    String updateMayContainText;
+    EditText enterContainsText;
+    String updateContainsText;
 
     private static final String TAG = "AddItemManually";
     private static final String KEY_NAME= "name";
@@ -181,6 +185,12 @@ public class AddItemManually extends Fragment {
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
         }
+        if (updateMayContainText != null) {
+            enterMayContainText.setText(updateMayContainText);
+        }
+        if (updateContainsText != null) {
+            enterContainsText.setText(updateContainsText);
+        }
     }
 
     /**
@@ -190,7 +200,15 @@ public class AddItemManually extends Fragment {
     protected void displayReceivedData(String message) {
 
         // TODO: If-else statement goes here to determine if the string is for ingredients or diet
-        updateIngredientsText = message;
+//        updateIngredientsText = message;
+
+        if (message.charAt(0) == 'I') { // Ingredients
+            updateIngredientsText = message.substring(1);
+        } else if (message.charAt(0) == 'M') { // May Contain
+            updateMayContainText = message.substring(1);
+        } else { // Contains
+            updateContainsText = message.substring(1);
+        }
     }
 
 }
