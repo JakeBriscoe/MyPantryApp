@@ -2,22 +2,18 @@ package com.example.mypantryapp;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.domain.Product;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
@@ -45,11 +41,6 @@ public class AddItemFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-
-  //  public void onAttach(Context context) {
-   //     super.onAttach(context);
-    //}
-
     //Display list of product name from firebase
     public void onStart(){
         super.onStart();
@@ -57,14 +48,13 @@ public class AddItemFragment extends Fragment {
         mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
+        ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
         productRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         StringBuilder bld = new StringBuilder();
-
-                        ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
                         for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                             Product product = documentSnapshot.toObject(Product.class);
@@ -74,18 +64,14 @@ public class AddItemFragment extends Fragment {
 
                             exampleList.add(new ExampleItem(name, brand));
 
-//                            bld.append("Product Name: ").append(name).append("\n"). append("\n");
-
                         }
 
                         mAdapter = new ExampleAdapter(exampleList);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
-                    //Set the get(attributes) to the textview
-//                        textViewData.setText(bld);
 
                     }
-    });
+        });
 
     }
 
@@ -135,55 +121,6 @@ public class AddItemFragment extends Fragment {
             }
         });
 
-        //----------------------------------------------This was used for testing,  Will need to remove code below-------------------------------------
-
-//        textViewData = v.findViewById(R.id.text_view_products);
-        ImageButton downloadButton = v.findViewById(R.id.downloadInfo);
-
-        mRecyclerView = v.findViewById(R.id.recyclerViewItems);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                productRef.get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                StringBuilder bld = new StringBuilder();
-
-                                ArrayList<ExampleItem> exampleList = new ArrayList<>();
-
-                                for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                                    Product product = documentSnapshot.toObject(Product.class);
-
-                                    String name = product.getName();
-                                    String brand = product.getBrand();
-
-                                    exampleList.add(new ExampleItem(name, brand));
-
-//                                    bld.append("Product Name: ").append(name).append("\n"). append("\n");
-
-                                }
-
-                                mAdapter = new ExampleAdapter(exampleList);
-                                mRecyclerView.setLayoutManager(mLayoutManager);
-                                mRecyclerView.setAdapter(mAdapter);
-//                                textViewData.setText(bld);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "Error!", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, toString());
-                            }
-                        });
-            }
-        });
         return v;
     }
 }

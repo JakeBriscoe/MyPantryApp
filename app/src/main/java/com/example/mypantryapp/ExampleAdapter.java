@@ -41,7 +41,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         ExampleItem currentItem = mExampleList.get(position);
 
         holder.mNameTextView.setText(currentItem.getName());
-        holder.mNameTextView.setText(currentItem.getBrand());
+        holder.mBrandTextView.setText(currentItem.getBrand());
     }
 
     @Override
