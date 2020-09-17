@@ -152,5 +152,5 @@ public class AddItemFragment extends Fragment {
     public interface SendDetails {
         void sendDetails(String name, String brand);
     }
-
+    
 }
