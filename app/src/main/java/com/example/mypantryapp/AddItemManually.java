@@ -3,6 +3,8 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -131,6 +133,19 @@ public class AddItemManually extends Fragment {
 //        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
 //        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
 
+        enterIngredientsText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                CheckIngredients continuousCheck = new CheckIngredients(enterIngredientsText.getText().toString());
+                enterContainsText.setText(continuousCheck.getDietWarnings());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do something before Text Change
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do something while Text Change
+            }
+        });
+
         Button save_manually = getActivity().findViewById(R.id.button_save_man);
         save_manually.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +199,7 @@ public class AddItemManually extends Fragment {
 
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
+
         }
         if (updateMayContainText != null) {
             enterMayContainText.setText(updateMayContainText);
@@ -198,17 +214,6 @@ public class AddItemManually extends Fragment {
      * @param message the result of camera in ScanIngredientsFragment
      */
     protected void displayReceivedData(String message) {
-
-        // TODO: If-else statement goes here to determine if the string is for ingredients or diet
-//        updateIngredientsText = message;
-
-        if (message.charAt(0) == 'I') { // Ingredients
-            updateIngredientsText = message.substring(1);
-        } else if (message.charAt(0) == 'M') { // May Contain
-            updateMayContainText = message.substring(1);
-        } else { // Contains
-            updateContainsText = message.substring(1);
-        }
+        updateIngredientsText = message;
     }
-
 }

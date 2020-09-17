@@ -22,19 +22,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
-import java.util.List;
 
 public class ScanIngredientsFragment extends Fragment {
     private CameraSource mCameraSource;
@@ -44,7 +38,6 @@ public class ScanIngredientsFragment extends Fragment {
     public static final int requestPermissionID = 100;// . or any other value
     private Button btnConfirm;
     public String ingredients;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private View view;
 
     private StringBuilder stringBuilder = new StringBuilder();
@@ -298,8 +291,15 @@ public class ScanIngredientsFragment extends Fragment {
         }
 
         // Check diet
-        checkIngredients(mayContain.split(" "), true);
-        checkIngredients((ingredients + " " + contains).split(" "), false);
+        CheckIngredients checkContains = new CheckIngredients(ingredients + " " + contains);
+        if (!checkContains.isDietValid()) {
+            view.setBackgroundColor(Color.RED);
+        } else {
+            CheckIngredients checkMayContain = new CheckIngredients(mayContain);
+            if (!checkMayContain.isDietValid()) {
+                view.setBackgroundColor(Color.YELLOW);
+            }
+        }
 
         String result;
 
@@ -326,7 +326,7 @@ public class ScanIngredientsFragment extends Fragment {
             result = ingredients + "\n\n" + contains;
         }
 
-        return "I" + result;
+        return result;
     }
 
     /**
@@ -349,57 +349,5 @@ public class ScanIngredientsFragment extends Fragment {
      * @param ingrs ingredients list
      * @param mayContain boolean indicator of whether the ingredients are definitely in it
      */
-    public void checkIngredients(final String[] ingrs, final boolean mayContain) {
-        db.collection("dietary")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String dietWarnings = "";
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                String name = document.getString("name");
-                                List<String> blacklist = (List<String>) document.get("blacklist");
-                                for (String ingr : ingrs) {
-                                    ingr = ingr.toLowerCase();
-                                    // removes trailing ,
-                                    if (ingr.charAt(ingr.length()-1) == ',') {
-                                        ingr = ingr.substring(0, ingr.length()-1);
-                                    }
-                                    if (blacklist.contains(ingr)) {
-                                        if (mayContain) {
-                                            view.setBackgroundColor(Color.YELLOW);
-                                        } else {
-                                            view.setBackgroundColor(Color.RED);
-                                        }
-                                        if (!dietWarnings.contains(name)) {
-                                            if (dietWarnings.length() != 0) {
-                                                // removes unwanted ", " doesn't work for last line
-                                                dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
-                                                dietWarnings += "\n";
-                                            }
-                                            dietWarnings += name + ": ";
-                                        }
-                                        dietWarnings += ingr + ", ";
-                                    }
-                                }
-                                if (dietWarnings.length() == 0) {
-                                    view.setBackgroundColor(Color.GREEN);
-                                } else {
-                                    // removes last ", "
-                                    dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
-                                }
-                                if (mayContain) {
-                                    SM.sendData("M" + dietWarnings);
-                                } else {
-                                    SM.sendData("C" + dietWarnings);
-                                }
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
+
 }
