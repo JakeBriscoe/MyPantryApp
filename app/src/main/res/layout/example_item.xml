@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/viewItems_productName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Name"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/viewItems_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewItems_productName"
+            android:text="Brand Name"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:layout_marginStart="8dp" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

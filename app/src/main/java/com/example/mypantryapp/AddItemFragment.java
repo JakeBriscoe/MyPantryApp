@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,6 +24,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 
 public class AddItemFragment extends Fragment {
@@ -37,6 +41,10 @@ public class AddItemFragment extends Fragment {
     //Field for collection of products in the firebase.
     private CollectionReference productRef = db.collection("products");
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
   //  public void onAttach(Context context) {
    //     super.onAttach(context);
@@ -46,21 +54,35 @@ public class AddItemFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
+        mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+
         productRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         StringBuilder bld = new StringBuilder();
+
+                        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+
                         for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                             Product product = documentSnapshot.toObject(Product.class);
 
                             String name = product.getName();
+                            String brand = product.getBrand();
 
-                            bld.append("Product Name: ").append(name).append("\n"). append("\n");
+                            exampleList.add(new ExampleItem(name, brand));
+
+//                            bld.append("Product Name: ").append(name).append("\n"). append("\n");
 
                         }
+
+                        mAdapter = new ExampleAdapter(exampleList);
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+                        mRecyclerView.setAdapter(mAdapter);
                     //Set the get(attributes) to the textview
-                        textViewData.setText(bld);
+//                        textViewData.setText(bld);
 
                     }
     });
@@ -115,8 +137,13 @@ public class AddItemFragment extends Fragment {
 
         //----------------------------------------------This was used for testing,  Will need to remove code below-------------------------------------
 
-        textViewData = v.findViewById(R.id.text_view_products);
+//        textViewData = v.findViewById(R.id.text_view_products);
         ImageButton downloadButton = v.findViewById(R.id.downloadInfo);
+
+        mRecyclerView = v.findViewById(R.id.recyclerViewItems);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+
         downloadButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -127,15 +154,25 @@ public class AddItemFragment extends Fragment {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 StringBuilder bld = new StringBuilder();
+
+                                ArrayList<ExampleItem> exampleList = new ArrayList<>();
+
                                 for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                                     Product product = documentSnapshot.toObject(Product.class);
 
                                     String name = product.getName();
+                                    String brand = product.getBrand();
 
-                                    bld.append("Product Name: ").append(name).append("\n"). append("\n");
+                                    exampleList.add(new ExampleItem(name, brand));
+
+//                                    bld.append("Product Name: ").append(name).append("\n"). append("\n");
 
                                 }
-                                textViewData.setText(bld);
+
+                                mAdapter = new ExampleAdapter(exampleList);
+                                mRecyclerView.setLayoutManager(mLayoutManager);
+                                mRecyclerView.setAdapter(mAdapter);
+//                                textViewData.setText(bld);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
