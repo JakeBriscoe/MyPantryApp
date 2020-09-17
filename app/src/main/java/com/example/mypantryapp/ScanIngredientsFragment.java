@@ -70,8 +70,6 @@ public class ScanIngredientsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
 
-        view.setBackgroundColor(Color.GREEN);
-
         mCameraView = getActivity().findViewById(R.id.surfaceView);
         final Button takeSnapshot = getActivity().findViewById(R.id.btnTakePicture);
 
@@ -147,12 +145,8 @@ public class ScanIngredientsFragment extends Fragment {
                             stringBuilder.append(item.getValue());
                             stringBuilder.append("\n");
                         }
-                        //might need to change where this is
-                        transformMessage(stringBuilder.toString().trim());
-
                     }
                 }
-                //maybe will need else set colour blank
             });
 
             btnConfirm = getActivity().findViewById(R.id.btnConfirm);
@@ -166,6 +160,7 @@ public class ScanIngredientsFragment extends Fragment {
                     if (takeSnapshot.getText().equals("Take Picture")) {
                         mCameraSource.stop();
                         takeSnapshot.setText("Try Again");
+                        message = transformMessage(stringBuilder.toString().trim());
                         // Show button for user to confirm
                         btnConfirm.setVisibility(View.VISIBLE);
                     } else if (takeSnapshot.getText().equals("Try Again")) {
@@ -196,7 +191,7 @@ public class ScanIngredientsFragment extends Fragment {
 
                     try {
 
-                        message = transformMessage(stringBuilder.toString().trim());
+                        // message = transformMessage(stringBuilder.toString().trim());
                         SM.sendData(message);
                         assert getFragmentManager() != null;
                         getFragmentManager().popBackStack();
@@ -367,6 +362,11 @@ public class ScanIngredientsFragment extends Fragment {
                                 String name = document.getString("name");
                                 List<String> blacklist = (List<String>) document.get("blacklist");
                                 for (String ingr : ingrs) {
+                                    ingr = ingr.toLowerCase();
+                                    // removes trailing ,
+                                    if (ingr.charAt(ingr.length()-1) == ',') {
+                                        ingr = ingr.substring(0, ingr.length()-1);
+                                    }
                                     if (blacklist.contains(ingr)) {
                                         if (mayContain) {
                                             view.setBackgroundColor(Color.YELLOW);
@@ -390,11 +390,11 @@ public class ScanIngredientsFragment extends Fragment {
                                     // removes last ", "
                                     dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
                                 }
-                                if (mayContain) {
-                                    SM.sendData("may " + dietWarnings);
-                                } else {
-                                    SM.sendData("contains " + dietWarnings);
-                                }
+//                                if (mayContain) {
+//                                    SM.sendData("may " + dietWarnings);
+//                                } else {
+//                                    SM.sendData("contains " + dietWarnings);
+//                                }
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
