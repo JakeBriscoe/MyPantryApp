@@ -34,7 +34,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:hint="Please enter the quantity"
-        android:inputType="number" />
+        android:inputType="number"
+        android:text="1" />
 
 
     <Button
