@@ -7,11 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.content.Context;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ProgressBar;
-import androidx.annotation.VisibleForTesting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -21,13 +16,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -36,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * navigation drawer = the menu that pulls out from the left side of the screen,
  * bottom navigation = the menu that remains on the bottom of the screen.
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ScanIngredientsFragment.SendMessage{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ScanIngredientsFragment.SendMessage, AddItemFragment.SendDetails{
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
 
@@ -202,10 +194,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void sendData(String message) {
-//        AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentById(R.id.scaningredientslayout);
         AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
         assert f != null;
         f.displayReceivedData(message);
+    }
+
+    @Override
+    public void sendDetails(String name, String brand) {
+        BottomSheetDialog f = new BottomSheetDialog();
+        f.show(getSupportFragmentManager(), "bottomSheetTag");
+        assert f != null;
+        f.displayReceivedData(name, brand);
     }
 
     /**

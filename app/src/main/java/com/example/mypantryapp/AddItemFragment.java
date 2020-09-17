@@ -1,6 +1,7 @@
 package com.example.mypantryapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,8 @@ public class AddItemFragment extends Fragment {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    SendDetails SM;
+
     //Display list of product name from firebase
     public void onStart(){
         super.onStart();
@@ -61,9 +64,8 @@ public class AddItemFragment extends Fragment {
                             // Add each individual product to exampleList
                             String name = product.getName();
                             String brand = product.getBrand();
-                            exampleList.add(new ExampleItem(name, brand));
-
-                            String productId = product.getProductId();
+                            String id = product.getProductId();
+                            exampleList.add(new ExampleItem(name, brand, id));
 
                         }
 
@@ -75,11 +77,10 @@ public class AddItemFragment extends Fragment {
                         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
-                                exampleList.get(position);
+                                ExampleItem selected = exampleList.get(position);
 
                                 // Open the bottom modal dialog
-                                BottomSheetDialog bottomSheet = new BottomSheetDialog();
-                                bottomSheet.show(getFragmentManager(), "bottomSheet");
+                                SM.sendDetails(selected.getName(), selected.getBrand());
                             }
                         });
 
@@ -135,6 +136,21 @@ public class AddItemFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            SM = (SendDetails) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+    }
+
+    public interface SendDetails {
+        void sendDetails(String name, String brand);
     }
 
 }
