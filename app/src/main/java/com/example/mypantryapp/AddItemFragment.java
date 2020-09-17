@@ -38,7 +38,7 @@ public class AddItemFragment extends Fragment {
     private CollectionReference productRef = db.collection("products");
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     //Display list of product name from firebase
@@ -54,21 +54,34 @@ public class AddItemFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        StringBuilder bld = new StringBuilder();
 
                         for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                             Product product = documentSnapshot.toObject(Product.class);
 
+                            // Add each individual product to exampleList
                             String name = product.getName();
                             String brand = product.getBrand();
-
                             exampleList.add(new ExampleItem(name, brand));
+
+                            String productId = product.getProductId();
 
                         }
 
                         mAdapter = new ExampleAdapter(exampleList);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
+
+                        // When the user clicks on a product, they should be prompted to enter the quantity.
+                        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                exampleList.get(position);
+
+                                // Open the bottom modal dialog
+                                BottomSheetDialog bottomSheet = new BottomSheetDialog();
+                                bottomSheet.show(getFragmentManager(), "bottomSheet");
+                            }
+                        });
 
                     }
         });
@@ -123,4 +136,5 @@ public class AddItemFragment extends Fragment {
 
         return v;
     }
+
 }
