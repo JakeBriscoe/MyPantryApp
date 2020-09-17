@@ -15,11 +15,10 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/modalBrand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="Brand" />
+        android:id="@+id/modalBrand"
+        android:text="Brand"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -37,7 +36,7 @@
         android:hint="Please enter the quantity"
         android:inputType="number" />
 
-    
+
     <Button
         android:id="@+id/bottomModalConfirm"
         android:layout_width="wrap_content"
