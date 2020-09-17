@@ -66,7 +66,7 @@ public class ScanIngredientsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
 
@@ -170,7 +170,7 @@ public class ScanIngredientsFragment extends Fragment {
                         btnConfirm.setVisibility(View.VISIBLE);
                     } else if (takeSnapshot.getText().equals("Try Again")) {
                         try {
-
+                            view.setBackgroundColor(Color.WHITE);
                             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
                                     Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
@@ -302,6 +302,10 @@ public class ScanIngredientsFragment extends Fragment {
             contains = ingredients.substring(iContains, ingredients.indexOf(".", iContains) + 1);
         }
 
+        // Check diet
+        checkIngredients(mayContain.split(" "), true);
+        checkIngredients((ingredients + " " + contains).split(" "), false);
+
         String result;
 
         // Now decide where to finish the ingredients string based on "Contains ..." and "May contain ..."
@@ -348,8 +352,9 @@ public class ScanIngredientsFragment extends Fragment {
      * Checks if a products ingredients do not match a users diet and updates the background color
      * accordingly
      * @param ingrs ingredients list
+     * @param mayContain boolean indicator of whether the ingredients are definitely in it
      */
-    public void checkIngredients(final String[] ingrs, final boolean mayContain, final boolean finalPic) {
+    public void checkIngredients(final String[] ingrs, final boolean mayContain) {
         db.collection("dietary")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -382,10 +387,13 @@ public class ScanIngredientsFragment extends Fragment {
                                 if (dietWarnings.length() == 0) {
                                     view.setBackgroundColor(Color.GREEN);
                                 } else {
+                                    // removes last ", "
                                     dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
                                 }
-                                if (finalPic) {
-                                    SM.sendData(dietWarnings);
+                                if (mayContain) {
+                                    SM.sendData("may " + dietWarnings);
+                                } else {
+                                    SM.sendData("contains " + dietWarnings);
                                 }
                             }
                         } else {
