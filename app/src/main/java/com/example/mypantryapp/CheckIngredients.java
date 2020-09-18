@@ -40,7 +40,7 @@ public class CheckIngredients {
                                 for (String ingr : ingrs) {
                                     ingr = ingr.toLowerCase();
                                     // removes trailing ,
-                                    if (ingr.charAt(ingr.length()-1) == ',' || ingr.charAt(ingr.length()-1) == '.') {
+                                    if (ingr.length() > 0 && (ingr.charAt(ingr.length()-1) == ',' || ingr.charAt(ingr.length()-1) == '.')) {
                                         ingr = ingr.substring(0, ingr.length()-1);
                                     }
                                     if (blacklist.contains(ingr)) {
@@ -68,8 +68,8 @@ public class CheckIngredients {
                     }
                 });
         dietWarnings = resultHolder.get();
-        if (dietWarnings == null) {
-            dietWarnings = "";
+        if (dietWarnings == null || dietWarnings.length() == 0) {
+            dietWarnings = "No dietary warnings";
         }
     }
 
