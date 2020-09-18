@@ -1,5 +1,7 @@
 package com.example.mypantryapp;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -10,22 +12,29 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CheckIngredients {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String dietWarnings;
-    private ArrayList<String> dietNames = new ArrayList<>();
-    private boolean dietValid = true;
+    private String ingredients;
 
-    public CheckIngredients(final String ingredients) {
+    private AtomicReference<String> resultHolder = new AtomicReference<>();
+
+    public CheckIngredients (String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void checkIngredients() {
         final String[] ingrs = ingredients.split(" ");
         db.collection("dietary")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        String dietWarnings = "";
+                        String result = "";
+                        ArrayList<String> dietNames = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String name = document.getString("name");
@@ -37,38 +46,43 @@ public class CheckIngredients {
                                         ingr = ingr.substring(0, ingr.length()-1);
                                     }
                                     if (blacklist.contains(ingr)) {
-                                        dietValid = false;
                                         if (!dietNames.contains(name)) {
-                                            if (dietWarnings.length() != 0) {
+                                            if (result.length() != 0) {
                                                 // removes unwanted ", " doesn't work for last line
-                                                dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
-                                                dietWarnings += "\n";
+                                                if (result.charAt(result.length()-2) == ',') {
+                                                    result = result.substring(0, result.length() - 2);
+                                                }
+                                                result += "\n";
                                             }
-                                            dietWarnings += name + ": ";
+                                            result += name + ": ";
                                             dietNames.add(name);
                                         }
-                                        dietWarnings += ingr + ", ";
+                                        result += ingr + ", ";
                                     }
                                 }
-                                if (dietWarnings.length() != 0) {
-                                    // removes last ", "
-                                    dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 1);
+                                if (result.length() != 0 && result.charAt(result.length()-2) == ',') {
+                                    // removes trailing ", "
+                                    result = result.substring(0, result.length() - 2);
                                 }
+                                resultHolder.set(result);
+                                Log.d("HERE", "in method " + result);
                             }
                         }
                     }
                 });
+        dietWarnings = resultHolder.get();
+        if (dietWarnings == null) {
+            dietWarnings = "";
+        }
+        Log.d("HERE", "outer class " + dietWarnings);
     }
 
-    public ArrayList<String> getDietNames() {
-        return dietNames;
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 
     public String getDietWarnings() {
+        Log.d("HERE", "dietWarnings" + dietWarnings);
         return dietWarnings;
-    }
-
-    public boolean isDietValid() {
-        return dietValid;
     }
 }

@@ -128,15 +128,22 @@ public class AddItemManually extends Fragment {
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
 
         enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
+        enterContainsText = (EditText) view.findViewById(R.id.enterContainsText);
 
 //        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
 //        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
 //        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
 
+        final CheckIngredients continuousCheck = new CheckIngredients(enterIngredientsText.getText().toString());
+        Log.d("HERE", "got to here");
         enterIngredientsText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                CheckIngredients continuousCheck = new CheckIngredients(enterIngredientsText.getText().toString());
+                Log.d("HERE", "start");
+                continuousCheck.setIngredients(enterIngredientsText.getText().toString());
+                continuousCheck.checkIngredients();
+                Log.d("HERE", continuousCheck.getDietWarnings());
                 enterContainsText.setText(continuousCheck.getDietWarnings());
+                Log.d("HERE", "end " + continuousCheck.getDietWarnings());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Do something before Text Change
@@ -199,13 +206,8 @@ public class AddItemManually extends Fragment {
 
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
-
-        }
-        if (updateMayContainText != null) {
-            enterMayContainText.setText(updateMayContainText);
-        }
-        if (updateContainsText != null) {
-            enterContainsText.setText(updateContainsText);
+            CheckIngredients checkIngredients = new CheckIngredients(updateIngredientsText);
+            enterContainsText.setText(checkIngredients.getDietWarnings());
         }
     }
 
