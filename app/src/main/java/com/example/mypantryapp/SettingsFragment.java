@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -21,12 +22,18 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
+        BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
+        navBar.setVisibility(View.GONE);
+
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Boolean isFirstRun = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
-
-        BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
-        navBar.setVisibility(View.GONE);
 
         NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -36,7 +43,7 @@ public class SettingsFragment extends Fragment {
             navigationView.setVisibility(View.GONE);
             toolbar.setVisibility(View.GONE);
 
-            Button save = v.findViewById(R.id.saveDetails);
+            Button save = view.findViewById(R.id.saveDetails);
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -57,7 +64,7 @@ public class SettingsFragment extends Fragment {
             navigationView.setVisibility(View.VISIBLE);
             toolbar.setVisibility(View.VISIBLE);
 
-            Button save = v.findViewById(R.id.saveDetails);
+            Button save = view.findViewById(R.id.saveDetails);
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -68,7 +75,5 @@ public class SettingsFragment extends Fragment {
 
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
         mActionBarToolbar.setTitle("Settings");
-
-        return v;
     }
 }
