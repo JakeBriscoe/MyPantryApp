@@ -167,11 +167,11 @@
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dietary Breach"
+                android:text="Dietary Warnings"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/enterContainsText"
+            <TextView
+                android:id="@+id/viewDietaryWarning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -179,25 +179,6 @@
 
             <Spinner
                 android:id="@+id/DietContainsSpinMan"
-                android:layout_width="match_parent"
-                android:layout_height="42dp" />
-
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Dietary Warning"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/enterMayContainText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textMultiLine" />
-
-            <Spinner
-                android:id="@+id/DietWarningSpinMan"
                 android:layout_width="match_parent"
                 android:layout_height="42dp" />
 

@@ -1,7 +1,5 @@
 package com.example.mypantryapp;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,7 +17,7 @@ public class CheckIngredients {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String dietWarnings;
     private String ingredients;
-
+    // Atomic String is required for updating dietWarnings from inner class
     private AtomicReference<String> resultHolder = new AtomicReference<>();
 
     public CheckIngredients (String ingredients) {
@@ -65,7 +63,6 @@ public class CheckIngredients {
                                     result = result.substring(0, result.length() - 2);
                                 }
                                 resultHolder.set(result);
-                                Log.d("HERE", "in method " + result);
                             }
                         }
                     }
@@ -74,7 +71,6 @@ public class CheckIngredients {
         if (dietWarnings == null) {
             dietWarnings = "";
         }
-        Log.d("HERE", "outer class " + dietWarnings);
     }
 
     public void setIngredients(String ingredients) {
@@ -82,7 +78,6 @@ public class CheckIngredients {
     }
 
     public String getDietWarnings() {
-        Log.d("HERE", "dietWarnings" + dietWarnings);
         return dietWarnings;
     }
 }
