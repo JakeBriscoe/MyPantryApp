@@ -16,8 +16,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class BottomSheetDialog extends BottomSheetDialogFragment {
     TextView nameTextView;
     TextView brandTextView;
+
     String nameText;
     String brandText;
+    String idText;
 
     @Nullable
     @Override
@@ -51,12 +53,15 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         if (nameText != null && brandText != null) {
             nameTextView.setText(nameText);
             brandTextView.setText(brandText);
+
+            Toast.makeText(getContext(), idText + " selected", Toast.LENGTH_SHORT).show();
         }
     }
 
-    protected void displayReceivedData(String name, String brand) {
-        nameText = name;
-        brandText = brand;
+    protected void displayReceivedData(ExampleItem item) {
+        nameText = item.getName();
+        brandText = item.getBrand();
+        idText = item.getId();
     }
 
 }
