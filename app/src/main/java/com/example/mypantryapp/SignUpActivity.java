@@ -59,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                                             .putBoolean("isFirstRun", true).apply();
 
-                                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                    finish();
                                 }
                             }
                         });

@@ -36,6 +36,19 @@ public class SettingsFragment extends Fragment {
             navigationView.setVisibility(View.GONE);
             toolbar.setVisibility(View.GONE);
 
+            Button save = v.findViewById(R.id.saveDetails);
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+                    Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
+
+                    navigationView.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
+                    navigationView.setCheckedItem(R.id.nav_pantry1);
+                }
+            });
+
             this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit()
                     .putBoolean("isFirstRun", false).apply();
 
@@ -43,18 +56,18 @@ public class SettingsFragment extends Fragment {
             // Otherwise, show the nav header and drawer.
             navigationView.setVisibility(View.VISIBLE);
             toolbar.setVisibility(View.VISIBLE);
+
+            Button save = v.findViewById(R.id.saveDetails);
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
         mActionBarToolbar.setTitle("Settings");
-
-        Button save = v.findViewById(R.id.saveDetails);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         return v;
     }

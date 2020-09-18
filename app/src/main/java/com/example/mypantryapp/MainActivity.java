@@ -31,8 +31,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ScanIngredientsFragment.SendMessage, AddItemFragment.SendDetails{
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
-    NavigationView navigationView;
-
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             bottomNav = findViewById(R.id.bottom_navigation_drawer);
             bottomNav.setOnNavigationItemSelectedListener(navListener);
             drawer = findViewById(R.id.navigation_drawer);
-            navigationView = findViewById(R.id.nav_view);
+            NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
             // Replace automatic toolbar with our own toolbar
@@ -73,26 +71,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
             if (savedInstanceState == null) {
+                Fragment fragment;
 
                 if (isFirstRun) {
                     // Navigate to settings if it is the first time user has logged in
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new SettingsFragment()).addToBackStack(null).commit();
+                    fragment = new SettingsFragment();
                     navigationView.setCheckedItem(R.id.nav_settings);
                 } else {
                     // Navigate to home fragment
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new HomeFragment()).addToBackStack(null).commit();
+                    fragment = new HomeFragment();
                     navigationView.setCheckedItem(R.id.nav_pantry1);
                 }
 
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragment).addToBackStack(null).commit();
+
             }
 
-            Toast.makeText(MainActivity.this, currentUser.getEmail(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(MainActivity.this, currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-
         }
-
 
     }
 
@@ -155,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Navigate to home fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).addToBackStack(null).commit();
+            NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setCheckedItem(R.id.nav_pantry1);
         } else {
             // Exit app entirely
