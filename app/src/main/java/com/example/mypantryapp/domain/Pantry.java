@@ -9,6 +9,7 @@ public class Pantry {
     private List<PantryItem> items;
     private String name;
     private List<String> userIds;
+    private List<String> kitchenLocations;
 
     /**
      * Create a Pantry with multiple user.

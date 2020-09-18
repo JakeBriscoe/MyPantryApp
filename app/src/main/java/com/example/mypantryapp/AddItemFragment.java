@@ -1,27 +1,28 @@
 package com.example.mypantryapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.domain.Product;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 
 public class AddItemFragment extends Fragment {
@@ -37,33 +38,54 @@ public class AddItemFragment extends Fragment {
     //Field for collection of products in the firebase.
     private CollectionReference productRef = db.collection("products");
 
+    private RecyclerView mRecyclerView;
+    private ExampleAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-  //  public void onAttach(Context context) {
-   //     super.onAttach(context);
-    //}
+    SendDetails SM;
 
     //Display list of product name from firebase
     public void onStart(){
         super.onStart();
 
+        mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+
         productRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        StringBuilder bld = new StringBuilder();
+
                         for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                             Product product = documentSnapshot.toObject(Product.class);
 
+                            // Add each individual product to exampleList
                             String name = product.getName();
-
-                            bld.append("Product Name: ").append(name).append("\n"). append("\n");
+                            String brand = product.getBrand();
+                            String id = documentSnapshot.getId();
+                            exampleList.add(new ExampleItem(name, brand, id));
 
                         }
-                    //Set the get(attributes) to the textview
-                        textViewData.setText(bld);
+
+                        mAdapter = new ExampleAdapter(exampleList);
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+                        mRecyclerView.setAdapter(mAdapter);
+
+                        // When the user clicks on a product, they should be prompted to enter the quantity.
+                        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                ExampleItem selected = exampleList.get(position);
+
+                                // Open the bottom modal dialog
+                                SM.sendDetails(selected);
+                            }
+                        });
 
                     }
-    });
+        });
 
     }
 
@@ -113,40 +135,22 @@ public class AddItemFragment extends Fragment {
             }
         });
 
-        //----------------------------------------------This was used for testing,  Will need to remove code below-------------------------------------
-
-        textViewData = v.findViewById(R.id.text_view_products);
-        ImageButton downloadButton = v.findViewById(R.id.downloadInfo);
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                productRef.get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                StringBuilder bld = new StringBuilder();
-                                for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                                    Product product = documentSnapshot.toObject(Product.class);
-
-                                    String name = product.getName();
-
-                                    bld.append("Product Name: ").append(name).append("\n"). append("\n");
-
-                                }
-                                textViewData.setText(bld);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "Error!", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, toString());
-                            }
-                        });
-            }
-        });
         return v;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            SM = (SendDetails) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+    }
+
+    public interface SendDetails {
+        void sendDetails(ExampleItem item);
+    }
+    
 }
