@@ -9,7 +9,22 @@ public class User {
     private String country;
     private String userAuthId;
 
-    public User(boolean isAdmin, String username, String email, String firstName, String lastName, String country, String userAuthId) {
+    private boolean df;
+    private boolean gf;
+    private boolean celiac;
+    private boolean eggs;
+    private boolean lactose;
+    private boolean nuts;
+    private boolean peanuts;
+    private boolean shellfish;
+    private boolean soy;
+    private boolean vegan;
+    private boolean vegetarian;
+    private boolean wheat;
+
+    public User(boolean isAdmin, String username, String email, String firstName, String lastName, String country, String userAuthId,
+                boolean df, boolean gf, boolean celiac, boolean eggs, boolean lactose, boolean nuts, boolean peanuts,
+                boolean shellfish, boolean soy, boolean vegan, boolean vegetarian, boolean wheat) {
         this.isAdmin = isAdmin;
         this.username = username;
         this.email = email;
@@ -17,6 +32,19 @@ public class User {
         this.lastName = lastName;
         this.country = country;
         this.userAuthId = userAuthId;
+
+        this.df = df;
+        this.gf = gf;
+        this.eggs = eggs;
+        this.celiac = celiac;
+        this.lactose = lactose;
+        this.nuts = nuts;
+        this.peanuts = peanuts;
+        this.shellfish = shellfish;
+        this.soy = soy;
+        this.vegan = vegan;
+        this.vegetarian = vegetarian;
+        this.wheat = wheat;
     }
 
     public boolean getAdmin() {
@@ -66,6 +94,54 @@ public class User {
     }
 
     public void setUserAuthId(String userAuthId) {this.userAuthId = userAuthId; }
+
+    public boolean getDf() {
+        return df;
+    }
+
+    public boolean getGf() {
+        return gf;
+    }
+
+    public boolean getCeliac() {
+        return celiac;
+    }
+
+    public boolean getEggs() {
+        return eggs;
+    }
+
+    public boolean getLactose() {
+        return lactose;
+    }
+
+    public boolean getNuts() {
+        return nuts;
+    }
+
+    public boolean getPeanuts() {
+        return peanuts;
+    }
+
+    public boolean getShellfish() {
+        return shellfish;
+    }
+
+    public boolean getSoy() {
+        return soy;
+    }
+
+    public boolean getVegan() {
+        return vegan;
+    }
+
+    public boolean getVegetarian() {
+        return vegetarian;
+    }
+
+    public boolean getWheat() {
+        return wheat;
+    }
 
     @Override
     public String toString() {
