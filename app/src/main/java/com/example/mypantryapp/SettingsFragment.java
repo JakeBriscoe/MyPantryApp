@@ -15,8 +15,18 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsFragment extends Fragment {
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    final String userId = currentUser.getUid(); //get unique user id
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,6 +41,8 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setFields(view);
 
         Boolean isFirstRun = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
@@ -75,5 +87,9 @@ public class SettingsFragment extends Fragment {
 
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
         mActionBarToolbar.setTitle("Settings");
+    }
+
+    private void setFields(View view) {
+
     }
 }

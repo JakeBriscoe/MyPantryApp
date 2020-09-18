@@ -22,6 +22,25 @@ public class User {
     private boolean vegetarian;
     private boolean wheat;
 
+    public User(String userAuthId) {
+
+        this.userAuthId = userAuthId;
+
+        this.isAdmin = false;
+        this.df = false;
+        this.gf = false;
+        this.eggs = false;
+        this.celiac = false;
+        this.lactose = false;
+        this.nuts = false;
+        this.peanuts = false;
+        this.shellfish = false;
+        this.soy = false;
+        this.vegan = false;
+        this.vegetarian = false;
+        this.wheat = false;
+    }
+
     public User(boolean isAdmin, String username, String email, String firstName, String lastName, String country, String userAuthId,
                 boolean df, boolean gf, boolean celiac, boolean eggs, boolean lactose, boolean nuts, boolean peanuts,
                 boolean shellfish, boolean soy, boolean vegan, boolean vegetarian, boolean wheat) {
@@ -142,6 +161,55 @@ public class User {
     public boolean getWheat() {
         return wheat;
     }
+
+    public void setDf(boolean df) {
+        this.df = df;
+    }
+
+    public void setGf(boolean gf) {
+        this.gf = gf;
+    }
+
+    public void setCeliac(boolean celiac) {
+        this.celiac = celiac;
+    }
+
+    public void setEggs(boolean eggs) {
+        this.eggs = eggs;
+    }
+
+    public void setLactose(boolean lactose) {
+        this.lactose = lactose;
+    }
+
+    public void setNuts(boolean nuts) {
+        this.nuts = nuts;
+    }
+
+    public void setPeanuts(boolean peanuts) {
+        this.peanuts = peanuts;
+    }
+
+    public void setShellfish(boolean shellfish) {
+        this.shellfish = shellfish;
+    }
+
+    public void setSoy(boolean soy) {
+        this.soy = soy;
+    }
+
+    public void setVegan(boolean vegan) {
+        this.vegan = vegan;
+    }
+
+    public void setVegetarian(boolean vegetarian) {
+        this.vegetarian = vegetarian;
+    }
+
+    public void setWheat(boolean wheat) {
+        this.wheat = wheat;
+    }
+
 
     @Override
     public String toString() {
