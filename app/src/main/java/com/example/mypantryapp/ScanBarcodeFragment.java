@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -48,6 +49,9 @@ public class ScanBarcodeFragment extends Fragment {
         // Show bottom navigation
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
+
+        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle("[Pantry 1]");
 
 //        mCameraView = getActivity().findViewById(R.id.surfaceView);
 //        mTextView = getActivity().findViewById(R.id.text_view);

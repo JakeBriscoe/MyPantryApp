@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,6 +96,9 @@ public class AddItemFragment extends Fragment {
         @Nullable
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
+
+        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle("[Pantry 1]");
 
         View v = inflater.inflate(R.layout.fragment_add_item, container, false);
 

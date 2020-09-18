@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ScanIngredientsFragment.SendMessage, AddItemFragment.SendDetails{
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
+    NavigationView navigationView;
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             bottomNav = findViewById(R.id.bottom_navigation_drawer);
             bottomNav.setOnNavigationItemSelectedListener(navListener);
             drawer = findViewById(R.id.navigation_drawer);
-            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView = findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
             // Replace automatic toolbar with our own toolbar
@@ -74,11 +75,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (savedInstanceState == null) {
 
                 if (isFirstRun) {
-                    // navigate to settings
+                    // Navigate to settings if it is the first time user has logged in
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new SettingsFragment()).addToBackStack(null).commit();
                     navigationView.setCheckedItem(R.id.nav_settings);
                 } else {
+                    // Navigate to home fragment
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             new HomeFragment()).addToBackStack(null).commit();
                     navigationView.setCheckedItem(R.id.nav_pantry1);
@@ -149,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         currentFragment instanceof ScanIngredientsFragment) {
             getFragmentManager().popBackStack();
             super.onBackPressed();
+        } else if (currentFragment instanceof SettingsFragment) {
+            // Navigate to home fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeFragment()).addToBackStack(null).commit();
+            navigationView.setCheckedItem(R.id.nav_pantry1);
         } else {
             // Exit app entirely
             Intent a = new Intent(Intent.ACTION_MAIN);

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +19,8 @@ public class SettingsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
         Boolean isFirstRun = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
@@ -41,6 +45,17 @@ public class SettingsFragment extends Fragment {
             toolbar.setVisibility(View.VISIBLE);
         }
 
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle("Settings");
+
+        Button save = v.findViewById(R.id.saveDetails);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return v;
     }
 }
