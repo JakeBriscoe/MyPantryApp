@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
 
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -67,17 +66,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
+            Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .getBoolean("isFirstRun", true);
+
             // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
             if (savedInstanceState == null) {
+                Fragment fragment;
+
+                if (isFirstRun) {
+                    // Navigate to settings if it is the first time user has logged in
+                    fragment = new SettingsFragment();
+                    navigationView.setCheckedItem(R.id.nav_settings);
+                } else {
+                    // Navigate to home fragment
+                    fragment = new HomeFragment();
+                    navigationView.setCheckedItem(R.id.nav_pantry1);
+                }
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new HomeFragment()).addToBackStack(null).commit();
-                navigationView.setCheckedItem(R.id.nav_pantry1);
+                        fragment).addToBackStack(null).commit();
+
             }
-            Toast.makeText(MainActivity.this, currentUser.getEmail(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(MainActivity.this, currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
 
         }
-
 
     }
 
@@ -109,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Add Pantry", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
-                // Placeholder
                 mAuth.signOut();
                 Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, LogInActivity.class);
@@ -137,6 +147,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         currentFragment instanceof ScanIngredientsFragment) {
             getFragmentManager().popBackStack();
             super.onBackPressed();
+        } else if (currentFragment instanceof SettingsFragment) {
+            // Navigate to home fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeFragment()).addToBackStack(null).commit();
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.setCheckedItem(R.id.nav_pantry1);
         } else {
             // Exit app entirely
             Intent a = new Intent(Intent.ACTION_MAIN);

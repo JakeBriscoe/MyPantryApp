@@ -2,7 +2,6 @@ package com.example.mypantryapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,13 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mypantryapp.domain.PantrySetUpActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 
 public class SignUpActivity extends AppCompatActivity {
@@ -57,8 +52,14 @@ public class SignUpActivity extends AppCompatActivity {
                                     Toast.makeText(SignUpActivity.this.getApplicationContext(),
                                             "SignUp unsuccessful: " + task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
+
                                 } else {
-                                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+
+                                    // Then this is the first time the user has signed in
+                                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                                            .putBoolean("isFirstRun", true).apply();
+
+                                    finish();
                                 }
                             }
                         });

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -77,6 +78,9 @@ public class AddItemManually extends Fragment {
         // Show bottom navigation
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
+
+        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle("[Pantry 1]");
 
         // When the camera icon is selected, the user should be navigated to the scan ingredients fragment.
         final TextView ingredientsTitle = v.findViewById(R.id.ingredientsTitle);

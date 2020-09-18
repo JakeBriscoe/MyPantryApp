@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -48,6 +49,9 @@ public class ScanIngredientsFragment extends Fragment {
         // Show bottom navigation
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
+
+        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle("[Pantry 1]");
 
         return inflater.inflate(R.layout.fragment_scan_ingredients, container, false);
     }
