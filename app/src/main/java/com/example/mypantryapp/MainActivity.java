@@ -67,12 +67,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
+            Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .getBoolean("isFirstRun", true);
+
             // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
             if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new HomeFragment()).addToBackStack(null).commit();
-                navigationView.setCheckedItem(R.id.nav_pantry1);
+
+                if (isFirstRun) {
+                    // navigate to settings
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new SettingsFragment()).addToBackStack(null).commit();
+                    navigationView.setCheckedItem(R.id.nav_settings);
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new HomeFragment()).addToBackStack(null).commit();
+                    navigationView.setCheckedItem(R.id.nav_pantry1);
+                }
+
             }
+
             Toast.makeText(MainActivity.this, currentUser.getEmail(), Toast.LENGTH_SHORT).show();
             Toast.makeText(MainActivity.this, currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
 
@@ -109,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Add Pantry", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
-                // Placeholder
                 mAuth.signOut();
                 Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, LogInActivity.class);
