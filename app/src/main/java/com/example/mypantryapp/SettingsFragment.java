@@ -54,6 +54,8 @@ public class SettingsFragment extends Fragment {
     CheckBox checkBoxShellFish;
     CheckBox checkBoxSoy;
 
+    UpdateUser UU;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -184,6 +186,17 @@ public class SettingsFragment extends Fragment {
         mActionBarToolbar.setTitle("Settings");
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            UU = (UpdateUser) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+    }
+
     private void setItem(View v) {
         String name = settingsName.getText().toString();
         String email = settingsEmail.getText().toString();
@@ -222,6 +235,7 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
+                        UU.setUser(name, email);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -234,4 +248,9 @@ public class SettingsFragment extends Fragment {
 
 
     }
+
+    interface UpdateUser {
+        void setUser(String name, String email);
+    }
+
 }

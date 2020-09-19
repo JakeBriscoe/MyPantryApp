@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * navigation drawer = the menu that pulls out from the left side of the screen,
  * bottom navigation = the menu that remains on the bottom of the screen.
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ScanIngredientsFragment.SendMessage, AddItemFragment.SendDetails{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+                                                                ScanIngredientsFragment.SendMessage,
+                                                                AddItemFragment.SendDetails,
+                                                                SettingsFragment.UpdateUser {
     private DrawerLayout drawer;
     BottomNavigationView bottomNav; // This needs to be here so it can be accessed in multiple methods
 
@@ -221,6 +225,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         f.show(getSupportFragmentManager(), "bottomSheetTag");
         assert f != null;
         f.displayReceivedData(name, brand);
+    }
+
+    @Override
+    public void setUser(String name, String email) {
+        TextView headerUser = findViewById(R.id.headerUser);
+        TextView headerEmail = findViewById(R.id.headerEmail);
+        headerUser.setText(name);
+        headerEmail.setText(email);
     }
 
     /**
