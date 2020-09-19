@@ -293,12 +293,12 @@ public class ScanIngredientsFragment extends Fragment {
         // Check diet
         CheckIngredients checkContains = new CheckIngredients(ingredients + " " + contains);
         checkContains.checkIngredients();
-        if (checkContains.getDietWarnings().length() > 0) {
+        if (!checkContains.equals("No dietary warnings")) {
             view.setBackgroundColor(Color.RED);
         } else {
             CheckIngredients checkMayContain = new CheckIngredients(mayContain);
             checkMayContain.checkIngredients();
-            if (checkMayContain.getDietWarnings().length() > 0) {
+            if (!checkMayContain.equals("No dietary warnings")) {
                 view.setBackgroundColor(Color.YELLOW);
             }
         }
