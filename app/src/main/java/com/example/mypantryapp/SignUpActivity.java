@@ -73,6 +73,19 @@ public class SignUpActivity extends AppCompatActivity {
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                                     Map<String, Object> item = new HashMap<>();
                                     item.put("email", emailID);
+                                    item.put("userAuthId", userId);
+                                    item.put("df", false);
+                                    item.put("gf", false);
+                                    item.put("vegan", false);
+                                    item.put("vegetarian", false);
+                                    item.put("celiac", false);
+                                    item.put("wheat", false);
+                                    item.put("lactose", false);
+                                    item.put("eggs", false);
+                                    item.put("nuts", false);
+                                    item.put("peanuts", false);
+                                    item.put("shellFish", false);
+                                    item.put("soy", false);
 
                                     db.collection("users").document(userId).set(item)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
