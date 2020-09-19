@@ -17,11 +17,15 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 /**
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
         else {
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+            currentUser = mAuth.getCurrentUser();
             boolean emailVerified = user.isEmailVerified();
 
             setContentView(R.layout.activity_main);
@@ -72,6 +77,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                     .getBoolean("isFirstRun", true);
+
+            String userId = currentUser.getUid(); //get unique user id
+            db.collection("users")
+                    .whereEqualTo("userAuthId", userId) //looks for the corresponding value with the field
+                    // in the database
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    TextView headerUser = findViewById(R.id.headerUser);
+                                    TextView headerEmail = findViewById(R.id.headerEmail);
+                                    headerUser.setText((String) document.get("name"));
+                                    headerEmail.setText((String) document.get("email"));
+                                }
+                            }
+                        }
+                    });
 
             // Make sure that it opens to the home fragment, but rotating screen doesn't restart state
             if (savedInstanceState == null) {
@@ -233,6 +257,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView headerEmail = findViewById(R.id.headerEmail);
         headerUser.setText(name);
         headerEmail.setText(email);
+
+        currentUser = mAuth.getCurrentUser();
+        currentUser.verifyBeforeUpdateEmail(email.trim());
     }
 
     /**
