@@ -54,7 +54,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             nameTextView.setText(nameText);
             brandTextView.setText(brandText);
 
-            Toast.makeText(getContext(), idText + " selected", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), idText + " selected", Toast.LENGTH_SHORT).show();
         }
     }
 

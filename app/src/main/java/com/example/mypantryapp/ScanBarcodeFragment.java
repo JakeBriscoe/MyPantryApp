@@ -39,7 +39,7 @@ public class ScanBarcodeFragment extends Fragment {
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
 
-
+    String message;
 
     @Nullable
     @Override
@@ -64,7 +64,7 @@ public class ScanBarcodeFragment extends Fragment {
 
 
         mCameraView = getActivity().findViewById(R.id.scanBarSufview);
-        mTextView = getActivity().findViewById(R.id.text_view2);
+//        mTextView = getActivity().findViewById(R.id.text_view2);
 
 
         //Create the Barcode Detector
@@ -132,16 +132,17 @@ public class ScanBarcodeFragment extends Fragment {
                 public void receiveDetections(Detector.Detections<Barcode> detections) {
                     final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                     if (barcodes.size() > 0) {
-                        mTextView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mCameraSource.stop();
-                                //Update barcode value to TextView
-                                mTextView.setText(String.valueOf((barcodes.valueAt(0).displayValue)));
-
-                            }
-
-                        });
+//                        mTextView.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mCameraSource.stop();
+//                                //Update barcode value to TextView
+//                                message = String.valueOf((barcodes.valueAt(0).displayValue));
+//                                mTextView.setText(message);
+//
+//                            }
+//
+//                        });
 
 
                     }
