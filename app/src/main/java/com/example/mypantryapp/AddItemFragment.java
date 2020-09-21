@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -79,7 +82,6 @@ public class AddItemFragment extends Fragment {
                             @Override
                             public void onItemClick(int position) {
                                 ExampleItem selected = exampleList.get(position);
-
                                 // Open the bottom modal dialog
                                 SM.sendDetails(selected);
                             }
@@ -138,6 +140,20 @@ public class AddItemFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getParentFragmentManager().setFragmentResultListener("requestName", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                String result = bundle.getString("bundleKey");
+                EditText search = getActivity().findViewById(R.id.textSearchCommon);
+                search.setText(result);
+            }
+        });
     }
 
     @Override

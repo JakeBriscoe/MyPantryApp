@@ -147,7 +147,6 @@ public class ScanBarcodeFragment extends Fragment {
                         if (message.equals("") || message == null) {
                             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
                         } else {
-                            boolean[] check = {true};
                             db.collection("products")
                                     .whereEqualTo("barcodeNum", Long.parseLong(message))//looks for the corresponding value with the field
                                     // in the database
@@ -157,20 +156,22 @@ public class ScanBarcodeFragment extends Fragment {
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 for (DocumentSnapshot document : task.getResult()) {
-                                                    check[0] = false;
                                                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemFragment()).addToBackStack(null).commit();
+
+                                                    String docName = (String) document.get("name");
+                                                    Bundle result2 = new Bundle();
+                                                    result2.putString("bundleKey", docName);
+                                                    getParentFragmentManager().setFragmentResult("requestName", result2);
                                                 }
                                             }
                                         }
                                     });
 
-                            if (check[0]) {
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                             Bundle result = new Bundle();
+                             result.putString("bundleKey", message);
+                             getParentFragmentManager().setFragmentResult("requestBarcode", result);
 
-                                Bundle result = new Bundle();
-                                result.putString("bundleKey", message);
-                                getParentFragmentManager().setFragmentResult("requestKey", result);
-                            }
                         }
 
                     } catch (ArrayIndexOutOfBoundsException exception) {

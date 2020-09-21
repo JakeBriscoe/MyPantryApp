@@ -184,7 +184,7 @@ public class AddItemManually extends Fragment {
             enterIngredientsText.setText(updateIngredientsText);
         }
 
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener("requestBarcode", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
                 String result = bundle.getString("bundleKey");
