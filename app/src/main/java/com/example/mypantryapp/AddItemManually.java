@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -60,13 +61,13 @@ public class AddItemManually extends Fragment {
 
     private Button saveButton;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private String barcodeText;
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-            }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -101,16 +102,7 @@ public class AddItemManually extends Fragment {
             }
         });
 
-
         return v;
-
-    }
-    // This method is called after the parent Activity's onCreate() method has completed.
-    // Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
-    // At this point, it is safe to search for activity View objects by their ID, for example.
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
     }
 
@@ -191,6 +183,14 @@ public class AddItemManually extends Fragment {
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
         }
+
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                String result = bundle.getString("bundleKey");
+                editTextBarcode.setText(result);
+            }
+        });
     }
 
     /**
@@ -200,5 +200,4 @@ public class AddItemManually extends Fragment {
     protected void displayReceivedData(String message) {
         updateIngredientsText = message;
     }
-
 }

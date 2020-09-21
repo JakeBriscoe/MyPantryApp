@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             setContentView(R.layout.activity_main);
 
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragment_container, new AddItemManually(), "addManuallyTag")
+//                    .commit();
+
             // Set listeners for the navigation options
             bottomNav = findViewById(R.id.bottom_navigation_drawer);
             bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -271,10 +275,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbarScan:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ScanBarcodeFragment()).addToBackStack(null).commit();
                 // Ensure bottom nav corresponds to add item
                 bottomNav.setSelectedItemId(R.id.nav_add_item);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ScanBarcodeFragment()).addToBackStack(null).commit();
                 return true;
             case R.id.toolbarShare:
                 Toast.makeText(this, "Share Pantry", Toast.LENGTH_SHORT).show();

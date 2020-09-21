@@ -147,8 +147,7 @@ public class ScanBarcodeFragment extends Fragment {
                         if (message.equals("") || message == null) {
                             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-
+                            boolean[] check = {true};
                             db.collection("products")
                                     .whereEqualTo("barcodeNum", Long.parseLong(message))//looks for the corresponding value with the field
                                     // in the database
@@ -158,18 +157,21 @@ public class ScanBarcodeFragment extends Fragment {
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 for (DocumentSnapshot document : task.getResult()) {
-                                                    Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                                                    check[0] = false;
                                                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemFragment()).addToBackStack(null).commit();
                                                 }
                                             }
                                         }
                                     });
 
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
-                        }
+                            if (check[0]) {
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
 
-                        // If barcode exists in database, select the item in Add Item
-                        // If the barcode doesn't exist in database, populate the barcode field in Add Manually
+                                Bundle result = new Bundle();
+                                result.putString("bundleKey", message);
+                                getParentFragmentManager().setFragmentResult("requestKey", result);
+                            }
+                        }
 
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
@@ -179,4 +181,5 @@ public class ScanBarcodeFragment extends Fragment {
 
         }
     }
+
 }
