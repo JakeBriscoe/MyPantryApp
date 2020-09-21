@@ -21,7 +21,8 @@
 
     </LinearLayout>
 
-    <TextView
+    <Button
+        android:id="@+id/scanBarcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -29,7 +30,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:layout_weight="2"
-        android:text="Please bring the barcode into view"
+        android:text="Scan Barcode"
         android:textAlignment="center"
         android:textSize="18sp" />
 

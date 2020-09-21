@@ -273,6 +273,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.toolbarScan:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ScanBarcodeFragment()).addToBackStack(null).commit();
+                // Ensure bottom nav corresponds to add item
+                bottomNav.setSelectedItemId(R.id.nav_add_item);
                 return true;
             case R.id.toolbarShare:
                 Toast.makeText(this, "Share Pantry", Toast.LENGTH_SHORT).show();
