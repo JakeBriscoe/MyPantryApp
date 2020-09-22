@@ -29,11 +29,12 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/settingsName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:hint="Please enter your first name"
-            android:id="@+id/settingsName"/>
+            android:inputType="textPersonName" />
 
         <TextView
             android:layout_width="match_parent"
@@ -43,11 +44,12 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/settingsEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:hint="Please enter your email address"
-            android:id="@+id/settingsEmail"/>
+            android:inputType="textEmailAddress" />
 
         <TextView
             android:layout_width="match_parent"

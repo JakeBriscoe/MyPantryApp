@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -50,11 +51,20 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     public void onResume() {
         super.onResume();
 
+        getParentFragmentManager().setFragmentResultListener("requestProductDetails", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                nameText = bundle.getString("bundleName");
+                brandText = bundle.getString("bundleBrand");
+                idText = bundle.getString("bundleId");
+            }
+        });
+
         if (nameText != null && brandText != null) {
             nameTextView.setText(nameText);
             brandTextView.setText(brandText);
-
-            Toast.makeText(getContext(), idText + " selected", Toast.LENGTH_SHORT).show();
+        } else if (nameText != null) {
+            nameTextView.setText(nameText);
         }
     }
 
