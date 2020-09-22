@@ -43,6 +43,8 @@ public class ScanBarcodeFragment extends Fragment {
     Button btnConfirm;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    private boolean checkCase = true;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -148,29 +150,60 @@ public class ScanBarcodeFragment extends Fragment {
                             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
                         } else {
                             db.collection("products")
-                                    .whereEqualTo("barcodeNum", Long.parseLong(message))//looks for the corresponding value with the field
-                                    // in the database
+                                    .whereEqualTo("barcodeNum", Long.parseLong(message))//looks for the corresponding value with the field in the database
                                     .get()
+//                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                                        @Override
+//                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                                            for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+//
+//                                                if (documentSnapshot.exists()) {
+//                                                    String name = (String) documentSnapshot.get("name");
+//                                                    String brand = (String) documentSnapshot.get("brand");
+//                                                    String id = documentSnapshot.getId();
+//                                                    Toast.makeText(getActivity(), "exists", Toast.LENGTH_SHORT).show();
+//
+//                                                } else {
+//                                                    Toast.makeText(getActivity(), "Does not exist", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            }
+//                                        }
+//                                    });
+
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
-                                                for (DocumentSnapshot document : task.getResult()) {
-                                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemFragment()).addToBackStack(null).commit();
-
-                                                    String docName = (String) document.get("name");
-                                                    Bundle result2 = new Bundle();
-                                                    result2.putString("bundleKey", docName);
-                                                    getParentFragmentManager().setFragmentResult("requestName", result2);
+                                                if(task.getResult().isEmpty()){
+                                                    Toast.makeText(getActivity(), "This product is not in our database", Toast.LENGTH_SHORT).show();
+                                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                                                    Bundle result = new Bundle();
+                                                    result.putString("bundleKey", message);
+                                                    getParentFragmentManager().setFragmentResult("requestBarcode", result);
+                                                }
+                                                else {
+                                                    for (DocumentSnapshot document : task.getResult()) {
+                                                        if (document.exists()) {
+                                                            BottomSheetDialog f = new BottomSheetDialog();
+                                                            f.show(getFragmentManager(), "bottomSheetTag");
+                                                            Bundle results = new Bundle();
+                                                            results.putString("bundleName", (String) document.get("name"));
+                                                            results.putString("bundleBrand", (String) document.get("brand"));
+                                                            results.putString("bundleId", (String) document.getId());
+                                                            getParentFragmentManager().setFragmentResult("requestProductDetails", results);
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                     });
 
-                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
-                             Bundle result = new Bundle();
-                             result.putString("bundleKey", message);
-                             getParentFragmentManager().setFragmentResult("requestBarcode", result);
+//                            if (checkCase) {
+//                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+//                                Bundle result = new Bundle();
+//                                result.putString("bundleKey", message);
+//                                getParentFragmentManager().setFragmentResult("requestBarcode", result);
+//                            }
 
                         }
 
