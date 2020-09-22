@@ -137,8 +137,7 @@ public class AddItemManually extends Fragment {
         enterIngredientsText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 continuousCheck.setIngredients(enterIngredientsText.getText().toString());
-                continuousCheck.checkIngredients();
-                viewDietaryWarning.setText(continuousCheck.getDietWarnings());
+                viewDietaryWarning.setText(continuousCheck.checkIngredients());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -206,7 +205,7 @@ public class AddItemManually extends Fragment {
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
             CheckIngredients checkIngredients = new CheckIngredients(updateIngredientsText);
-            viewDietaryWarning.setText(checkIngredients.getDietWarnings());
+            viewDietaryWarning.setText(checkIngredients.checkIngredients());
         }
     }
 

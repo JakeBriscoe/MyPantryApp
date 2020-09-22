@@ -9,23 +9,18 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CheckIngredients {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String dietWarnings;
     private String ingredients;
-    // Atomic String is required for updating dietWarnings from inner class
-    private AtomicReference<String> resultHolder = new AtomicReference<>();
+    private Map<String, ArrayList<String>> diets = new HashMap<String, ArrayList<String>>();
 
     public CheckIngredients (String ingredients) {
         this.ingredients = ingredients;
-    }
-
-    public void checkIngredients() {
-        final String[] ingrs = ingredients.split(" ");
+        // Gets the diets and blacklisted ingredients from firebase
         db.collection("dietary")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -35,49 +30,55 @@ public class CheckIngredients {
                         ArrayList<String> dietNames = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String name = document.getString("name");
-                                List<String> blacklist = (List<String>) document.get("blacklist");
-                                for (String ingr : ingrs) {
-                                    ingr = ingr.toLowerCase();
-                                    // removes trailing ,
-                                    if (ingr.length() > 0 && (ingr.charAt(ingr.length()-1) == ',' || ingr.charAt(ingr.length()-1) == '.')) {
-                                        ingr = ingr.substring(0, ingr.length()-1);
-                                    }
-                                    if (blacklist.contains(ingr)) {
-                                        if (!dietNames.contains(name)) {
-                                            if (result.length() != 0) {
-                                                // removes unwanted ", " doesn't work for last line
-                                                if (result.charAt(result.length()-2) == ',') {
-                                                    result = result.substring(0, result.length() - 2);
-                                                }
-                                                result += "\n";
-                                            }
-                                            result += name + ": ";
-                                            dietNames.add(name);
-                                        }
-                                        result += ingr + ", ";
-                                    }
-                                }
-                                if (result.length() != 0 && result.charAt(result.length()-2) == ',') {
-                                    // removes trailing ", "
-                                    result = result.substring(0, result.length() - 2);
-                                }
-                                resultHolder.set(result);
+                                 String name = document.getString("name");
+                                ArrayList<String> blacklist = (ArrayList<String>) document.get("blacklist");
+                                 diets.put(name, blacklist);
                             }
                         }
                     }
                 });
-        dietWarnings = resultHolder.get();
-        if (dietWarnings == null || dietWarnings.length() == 0) {
+    }
+
+    public String checkIngredients() {
+        String[] ingrs = ingredients.split(" ");
+        ArrayList<String> dietNames = new ArrayList<>();
+        String dietWarnings = "";
+        for (Map.Entry<String, ArrayList<String>> entry : diets.entrySet()) {
+            String name = entry.getKey();
+            ArrayList<String> blacklist = (ArrayList<String>) entry.getValue();
+            for (String ingr : ingrs) {
+                ingr = ingr.toLowerCase();
+                // removes trailing ,
+                if (ingr.length() > 0 && (ingr.charAt(ingr.length()-1) == ',' || ingr.charAt(ingr.length()-1) == '.')) {
+                    ingr = ingr.substring(0, ingr.length()-1);
+                }
+                if (blacklist.contains(ingr)) {
+                    if (!dietNames.contains(name)) {
+                        if (dietWarnings.length() != 0) {
+                            // removes unwanted ", " doesn't work for last line
+                            if (dietWarnings.charAt(dietWarnings.length()-2) == ',') {
+                                dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 2);
+                            }
+                            dietWarnings += "\n";
+                        }
+                        dietWarnings += name + ": ";
+                        dietNames.add(name);
+                    }
+                    dietWarnings += ingr + ", ";
+                }
+            }
+            if (dietWarnings.length() != 0 && dietWarnings.charAt(dietWarnings.length()-2) == ',') {
+                // removes final trailing ", "
+                dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 2);
+            }
+        }
+        if (dietWarnings == "") {
             dietWarnings = "No dietary warnings";
         }
+        return dietWarnings;
     }
 
     public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
-    }
-
-    public String getDietWarnings() {
-        return dietWarnings;
     }
 }
