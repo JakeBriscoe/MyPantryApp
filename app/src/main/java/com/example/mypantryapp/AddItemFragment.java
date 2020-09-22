@@ -65,7 +65,7 @@ public class AddItemFragment extends Fragment {
                             // Add each individual product to exampleList
                             String name = product.getName();
                             String brand = product.getBrand();
-                            String id = product.getProductId();
+                            String id = documentSnapshot.getId();
                             exampleList.add(new ExampleItem(name, brand, id));
 
                         }
@@ -81,7 +81,7 @@ public class AddItemFragment extends Fragment {
                                 ExampleItem selected = exampleList.get(position);
 
                                 // Open the bottom modal dialog
-                                SM.sendDetails(selected.getName(), selected.getBrand());
+                                SM.sendDetails(selected);
                             }
                         });
 
@@ -152,7 +152,7 @@ public class AddItemFragment extends Fragment {
     }
 
     public interface SendDetails {
-        void sendDetails(String name, String brand);
+        void sendDetails(ExampleItem item);
     }
     
 }

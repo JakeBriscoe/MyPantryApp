@@ -244,11 +244,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void sendDetails(String name, String brand) {
+    public void sendDetails(ExampleItem item) {
         BottomSheetDialog f = new BottomSheetDialog();
         f.show(getSupportFragmentManager(), "bottomSheetTag");
         assert f != null;
-        f.displayReceivedData(name, brand);
+        f.displayReceivedData(item);
     }
 
     @Override

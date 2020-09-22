@@ -3,6 +3,8 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,6 +39,7 @@ public class AddItemManually extends Fragment {
 
     EditText enterIngredientsText;
     String updateIngredientsText;
+    TextView viewDietaryWarning;
 
     private static final String TAG = "AddItemManually";
     private static final String KEY_NAME= "name";
@@ -126,10 +129,25 @@ public class AddItemManually extends Fragment {
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
 
         enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
+        viewDietaryWarning = (TextView) view.findViewById(R.id.viewDietaryWarning);
 
 //        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
 //        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
 //        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
+
+
+        // Checks diets as the user types
+        final CheckIngredients continuousCheck = new CheckIngredients(enterIngredientsText.getText().toString());
+        enterIngredientsText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                continuousCheck.setIngredients(enterIngredientsText.getText().toString());
+                viewDietaryWarning.setText(continuousCheck.checkIngredients());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
 
         Button save_manually = getActivity().findViewById(R.id.button_save_man);
         save_manually.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +208,8 @@ public class AddItemManually extends Fragment {
 
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
+            CheckIngredients checkIngredients = new CheckIngredients(updateIngredientsText);
+            viewDietaryWarning.setText(checkIngredients.checkIngredients());
         }
     }
 
@@ -200,5 +220,4 @@ public class AddItemManually extends Fragment {
     protected void displayReceivedData(String message) {
         updateIngredientsText = message;
     }
-
 }
