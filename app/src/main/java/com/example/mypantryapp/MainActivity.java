@@ -90,8 +90,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 for (DocumentSnapshot document : task.getResult()) {
                                     TextView headerUser = findViewById(R.id.headerUser);
                                     TextView headerEmail = findViewById(R.id.headerEmail);
-                                    headerUser.setText((String) document.get("name"));
-                                    headerEmail.setText((String) document.get("email"));
+                                    if (document.get("name") != null && headerUser != null) {
+                                        headerUser.setText((String) document.get("name"));
+                                    }
+                                    if (document.get("email") != null && headerEmail != null) {
+                                        headerEmail.setText((String) document.get("email"));
+                                    }
                                 }
                             }
                         }
