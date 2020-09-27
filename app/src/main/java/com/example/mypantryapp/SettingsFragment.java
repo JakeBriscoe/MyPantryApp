@@ -33,12 +33,13 @@ import java.util.Map;
 
 public class SettingsFragment extends Fragment {
 
+    // Get the user's information from Firestore.
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = mAuth.getCurrentUser();
-    final String userId = currentUser.getUid(); //get unique user id
+    final String userId = currentUser.getUid();
 
+    // Declare the views
     EditText settingsName;
     EditText settingsEmail;
     CheckBox checkBoxVegan;
@@ -56,14 +57,23 @@ public class SettingsFragment extends Fragment {
 
     UpdateUser UU;
 
+    /**
+     * Set the information based on the user's information
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState the saved instance state
+     * @return the view
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        // Make sure that the bottom nav is not displayed.
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.GONE);
 
+        // Initialise the view
         settingsName = v.findViewById(R.id.settingsName);
         settingsEmail = v.findViewById(R.id.settingsEmail);
         checkBoxVegan = v.findViewById(R.id.checkBoxVegan);
@@ -81,7 +91,7 @@ public class SettingsFragment extends Fragment {
 
         // Set the fields based on what has previously been saved for the user
         db.collection("users")
-                .whereEqualTo("userAuthId", userId)//looks for the corresponding value with the field
+                .whereEqualTo("userAuthId", userId)// Looks for the corresponding value with the field
                 // in the database
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -133,25 +143,36 @@ public class SettingsFragment extends Fragment {
                         }
                     }
                 });
-
         return v;
     }
 
+    /**
+     * Set the logic based on whether or not this is the first time the user is logged in.
+     * @param view view
+     * @param savedInstanceState saved instance state
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Boolean isFirstRun = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+        // True if this is user's first time logging in, false otherwise.
+        boolean isFirstRun = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
 
-        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+        // Set the toolbar title to 'Settings'
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle("Settings");
+
+        // Initialise the navigation view
+        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
 
         if (isFirstRun) {
             // If it is the first run, hide the nav header and drawer.
             navigationView.setVisibility(View.GONE);
             toolbar.setVisibility(View.GONE);
 
+            // Save details.
+            // Once details have been saved, navigate to HomeFragment and show the navigation.
             Button save = view.findViewById(R.id.saveDetails);
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -165,6 +186,7 @@ public class SettingsFragment extends Fragment {
                 }
             });
 
+            // Update shared preferences to reflect that the user has now been logged in
             this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit()
                     .putBoolean("isFirstRun", false).apply();
 
@@ -173,6 +195,7 @@ public class SettingsFragment extends Fragment {
             navigationView.setVisibility(View.VISIBLE);
             toolbar.setVisibility(View.VISIBLE);
 
+            // Save details
             Button save = view.findViewById(R.id.saveDetails);
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -181,23 +204,14 @@ public class SettingsFragment extends Fragment {
                 }
             });
         }
-
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("Settings");
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            UU = (UpdateUser) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Error in retrieving data. Please try again");
-        }
-    }
-
+    /**
+     * Set the user's details
+     * @param v
+     */
     private void setItem(View v) {
+        // Get what the user has entered
         String name = settingsName.getText().toString();
         String email = settingsEmail.getText().toString();
         boolean df = checkBoxDairyFree.isChecked();
@@ -213,6 +227,7 @@ public class SettingsFragment extends Fragment {
         boolean soy = checkBoxSoy.isChecked();
         boolean celiac = checkBoxCeliac.isChecked();
 
+        // Put these details in a map
         Map<String, Object> item = new HashMap<>();
         item.put("userAuthId", userId);
         item.put("name", name);
@@ -230,6 +245,7 @@ public class SettingsFragment extends Fragment {
         item.put("soy", soy);
         item.put("celiac", celiac);
 
+        // Set the user details accordingly
         db.collection("users").document(userId).set(item)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -249,6 +265,25 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    /**
+     * Here to send the user details to HomeFragment.
+     * @param context context
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            UU = (UpdateUser) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+    }
+
+    /**
+     * Send the user's name and email to HomeFragment so the navigation view can be
+     * updated accordingly.
+     */
     interface UpdateUser {
         void setUser(String name, String email);
     }

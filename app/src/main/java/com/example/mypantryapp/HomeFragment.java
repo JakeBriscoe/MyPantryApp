@@ -25,10 +25,11 @@ public class HomeFragment extends Fragment implements ProductAdapter.ItemClickLi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Show bottom navigation
+        // POSSIBLY NOT NEEDED. Show bottom navigation
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
+        // POSSIBLY NOT NEEDED. Set toolbar title.
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
         mActionBarToolbar.setTitle("[Pantry 1]");
 

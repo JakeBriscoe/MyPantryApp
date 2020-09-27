@@ -43,19 +43,26 @@ public class ScanBarcodeFragment extends Fragment {
     Button btnConfirm;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private boolean checkCase = true;
-
+    /**
+     * Set up any static views
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState the saved instance state
+     * @return the view
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        // Show bottom navigation
+        // POSSIBLY NOT NEEDED. Show bottom navigation.
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
+        // POSSIBLY NOT NEEDED. Set toolbar title.
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
         mActionBarToolbar.setTitle("[Pantry 1]");
 
+        // Get the camera view
         mCameraView = getActivity().findViewById(R.id.scanBarSufview);
 
         return inflater.inflate(R.layout.fragment_scan_barcode, container, false);
@@ -140,52 +147,43 @@ public class ScanBarcodeFragment extends Fragment {
                 }
             });
 
+            // Set the onclick listener for taking a pic of the barcode.
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
-
                     try {
                         if (message.equals("") || message == null) {
+                            // If no barcode has been identified, then prompt the user to try again.
                             Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
                         } else {
+                            // If a barcode has been identified:
+                            // Determine if it exists in our 'products' collection in Firestore.
                             db.collection("products")
                                     .whereEqualTo("barcodeNum", Long.parseLong(message))//looks for the corresponding value with the field in the database
                                     .get()
-//                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                                        @Override
-//                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                            for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-//
-//                                                if (documentSnapshot.exists()) {
-//                                                    String name = (String) documentSnapshot.get("name");
-//                                                    String brand = (String) documentSnapshot.get("brand");
-//                                                    String id = documentSnapshot.getId();
-//                                                    Toast.makeText(getActivity(), "exists", Toast.LENGTH_SHORT).show();
-//
-//                                                } else {
-//                                                    Toast.makeText(getActivity(), "Does not exist", Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            }
-//                                        }
-//                                    });
-
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 if(task.getResult().isEmpty()){
+                                                    // If the barcode doesn't exist, notify the user.
                                                     Toast.makeText(getActivity(), "This product is not in our database", Toast.LENGTH_SHORT).show();
+                                                    // Navigate to AddItemManually
                                                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                                                    // Send the barcode to AddItemManually so it can be pre-populated.
                                                     Bundle result = new Bundle();
                                                     result.putString("bundleKey", message);
                                                     getParentFragmentManager().setFragmentResult("requestBarcode", result);
                                                 }
                                                 else {
+                                                    // If the barcode does exist, BottomSheetDialog should pop up
+                                                    // and display the product details.
                                                     for (DocumentSnapshot document : task.getResult()) {
                                                         if (document.exists()) {
                                                             BottomSheetDialog f = new BottomSheetDialog();
                                                             f.show(getFragmentManager(), "bottomSheetTag");
+                                                            // Send the barcode information to BottomSheetDialog
                                                             Bundle results = new Bundle();
                                                             results.putString("bundleName", (String) document.get("name"));
                                                             results.putString("bundleBrand", (String) document.get("brand"));
@@ -197,16 +195,7 @@ public class ScanBarcodeFragment extends Fragment {
                                             }
                                         }
                                     });
-
-//                            if (checkCase) {
-//                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
-//                                Bundle result = new Bundle();
-//                                result.putString("bundleKey", message);
-//                                getParentFragmentManager().setFragmentResult("requestBarcode", result);
-//                            }
-
                         }
-
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
                     }
