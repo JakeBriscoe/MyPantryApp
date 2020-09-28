@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = mAuth.getCurrentUser();
     final String userId = currentUser.getUid();
+    public int numberOfLines = 1;
 
     // Declare the views
     EditText settingsName;
@@ -54,8 +56,11 @@ public class SettingsFragment extends Fragment {
     CheckBox checkBoxPeanut;
     CheckBox checkBoxShellFish;
     CheckBox checkBoxSoy;
+    EditText settingsPantryName;
+    Button addButton;
 
     UpdateUser UU;
+    UpdatePantry UP;
 
     /**
      * Set the information based on the user's information
@@ -88,6 +93,9 @@ public class SettingsFragment extends Fragment {
         checkBoxPeanut = v.findViewById(R.id.checkBoxPeanut);
         checkBoxShellFish = v.findViewById(R.id.checkBoxShellFish);
         checkBoxSoy = v.findViewById(R.id.checkBoxSoy);
+
+
+
 
         // Set the fields based on what has previously been saved for the user
         db.collection("users")
@@ -170,6 +178,13 @@ public class SettingsFragment extends Fragment {
             // If it is the first run, hide the nav header and drawer.
             navigationView.setVisibility(View.GONE);
             toolbar.setVisibility(View.GONE);
+            final Button addButton = (Button) view.findViewById(R.id.add_button);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Add_Line(view);
+                }
+            });
 
             // Save details.
             // Once details have been saved, navigate to HomeFragment and show the navigation.
@@ -185,6 +200,7 @@ public class SettingsFragment extends Fragment {
                     navigationView.setCheckedItem(R.id.nav_pantry1);
                 }
             });
+
 
             // Update shared preferences to reflect that the user has now been logged in
             this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit()
@@ -286,6 +302,22 @@ public class SettingsFragment extends Fragment {
      */
     interface UpdateUser {
         void setUser(String name, String email);
+    }
+
+    interface UpdatePantry{
+
+    }
+
+    public void Add_Line(View v) {
+        LinearLayout ll = (LinearLayout) v.findViewById(R.id.linearLayoutDecisions);
+        // add edittext
+        EditText et = new EditText(getContext());
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        et.setLayoutParams(p);
+        et.setHint("Add a Location");
+        et.setId(numberOfLines + 1);
+        ll.addView(et);
+        numberOfLines++;
     }
 
 }

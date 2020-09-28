@@ -23,7 +23,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
+            android:text="Your Details"
+            android:layout_marginBottom="20dp"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Name"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -155,7 +163,71 @@
             android:text="Soy allergy"
             android:textSize="15sp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Your Pantry"
+            android:layout_marginBottom="20dp"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pantry Name"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/settingsPantryName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:hint="e.g. Smith's Pantry"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please Enter your Kitchen Locations"
+            android:layout_marginBottom="20dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:id="@+id/linearLayoutDecisions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/kitchen1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:hint="e.g. Fridge, Pantry Shelf 1, Freezer"
+            android:inputType="text"
+            android:textSize="16sp"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="20"
+            android:text="Add Another"
+            android:id="@+id/add_button"/>
+
+
     </LinearLayout>
+
+
 
     </ScrollView>
 
