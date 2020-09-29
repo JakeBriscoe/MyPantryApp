@@ -64,8 +64,9 @@ public class AddItemFragment extends Fragment {
                             Product product = documentSnapshot.toObject(Product.class);
                             // Add each individual product to exampleList
                             exampleList.add(new ExampleItem(product.getName(),
-                                                            product.getBrand(),
-                                                            documentSnapshot.getId()));
+                                    product.getBrand(),
+                                    documentSnapshot.getId(),
+                                    (String) documentSnapshot.get("volume")));
 
                         }
 
@@ -85,7 +86,7 @@ public class AddItemFragment extends Fragment {
                         });
 
                     }
-        });
+                });
 
     }
 
@@ -168,5 +169,5 @@ public class AddItemFragment extends Fragment {
     public interface SendDetails {
         void sendDetails(ExampleItem item);
     }
-    
+
 }
