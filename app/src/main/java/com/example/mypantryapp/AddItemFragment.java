@@ -65,7 +65,8 @@ public class AddItemFragment extends Fragment {
                             String name = product.getName();
                             String brand = product.getBrand();
                             String id = documentSnapshot.getId();
-                            exampleList.add(new ExampleItem(name, brand, id));
+                            String volume = (String) documentSnapshot.get("volume");
+                            exampleList.add(new ExampleItem(name, brand, id, volume));
 
                         }
 
