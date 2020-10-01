@@ -29,6 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,6 +94,8 @@ public class SettingsFragment extends Fragment {
         checkBoxPeanut = v.findViewById(R.id.checkBoxPeanut);
         checkBoxShellFish = v.findViewById(R.id.checkBoxShellFish);
         checkBoxSoy = v.findViewById(R.id.checkBoxSoy);
+        settingsPantryName = v.findViewById(R.id.settingsPantryName);
+
 
 
 
@@ -179,6 +182,7 @@ public class SettingsFragment extends Fragment {
             navigationView.setVisibility(View.GONE);
             toolbar.setVisibility(View.GONE);
             final Button addButton = (Button) view.findViewById(R.id.add_button);
+
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -210,7 +214,12 @@ public class SettingsFragment extends Fragment {
             // Otherwise, show the nav header and drawer.
             navigationView.setVisibility(View.VISIBLE);
             toolbar.setVisibility(View.VISIBLE);
-
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Add_Line(view);
+                }
+            });
             // Save details
             Button save = view.findViewById(R.id.saveDetails);
             save.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +252,29 @@ public class SettingsFragment extends Fragment {
         boolean soy = checkBoxSoy.isChecked();
         boolean celiac = checkBoxCeliac.isChecked();
 
+        //Get Pantry Details
+        String pantryName = settingsPantryName.getText().toString();
+        //get locations as array
+        LinearLayout ll = (LinearLayout) v.findViewById(R.id.linearLayoutDecisions);
+        String[] locations = new String[ll.getChildCount()];
+        int lLength = 0;
+        for (int i=0; i<= numberOfLines; i++){
+            EditText editText = (EditText)ll.getChildAt(i);
+            String kL = editText.getText().toString();
+            if (!kL.equals("")){
+                locations[lLength] = kL;
+                lLength += 1;
+            }
+        }
+        //ArrayList for multiple users, add current user id
+        ArrayList<String> users = new ArrayList<>();
+        users.add(userId);
+        //Put pantry details in a map
+        Map<String, Object> pantry = new HashMap<>();
+        pantry.put("users", users);
+        pantry.put("pantryName", pantryName);
+        pantry.put("kitchenLocations", locations);
+
         // Put these details in a map
         Map<String, Object> item = new HashMap<>();
         item.put("userAuthId", userId);
@@ -261,6 +293,24 @@ public class SettingsFragment extends Fragment {
         item.put("soy", soy);
         item.put("celiac", celiac);
 
+        //Make a new pantry and set the id, then add the pantry info to new document
+        String id = db.collection("pantries").document().getId();
+        db.collection("pantries").document(id).set(pantry)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getContext(), "Your Pantry is saved!", Toast.LENGTH_SHORT).show();
+                        UP.setPantry(id, pantryName, locations);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", e.toString());
+                    }
+                });
+
         // Set the user details accordingly
         db.collection("users").document(userId).set(item)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -277,6 +327,9 @@ public class SettingsFragment extends Fragment {
                         Log.d("TAG", e.toString());
                     }
                 });
+
+
+
 
 
     }
@@ -305,12 +358,13 @@ public class SettingsFragment extends Fragment {
     }
 
     interface UpdatePantry{
+        void setPantry(String id, String pantryName, String[] locations);
 
     }
 
     public void Add_Line(View v) {
         LinearLayout ll = (LinearLayout) v.findViewById(R.id.linearLayoutDecisions);
-        // add edittext
+        // add edittext when button clicked
         EditText et = new EditText(getContext());
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         et.setLayoutParams(p);

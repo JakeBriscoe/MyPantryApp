@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.solver.widgets.WidgetContainer;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -36,7 +38,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
                                                                 ScanIngredientsFragment.SendMessage,
                                                                 AddItemFragment.SendDetails,
-                                                                SettingsFragment.UpdateUser {
+                                                                SettingsFragment.UpdateUser,
+                                                                SettingsFragment.UpdatePantry{
     // Declarations
     private DrawerLayout drawer;
     private BottomNavigationView bottomNav;
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             // If a user is logged in, continue as normal.
+
             boolean emailVerified = currentUser.isEmailVerified();
 
             // Set up content view
@@ -320,5 +324,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // TODO: reflect email change in Firestore authentication
         currentUser = mAuth.getCurrentUser();
         currentUser.verifyBeforeUpdateEmail(email.trim());
+    }
+
+    public void setPantry(String id, String name, String[] locations) {
+        // TODO: add content to use Pantry data
+        View toolbar = findViewById(R.id.toolbar);
     }
 }
