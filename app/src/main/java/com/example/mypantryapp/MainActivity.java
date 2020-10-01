@@ -41,6 +41,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 /**
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
+
             // Add listener so we can toggle between the menu drawer being open and closed
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                     .getBoolean("isFirstRun", true);
             String userId = currentUser.getUid(); // Get unique user id, which corresponds with userAuthId in database
+
+
 
             // Get the user from database by matching userId (from authentication) to
             // userAuthId (from 'user' collection in database).
@@ -145,7 +149,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     fragment = new HomeFragment();
                     navigationView.setCheckedItem(R.id.nav_pantry1);
                 }
+                String docRefPantry = this.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                        .getString("pantryRef", null);
+                DocumentReference docRef = db.collection("pantries").document(docRefPantry);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Map<String, Object> data = document.getData();
+                                if (data.get("pantryName") != null) {
+                                    toolbar.setTitle((CharSequence) data.get("pantryName"));
+                                }
+
+                            }
+                        }
+                    }
+                });
+                toolbar.setTitle(docRefPantry);
+
                 // Replace fragment
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragment).addToBackStack(null).commit();
             }

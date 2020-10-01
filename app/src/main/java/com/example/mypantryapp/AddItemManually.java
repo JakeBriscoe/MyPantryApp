@@ -79,9 +79,6 @@ public class AddItemManually extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        // POSSIBLY NOT NEEDED. Set toolbar title.
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
 
         // When the camera icon is selected, the user should be navigated to the scan ingredients fragment.
         // First need to set a listener to the whole view. The camera icon is on the far right of the view.

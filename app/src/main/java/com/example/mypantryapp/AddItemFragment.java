@@ -107,9 +107,6 @@ public class AddItemFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        // POSSIBLY NOT NEEDED. Set the toolbar title.
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
 
         // When the barcode icon or text is selected, the user should be navigated to the barcode fragment.
         final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);

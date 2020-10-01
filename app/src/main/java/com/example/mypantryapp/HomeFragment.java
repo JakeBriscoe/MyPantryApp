@@ -29,10 +29,6 @@ public class HomeFragment extends Fragment implements ProductAdapter.ItemClickLi
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        // POSSIBLY NOT NEEDED. Set toolbar title.
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
-
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
