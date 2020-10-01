@@ -29,6 +29,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public TextView mNameTextView;
         public TextView mBrandTextView;
         public TextView mIdTextView;
+        public TextView mVolumeTextView;
 
         /**
          * Constructor to initialise TextViews and set onclick listener.
@@ -41,6 +42,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mNameTextView = itemView.findViewById(R.id.viewItems_productName);
             mBrandTextView = itemView.findViewById(R.id.viewItems_brand);
             mIdTextView = itemView.findViewById(R.id.viewItems_id);
+            mVolumeTextView = itemView.findViewById(R.id.viewItems_volume);
 
             // Set the onclick listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +94,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         holder.mNameTextView.setText(currentItem.getName());
         holder.mBrandTextView.setText(currentItem.getBrand());
         holder.mIdTextView.setText(currentItem.getId());
+        holder.mVolumeTextView.setText(currentItem.getVolume());
     }
 
     /**

@@ -7,6 +7,7 @@ public class ExampleItem {
     private String mName;
     private String mBrand;
     private String mId;
+    private String mVolume;
 
     /**
      * Constructor to set the details
@@ -14,10 +15,11 @@ public class ExampleItem {
      * @param brand the product brand
      * @param id the product id
      */
-    public ExampleItem(String name, String brand, String id) {
+    public ExampleItem(String name, String brand, String id, String volume) {
         mName = name;
         mBrand = brand;
         mId = id;
+        mVolume = volume;
     }
 
     /**
@@ -42,6 +44,14 @@ public class ExampleItem {
      */
     public String getId() {
         return mId;
+    }
+
+    /**
+     * Get the product volume
+     * @return volume
+     */
+    public String getVolume() {
+        return mVolume;
     }
 
 }

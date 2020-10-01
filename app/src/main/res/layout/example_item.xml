@@ -44,6 +44,14 @@
             android:text="Product ID"
             android:visibility="invisible" />
 
+        <TextView
+            android:id="@+id/viewItems_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Volume"
+            android:textSize="16sp" />
+
 
     </RelativeLayout>
 
