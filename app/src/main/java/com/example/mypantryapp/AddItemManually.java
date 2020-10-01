@@ -1,6 +1,7 @@
 package com.example.mypantryapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,12 +20,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 
+import com.example.mypantryapp.domain.Product;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,6 +120,9 @@ public class AddItemManually extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String pantryRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("pantryRef", null);
+
         // Setup any handles to view objects here
         editTextName =  (EditText) view.findViewById(R.id.productNameInputMan);
         editTextBrand =  (EditText) view.findViewById(R.id.brandInputMan);
@@ -119,8 +131,7 @@ public class AddItemManually extends Fragment {
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
         enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
 //        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
-//        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
-//        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
+
 
         // Set onclick listener for save button.
         final Button save_manually = getActivity().findViewById(R.id.button_save_man);
@@ -134,8 +145,7 @@ public class AddItemManually extends Fragment {
                 Integer shelfLife = Integer.parseInt(editTextShelfLife.getText().toString());
                 String volume = editTextQuantity.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
-//              String dietary =spinnerDietary.getSelectedItem().toString()
-//              String allergy =spinnerAllergy.getSelectedItem().toString();
+
 
                 // Put all data into a map
                 Map<String, Object> item = new HashMap<>();
@@ -145,31 +155,104 @@ public class AddItemManually extends Fragment {
                 item.put(KEY_SHELFLIFE, shelfLife);
                 item.put(KEY_VOLUME, volume);
                 //        item.put(KEY_CATEGORY, category);
-                //        item.put(KEY_DIETARY, dietary);
-                //        item.put(KEY_ALLERGY, allergy);
+
+
+                //check status of item
+                ArrayList<String> docIds = new ArrayList<String>();
+                if(barcode == 0){
+                    //TODO: figure out a good way to do no barcode items
+
+                }
+                else {
+                    // Array to hold all ids
+                    ArrayList<Long> prodId = new ArrayList<Long>();
+                    boolean match = false; //flag for matched barcode
+                    db.collection("products").get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                        Product product = documentSnapshot.toObject(Product.class);
+                                        docIds.add(documentSnapshot.getId());
+                                        // Add each individual product barcode to prodId
+                                        prodId.add(product.getBarcodeNum());
+                                    }
+                                }
+                            });
+                    //
+                    if (prodId.contains(barcode)){
+                        match = true;
+                    }
+                    if (match = false){
+                        //if barcode not in system
+                        // Put this data into the 'products' collection in Firestore.
+                        db.collection("products").document().set(item)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // On success, the data should be cleared.
+                                        Toast.makeText(getContext(), "Item Added to database", Toast.LENGTH_SHORT).show();
+                                        editTextName.setText("");
+                                        editTextBrand.setText("");
+                                        editTextBarcode.setText("");
+                                        editTextShelfLife.setText("");
+                                        editTextQuantity.setText("");
+                                        enterIngredientsText.setText("");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, e.toString());
+                                    }
+                                });
+                    }
+                    DocumentReference docRef = db.collection("pantries").document(pantryRef);
+                    if (db.collection("pantries").document(pantryRef).collection("pantry") == null){
+
+                    }
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Map<String, Object> data = document.getData();
+                                    if (data.get("pantryName") != null) {
+
+                                    }
+
+                                }
+                            }
+                        }
+                    });
+
+                }
+
 
                 // Put this data into the 'products' collection in Firestore.
-                db.collection("products").document().set(item)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // On success, the data should be cleared.
-                                Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
-                                editTextName.setText("");
-                                editTextBrand.setText("");
-                                editTextBarcode.setText("");
-                                editTextShelfLife.setText("");
-                                editTextQuantity.setText("");
-                                enterIngredientsText.setText("");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, e.toString());
-                            }
-                        });
+//                db.collection("products").document().set(item)
+//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                // On success, the data should be cleared.
+//                                Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
+//                                editTextName.setText("");
+//                                editTextBrand.setText("");
+//                                editTextBarcode.setText("");
+//                                editTextShelfLife.setText("");
+//                                editTextQuantity.setText("");
+//                                enterIngredientsText.setText("");
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+//                                Log.d(TAG, e.toString());
+//                            }
+//                        });
             }
         });
 

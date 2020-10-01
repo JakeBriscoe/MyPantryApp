@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
-                android:hint="Barcode"
+                android:hint="Barcode (if no barcode enter 0)"
                 android:inputType="number"
                 android:selectAllOnFocus="true" />
 
