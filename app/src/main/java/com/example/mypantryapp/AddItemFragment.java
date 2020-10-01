@@ -55,6 +55,7 @@ public class AddItemFragment extends Fragment {
         // Store the items
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
+
         productRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

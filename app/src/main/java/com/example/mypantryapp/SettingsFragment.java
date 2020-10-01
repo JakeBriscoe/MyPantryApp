@@ -1,6 +1,7 @@
 package com.example.mypantryapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -40,7 +42,8 @@ public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = mAuth.getCurrentUser();
     final String userId = currentUser.getUid();
-    public int numberOfLines = 1;
+    private int numberOfLines = 1;
+    public String docRefPantry;
 
     // Declare the views
     EditText settingsName;
@@ -60,8 +63,8 @@ public class SettingsFragment extends Fragment {
     EditText settingsPantryName;
     Button addButton;
 
+
     UpdateUser UU;
-    UpdatePantry UP;
 
     /**
      * Set the information based on the user's information
@@ -95,10 +98,6 @@ public class SettingsFragment extends Fragment {
         checkBoxShellFish = v.findViewById(R.id.checkBoxShellFish);
         checkBoxSoy = v.findViewById(R.id.checkBoxSoy);
         settingsPantryName = v.findViewById(R.id.settingsPantryName);
-
-
-
-
 
         // Set the fields based on what has previously been saved for the user
         db.collection("users")
@@ -154,6 +153,7 @@ public class SettingsFragment extends Fragment {
                         }
                     }
                 });
+
         return v;
     }
 
@@ -169,6 +169,8 @@ public class SettingsFragment extends Fragment {
         // True if this is user's first time logging in, false otherwise.
         boolean isFirstRun = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
+        docRefPantry = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("pantryRef", null);
 
         // Set the toolbar title to 'Settings'
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -189,8 +191,12 @@ public class SettingsFragment extends Fragment {
                     Add_Line(view);
                 }
             });
+            //Set up pantry doc reference for user
+            docRefPantry = db.collection("pantries").document().getId();
+            // Save details in shared preference
+            this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putString("pantryRef",
+                    docRefPantry).apply();
 
-            // Save details.
             // Once details have been saved, navigate to HomeFragment and show the navigation.
             Button save = view.findViewById(R.id.saveDetails);
             save.setOnClickListener(new View.OnClickListener() {
@@ -198,7 +204,6 @@ public class SettingsFragment extends Fragment {
                 public void onClick(View v) {
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
                     setItem(view);
-
                     navigationView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                     navigationView.setCheckedItem(R.id.nav_pantry1);
@@ -214,6 +219,29 @@ public class SettingsFragment extends Fragment {
             // Otherwise, show the nav header and drawer.
             navigationView.setVisibility(View.VISIBLE);
             toolbar.setVisibility(View.VISIBLE);
+
+            // Set the fields based on what has previously been saved for the user
+            // TODO: set pantry setting fields somehow
+
+
+            DocumentReference docRef = db.collection("pantries").document(docRefPantry);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> data = document.getData();
+                            if (data.get("pantryName") != null) {
+                                settingsPantryName.setText((CharSequence) data.get("pantryName"));
+                            }
+
+                        }
+                    }
+                }
+            });
+
+            Button addButton = view.findViewById(R.id.add_button);
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -256,13 +284,13 @@ public class SettingsFragment extends Fragment {
         String pantryName = settingsPantryName.getText().toString();
         //get locations as array
         LinearLayout ll = (LinearLayout) v.findViewById(R.id.linearLayoutDecisions);
-        String[] locations = new String[ll.getChildCount()];
+        ArrayList<String> locations = new ArrayList<String>();
         int lLength = 0;
-        for (int i=0; i<= numberOfLines; i++){
+        for (int i=0; i<ll.getChildCount();  i++){
             EditText editText = (EditText)ll.getChildAt(i);
             String kL = editText.getText().toString();
             if (!kL.equals("")){
-                locations[lLength] = kL;
+                locations.add(kL);
                 lLength += 1;
             }
         }
@@ -294,13 +322,11 @@ public class SettingsFragment extends Fragment {
         item.put("celiac", celiac);
 
         //Make a new pantry and set the id, then add the pantry info to new document
-        String id = db.collection("pantries").document().getId();
-        db.collection("pantries").document(id).set(pantry)
+        db.collection("pantries").document(docRefPantry).set(pantry)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "Your Pantry is saved!", Toast.LENGTH_SHORT).show();
-                        UP.setPantry(id, pantryName, locations);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -328,10 +354,6 @@ public class SettingsFragment extends Fragment {
                     }
                 });
 
-
-
-
-
     }
 
     /**
@@ -357,10 +379,6 @@ public class SettingsFragment extends Fragment {
         void setUser(String name, String email);
     }
 
-    interface UpdatePantry{
-        void setPantry(String id, String pantryName, String[] locations);
-
-    }
 
     public void Add_Line(View v) {
         LinearLayout ll = (LinearLayout) v.findViewById(R.id.linearLayoutDecisions);
