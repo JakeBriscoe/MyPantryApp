@@ -167,7 +167,7 @@ public class AddItemManually extends Fragment {
                 String ingredients = enterIngredientsText.getText().toString();
 
                 //for pantry
-                String quantity = editTextQuantity.getText().toString();
+                Integer quantity = Integer.parseInt(editTextQuantity.getText().toString());
 //              String category = spinnerCategory.getSelectedItem().toString();
 
 

@@ -10,10 +10,10 @@ public class PantryItem {
     private Product product;
     private Category category;
     private String kitchenLocation;
-    private Date expiry;
+    private String expiry;
     private int quantity;
 
-    public PantryItem(Product product, Date expiry, int quantity, Category category, String kitchenLocation) {
+    public PantryItem(Product product, String expiry, int quantity, Category category, String kitchenLocation) {
         this.product = product;
         this.quantity = quantity;
         this.category = category;
@@ -28,7 +28,7 @@ public class PantryItem {
         return product;
     }
 
-    public Date getExpiry() {
+    public String getExpiry() {
         return expiry;
     }
 
@@ -55,7 +55,7 @@ public class PantryItem {
         return this;
     }
 
-    public PantryItem setExpiry(Date expiry) {
+    public PantryItem setExpiry(String expiry) {
         this.expiry = expiry;
         return this;
     }

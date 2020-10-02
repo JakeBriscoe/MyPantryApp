@@ -1,4 +1,4 @@
-package com.example.mypantryapp;
+package com.example.mypantryapp.domain;
 
 /**
  * Stores details about a product so it can be displayed dynamically in AddItemFragment.
@@ -8,6 +8,7 @@ public class ExampleItem {
     private String mBrand;
     private String mId;
     private String mVolume;
+    private Integer mQuantity;
 
     /**
      * Constructor to set the details
@@ -15,11 +16,12 @@ public class ExampleItem {
      * @param brand the product brand
      * @param id the product id
      */
-    public ExampleItem(String name, String brand, String id, String volume) {
+    public ExampleItem(String name, String brand, String id, String volume, Integer quantity) {
         mName = name;
         mBrand = brand;
         mId = id;
         mVolume = volume;
+        mQuantity = quantity;
     }
 
     /**
@@ -53,5 +55,6 @@ public class ExampleItem {
     public String getVolume() {
         return mVolume;
     }
+
 
 }

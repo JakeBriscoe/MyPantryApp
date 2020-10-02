@@ -1,4 +1,4 @@
-package com.example.mypantryapp;
+package com.example.mypantryapp.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mypantryapp.R;
+import com.example.mypantryapp.domain.ExampleItem;
 
 import java.util.ArrayList;
 
