@@ -21,6 +21,9 @@ public class PantryItem {
         this.expiry = expiry;
     }
 
+    public PantryItem() {
+    }
+
     public Product getProduct() {
         return product;
     }

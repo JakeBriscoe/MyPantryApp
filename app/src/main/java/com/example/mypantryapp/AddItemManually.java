@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 
+import com.example.mypantryapp.domain.PantryItem;
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,13 +28,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,13 +52,24 @@ public class AddItemManually extends Fragment {
     EditText enterIngredientsText;
     String updateIngredientsText;
 
+
     private static final String TAG = "AddItemManually";
+    //Product map
     private static final String KEY_NAME= "name";
     private static final String KEY_BRAND = "brand";
     private static final String KEY_BARCODE = "barcodeNum";
     private static final String KEY_SHELFLIFE = "shelfLife";
     private static final String KEY_VOLUME = "volume";
-//    private  static final String KEY_CATEGORY = "categoryName";
+
+    private static final String KEY_INGREDIENTS = "ingredients";
+
+    //Pantry Product Map
+    private static final String KEY_PRODUCTREF = "productRef";
+    private static final String KEY_QUANTITY = "quantity";
+    private static final String KEY_EXPIRY = "expiry";
+    private static final String KEY_LOCATION = "location";
+    private  static final String KEY_CATEGORY = "categoryName";
+
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
 
@@ -62,6 +78,7 @@ public class AddItemManually extends Fragment {
     private EditText editTextBrand;
     private EditText editTextBarcode;
     private EditText editTextShelfLife;
+    private EditText editTextVolume;
     private EditText editTextQuantity;
 //    private Spinner spinnerCategory;
 //    private Spinner spinnerDietary;
@@ -123,12 +140,14 @@ public class AddItemManually extends Fragment {
         String pantryRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getString("pantryRef", null);
 
+
         // Setup any handles to view objects here
         editTextName =  (EditText) view.findViewById(R.id.productNameInputMan);
         editTextBrand =  (EditText) view.findViewById(R.id.brandInputMan);
         editTextBarcode =  (EditText) view.findViewById(R.id.barcodeInputMan);
         editTextShelfLife = (EditText) view.findViewById(R.id.shelfLifeInputMan);
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
+        editTextVolume = (EditText) view.findViewById(R.id.VolumeInputMan);
         enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
 //        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
 
@@ -139,11 +158,16 @@ public class AddItemManually extends Fragment {
             @Override
             public void onClick(View v) {
                 // Get all the data that has been entered.
+                //for product
                 String name = editTextName.getText().toString();
                 String brand = editTextBrand.getText().toString();
-                Integer barcode = Integer.parseInt(editTextBarcode.getText().toString());
+                Long barcode = Long.parseLong(editTextBarcode.getText().toString());
                 Integer shelfLife = Integer.parseInt(editTextShelfLife.getText().toString());
-                String volume = editTextQuantity.getText().toString();
+                String volume = editTextVolume.getText().toString();
+                String ingredients = enterIngredientsText.getText().toString();
+
+                //for pantry
+                String quantity = editTextQuantity.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
 
 
@@ -154,16 +178,23 @@ public class AddItemManually extends Fragment {
                 item.put(KEY_BARCODE, barcode);
                 item.put(KEY_SHELFLIFE, shelfLife);
                 item.put(KEY_VOLUME, volume);
+                item.put(KEY_INGREDIENTS, ingredients);
                 //        item.put(KEY_CATEGORY, category);
 
 
                 //check status of item
                 ArrayList<String> docIds = new ArrayList<String>();
+                String productdocId = "ERROR";
+                //to help document reference for product if in data base
+                //PRODUCTS - adding product if not in database.
+
+
                 if(barcode == 0){
-                    //TODO: figure out a good way to do no barcode items
+                    //TODO: figure out a good way to do no barcode items - name match?
 
                 }
                 else {
+                    //has a barcode
                     // Array to hold all ids
                     ArrayList<Long> prodId = new ArrayList<Long>();
                     boolean match = false; //flag for matched barcode
@@ -180,13 +211,16 @@ public class AddItemManually extends Fragment {
                                 }
                             });
                     //
-                    if (prodId.contains(barcode)){
+                    if (prodId.contains(barcode)) {
                         match = true;
+                        int index = prodId.indexOf(barcode);
+                        productdocId = docIds.get(index);
                     }
-                    if (match = false){
-                        //if barcode not in system
+                    if (match == false) {
+                        //if barcode not in system make new doc for product and save the id
+                        productdocId = db.collection("products").document().getId();
                         // Put this data into the 'products' collection in Firestore.
-                        db.collection("products").document().set(item)
+                        db.collection("products").document(productdocId).set(item)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -198,6 +232,7 @@ public class AddItemManually extends Fragment {
                                         editTextShelfLife.setText("");
                                         editTextQuantity.setText("");
                                         enterIngredientsText.setText("");
+                                        editTextVolume.setText("");
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -208,55 +243,84 @@ public class AddItemManually extends Fragment {
                                     }
                                 });
                     }
-                    DocumentReference docRef = db.collection("pantries").document(pantryRef);
-                    if (db.collection("pantries").document(pantryRef).collection("pantry") == null){
-
+                    else{ //if barcode matches
+                        //do nothing as product doesn't need to be updated, and product reference has been stored.
                     }
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Map<String, Object> data = document.getData();
-                                    if (data.get("pantryName") != null) {
 
-                                    }
+                } //end of no barcode product else
 
+                //PANTRY - Adding entered product to pantry
+                ArrayList<String> productsInPantry = new ArrayList<String>(); //list to store product id of pantry items
+                ArrayList<Integer> productsInPantryQ = new ArrayList<Integer>();
+
+                db.collection("pantries").document(pantryRef).collection("products").get() //get all in pantry -> products
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                  @Override
+                                                  public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                      for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                          productsInPantry.add(documentSnapshot.getId());
+                                                          PantryItem product = documentSnapshot.toObject(PantryItem.class);
+                                                          productsInPantryQ.add(product.getQuantity());
+
+                                                      }
+                                                  }
+                                                  });
+
+                if (productsInPantry.contains(productdocId)) {
+                    int index = productsInPantry.indexOf(productdocId);
+                    int oldQ = productsInPantryQ.get(index);
+                    //TODO UPDATE PRODUCT
+                }
+                else{
+                    //making new product document
+                    DocumentReference pantryProdRef = db.collection("pantries").document(pantryRef).collection("products").document(productdocId);
+
+                    //set expiry date
+                    Date c = Calendar.getInstance().getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    //Getting current date
+                    Calendar cal = Calendar.getInstance();
+                    //Number of Days to add
+                    cal.add(Calendar.DAY_OF_MONTH, shelfLife);
+                    //Date after adding the days to the current date
+                    String newDate = sdf.format(cal.getTime());
+
+                    Map<String, Object> product = new HashMap<>();
+                    product.put(KEY_QUANTITY, quantity);
+                    product.put(KEY_PRODUCTREF, productdocId);
+                    product.put(KEY_EXPIRY, newDate);
+                    //TODO get LOCATION AND CATEGORY WORKING? IN SPINNER?????!!
+//                        product.put(KEY_LOCATION, shelfLife);
+//                        product.put(KEY_CATEGORY, volume);
+
+                    db.collection("pantries").document(pantryRef).collection("products").document(productdocId).set(product)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                   enterIngredientsText.setText("");
                                 }
-                            }
-                        }
-                    });
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
 
                 }
 
 
-                // Put this data into the 'products' collection in Firestore.
-//                db.collection("products").document().set(item)
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                // On success, the data should be cleared.
-//                                Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
-//                                editTextName.setText("");
-//                                editTextBrand.setText("");
-//                                editTextBarcode.setText("");
-//                                editTextShelfLife.setText("");
-//                                editTextQuantity.setText("");
-//                                enterIngredientsText.setText("");
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
-//                                Log.d(TAG, e.toString());
-//                            }
-//                        });
-            }
-        });
 
-    }
+
+
+
+
+                           } //end of On Click
+               }); //end of click listener
+
+        } //end of on view created
+
 
     /**
      * Update the ingredients field in onResume to ensure it is displayed

@@ -154,6 +154,7 @@ public class SettingsFragment extends Fragment {
                     }
                 });
 
+
         return v;
     }
 
@@ -202,11 +203,13 @@ public class SettingsFragment extends Fragment {
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //TODO check this!!
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
                     setItem(view);
                     navigationView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                     navigationView.setCheckedItem(R.id.nav_pantry1);
+
                 }
             });
 
@@ -221,7 +224,7 @@ public class SettingsFragment extends Fragment {
             toolbar.setVisibility(View.VISIBLE);
 
             // Set the fields based on what has previously been saved for the user
-            // TODO: set pantry setting fields somehow
+
 
 
             DocumentReference docRef = db.collection("pantries").document(docRefPantry);
@@ -236,10 +239,30 @@ public class SettingsFragment extends Fragment {
                                 settingsPantryName.setText((CharSequence) data.get("pantryName"));
                             }
 
+                            // TODO: set pantry setting fields somehow
+                            if (data.get("kitchenLocations")!= null ){
+                               // ArrayList<String> locations = data.get("kitchenLocations");
+                            }
                         }
                     }
                 }
             });
+            db.collection("pantries")
+                    .whereEqualTo("users", userId)// Looks for the corresponding value with the field
+                    // in the database
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    if (document.get("name") != null) {
+                                        settingsName.setText((CharSequence) document.get("name"));
+                                    }
+                                }
+                            }
+                        }
+                    });
 
             Button addButton = view.findViewById(R.id.add_button);
             addButton.setOnClickListener(new View.OnClickListener() {
