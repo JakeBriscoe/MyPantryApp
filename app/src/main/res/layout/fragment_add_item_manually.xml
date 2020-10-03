@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddItemManually">
+    tools:context=".AddItemManuallyFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,10 +80,11 @@
                 tools:layout_editor_absoluteY="90dp" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/barcodeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Barcode#"
+                android:drawableRight="@drawable/ic_camera"
+                android:text="Barcode Number"
                 android:textStyle="bold" />
 
             <EditText
@@ -105,12 +106,12 @@
 
             <EditText
                 android:id="@+id/QuantityInputMan"
-                android:layout_width="159dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
                 android:hint="Volume"
-                android:inputType="numberDecimal"
+                android:inputType="text"
                 android:selectAllOnFocus="true" />
 
 
@@ -123,8 +124,8 @@
 
             <EditText
                 android:id="@+id/shelfLifeInputMan"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
                 android:gravity="start|top"

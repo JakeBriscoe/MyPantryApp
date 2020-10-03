@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -52,13 +53,22 @@ public class ScanIngredientsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        // Show bottom navigation
+        // POSSIBLY NOT NEEDED: Show bottom navigation.
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
+
+        // POSSIBLY NOT NEEDED: Set toolbar title.
+        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle("[Pantry 1]");
 
         return inflater.inflate(R.layout.fragment_scan_ingredients, container, false);
     }
 
+    /**
+     * Set up camera and listeners
+     * @param view view
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -145,19 +155,21 @@ public class ScanIngredientsFragment extends Fragment {
 
             btnConfirm = getActivity().findViewById(R.id.btnConfirm);
 
-            // When the barcode icon is selected, the user should be navigated to the barcode fragment.
+            // Set up onclick listener for takeSnapshot button.
             takeSnapshot.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
 
                     if (takeSnapshot.getText().equals("Take Picture")) {
+                        // If the text is "Take Picture", then pause the camera and change text.
                         mCameraSource.stop();
                         takeSnapshot.setText("Try Again");
                         message = transformMessage(stringBuilder.toString().trim());
                         // Show button for user to confirm
                         btnConfirm.setVisibility(View.VISIBLE);
                     } else if (takeSnapshot.getText().equals("Try Again")) {
+                        // If the text is "Try Again" then resume the camera and change text.
                         try {
                             view.setBackgroundColor(Color.WHITE);
                             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
@@ -178,22 +190,52 @@ public class ScanIngredientsFragment extends Fragment {
                 }
             });
 
+            // If user selects 'Confirm' then send the ingredients.
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
-
                     try {
-
-                        // message = transformMessage(stringBuilder.toString().trim());
+                        // Transform the message to be in the correct format
+                        message = transformMessage(stringBuilder.toString().trim());
                         SM.sendData(message);
+                        // Navigate to AddItemManually
                         assert getFragmentManager() != null;
                         getFragmentManager().popBackStack();
-
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
                         btnConfirm.setVisibility(View.VISIBLE);
                         takeSnapshot.setText("Take Picture");
+                        try {
+                            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        requestPermissionID);
+                                return;
+                            }
+                            mCameraSource.start(mCameraView.getHolder());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (StringIndexOutOfBoundsException exception) {
+                        Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
+                        btnConfirm.setVisibility(View.VISIBLE);
+                        takeSnapshot.setText("Take Picture");
+                        try {
+                            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        requestPermissionID);
+                                return;
+                            }
+                            mCameraSource.start(mCameraView.getHolder());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
@@ -202,14 +244,20 @@ public class ScanIngredientsFragment extends Fragment {
 
     }
 
+    /**
+     * Set up an interface so ingredients can be sent to AddItemManually via MainActivity.
+     */
     interface SendMessage {
         void sendData(String message);
     }
 
+    /**
+     * Send the ingredients from ScanIngredientsFragment to MainActivity.
+     * @param context context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             SM = (SendMessage) getActivity();
         } catch (ClassCastException e) {
@@ -225,8 +273,6 @@ public class ScanIngredientsFragment extends Fragment {
      * The format will include "Ingredients ...", "May contain ..." and "Contains ..."
      * There is only one occurrence of 'Ingredients' in the snapshot taken
      * The camera picks up the full stops
-     *
-     * TODO: consider "May be present: ..."
      *
      * @param data the result from scan ingredients
      * @return the modified string
