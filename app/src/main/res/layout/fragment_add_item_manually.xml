@@ -151,7 +151,27 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />
-            
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dietary Warnings"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/viewDietaryWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="No dietary warnings"
+                android:inputType="textMultiLine" />
+
+            <Spinner
+                android:id="@+id/DietContainsSpinMan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp" />
+
             <Button
                 android:id="@+id/button_save_man"
                 android:layout_width="match_parent"

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -36,11 +37,17 @@ public class ScanIngredientsFragment extends Fragment {
     private TextView mTextView;
     public static final String TAG = "PLACEHOLDER";
     public static final int requestPermissionID = 100;// . or any other value
-    private StringBuilder stringBuilder = new StringBuilder();
     private Button btnConfirm;
+    public String ingredients;
+    private View view;
+    private CheckIngredients checkIngredients = new CheckIngredients();
 
+    private StringBuilder stringBuilder = new StringBuilder();
     SendMessage SM;
-    String message;
+
+    // TODO: This is the variable that can be used for dietary checks in the takeSnapshot button listener.
+    // TODO: Make sure it is in the case of "Take picture"
+    String message; // Ingredients in the correct form
 
     @Nullable
     @Override
@@ -63,8 +70,9 @@ public class ScanIngredientsFragment extends Fragment {
      * @param savedInstanceState the saved instance state
      */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
 
         mCameraView = getActivity().findViewById(R.id.surfaceView);
         final Button takeSnapshot = getActivity().findViewById(R.id.btnTakePicture);
@@ -129,6 +137,7 @@ public class ScanIngredientsFragment extends Fragment {
                 /**
                  * Detect all the text from camera using TextBlock and the values into a stringBuilder
                  * which will then be set to the textView.
+                 * This is in real-time
                  * */
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
@@ -140,7 +149,6 @@ public class ScanIngredientsFragment extends Fragment {
                             stringBuilder.append(item.getValue());
                             stringBuilder.append("\n");
                         }
-
                     }
                 }
             });
@@ -157,11 +165,13 @@ public class ScanIngredientsFragment extends Fragment {
                         // If the text is "Take Picture", then pause the camera and change text.
                         mCameraSource.stop();
                         takeSnapshot.setText("Try Again");
+                        message = transformMessage(stringBuilder.toString().trim());
                         // Show button for user to confirm
                         btnConfirm.setVisibility(View.VISIBLE);
                     } else if (takeSnapshot.getText().equals("Try Again")) {
                         // If the text is "Try Again" then resume the camera and change text.
                         try {
+                            view.setBackgroundColor(Color.WHITE);
                             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
                                     Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
@@ -318,12 +328,24 @@ public class ScanIngredientsFragment extends Fragment {
             mayContain = "";
         } else {
             mayContain = ingredients.substring(iMayContain, ingredients.indexOf(".", iMayContain) + 1);
+            //may contain ingredients (ingredients type, may need to add in firebase)
         }
 
         if (iContains == -1) {
             contains = "";
         } else {
             contains = ingredients.substring(iContains, ingredients.indexOf(".", iContains) + 1);
+        }
+
+        // Check diet
+        checkIngredients.setIngredients(ingredients + " " + contains);
+        if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
+            view.setBackgroundColor(Color.RED);
+        } else {
+            checkIngredients.setIngredients(mayContain);
+            if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
+                view.setBackgroundColor(Color.YELLOW);
+            }
         }
 
         String result;
@@ -367,5 +389,12 @@ public class ScanIngredientsFragment extends Fragment {
         }
         return -1; // not found
     }
+
+    /**
+     * Checks if a products ingredients do not match a users diet and updates the background color
+     * accordingly
+     * @param ingrs ingredients list
+     * @param mayContain boolean indicator of whether the ingredients are definitely in it
+     */
 
 }
