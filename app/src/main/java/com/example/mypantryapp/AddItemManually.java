@@ -50,7 +50,6 @@ public class AddItemManually extends Fragment {
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
 
-
     private EditText editTextName;
     private EditText editTextBrand;
     private EditText editTextBarcode;
@@ -62,8 +61,7 @@ public class AddItemManually extends Fragment {
 
     private Button saveButton;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
+    private CheckIngredients checkIngredients = new CheckIngredients();
 
     @Override
     public void onAttach(Context context) {
@@ -133,11 +131,10 @@ public class AddItemManually extends Fragment {
 
 
         // Checks diets as the user types
-        final CheckIngredients continuousCheck = new CheckIngredients(enterIngredientsText.getText().toString());
         enterIngredientsText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                continuousCheck.setIngredients(enterIngredientsText.getText().toString());
-                viewDietaryWarning.setText(continuousCheck.checkIngredients());
+                checkIngredients.setIngredients(enterIngredientsText.getText().toString());
+                viewDietaryWarning.setText(checkIngredients.checkIngredients());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -204,7 +201,7 @@ public class AddItemManually extends Fragment {
 
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
-            CheckIngredients checkIngredients = new CheckIngredients(updateIngredientsText);
+            checkIngredients.setIngredients(updateIngredientsText);
             viewDietaryWarning.setText(checkIngredients.checkIngredients());
         }
     }

@@ -39,6 +39,7 @@ public class ScanIngredientsFragment extends Fragment {
     private Button btnConfirm;
     public String ingredients;
     private View view;
+    private CheckIngredients checkIngredients = new CheckIngredients();
 
     private StringBuilder stringBuilder = new StringBuilder();
     SendMessage SM;
@@ -291,12 +292,12 @@ public class ScanIngredientsFragment extends Fragment {
         }
 
         // Check diet
-        CheckIngredients checkContains = new CheckIngredients(ingredients + " " + contains);
-        if (!checkContains.checkIngredients().equals("No dietary warnings")) {
+        checkIngredients.setIngredients(ingredients + " " + contains);
+        if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
             view.setBackgroundColor(Color.RED);
         } else {
-            CheckIngredients checkMayContain = new CheckIngredients(mayContain);
-            if (!checkMayContain.checkIngredients().equals("No dietary warnings")) {
+            checkIngredients.setIngredients(mayContain);
+            if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
                 view.setBackgroundColor(Color.YELLOW);
             }
         }

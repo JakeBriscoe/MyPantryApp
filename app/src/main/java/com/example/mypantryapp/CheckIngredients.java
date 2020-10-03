@@ -1,5 +1,7 @@
 package com.example.mypantryapp;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,8 +20,7 @@ public class CheckIngredients {
     private String ingredients;
     private Map<String, ArrayList<String>> diets = new HashMap<String, ArrayList<String>>();
 
-    public CheckIngredients (String ingredients) {
-        this.ingredients = ingredients;
+    public CheckIngredients () {
         // Gets the diets and blacklisted ingredients from firebase
         db.collection("dietary")
                 .get()
@@ -31,7 +32,7 @@ public class CheckIngredients {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                  String name = document.getString("name");
-                                ArrayList<String> blacklist = (ArrayList<String>) document.get("blacklist");
+                                 ArrayList<String> blacklist = (ArrayList<String>) document.get("blacklist");
                                  diets.put(name, blacklist);
                             }
                         }
@@ -40,6 +41,7 @@ public class CheckIngredients {
     }
 
     public String checkIngredients() {
+        Log.d("HERE", diets.toString());
         String[] ingrs = ingredients.split(" ");
         ArrayList<String> dietNames = new ArrayList<>();
         String dietWarnings = "";
