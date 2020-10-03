@@ -138,26 +138,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     // Navigate to home fragment otherwise
                     fragment = new HomeFragment();
                     navigationView.setCheckedItem(R.id.nav_pantry1);
-                }
-                String docRefPantry = this.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
-                        .getString("pantryRef", null);
-                DocumentReference docRef = db.collection("pantries").document(docRefPantry);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Map<String, Object> data = document.getData();
-                                if (data.get("pantryName") != null) {
-                                    toolbar.setTitle((CharSequence) data.get("pantryName"));
-                                }
 
+                    String docRefPantry = this.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                            .getString("pantryRef", null);
+                    DocumentReference docRef = db.collection("pantries").document(docRefPantry);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Map<String, Object> data = document.getData();
+                                    if (data.get("pantryName") != null) {
+                                        toolbar.setTitle((CharSequence) data.get("pantryName"));
+                                    }
+
+                                }
                             }
                         }
-                    }
-                });
-                toolbar.setTitle(docRefPantry);
+                    });
+                    toolbar.setTitle(docRefPantry);
+                }
+
+
 
                 // Replace fragment
 

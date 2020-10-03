@@ -25,6 +25,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class AddItemFragment extends Fragment {
@@ -43,6 +45,7 @@ public class AddItemFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
 
+
     /**
      * Display all products in database.
      */
@@ -55,7 +58,8 @@ public class AddItemFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         // Store the items
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
-
+        ArrayList<String> productIDDB = new ArrayList<>(); //array list for product id
+        ArrayList<String> productBCDB = new ArrayList<>(); //array list for product barcode
 
         productRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -69,6 +73,10 @@ public class AddItemFragment extends Fragment {
                                     product.getBrand(),
                                     documentSnapshot.getId(),
                                     (String) documentSnapshot.get("volume")));
+                            Long bCode = product.getBarcodeNum();
+                            if(bCode != 0){
+                                productBCDB.add(Long.toString(bCode));
+                            }
 
                         }
 
@@ -76,6 +84,12 @@ public class AddItemFragment extends Fragment {
                         mAdapter = new ExampleAdapter(exampleList);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
+                        Set<String> set = new HashSet<>(productBCDB);
+                        getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
+                                set).apply();
+
+
+
 
                         // When the user clicks on a product, they should be prompted to enter the quantity.
                         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {

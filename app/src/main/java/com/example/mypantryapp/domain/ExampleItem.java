@@ -16,12 +16,11 @@ public class ExampleItem {
      * @param brand the product brand
      * @param id the product id
      */
-    public ExampleItem(String name, String brand, String id, String volume, Integer quantity) {
+    public ExampleItem(String name, String brand, String id, String volume) {
         mName = name;
         mBrand = brand;
         mId = id;
         mVolume = volume;
-        mQuantity = quantity;
     }
 
     /**
