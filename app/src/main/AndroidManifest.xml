@@ -27,6 +27,13 @@
         <activity android:name=".PantrySetUpActivity">
 
         </activity>
+        <activity
+            android:name=".DefaultIntro"
+            android:label="Intro Label"
+            android:theme="@style/FullscreenTheme">
+
+        </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

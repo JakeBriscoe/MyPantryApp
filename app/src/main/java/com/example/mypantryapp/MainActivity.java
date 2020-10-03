@@ -1,6 +1,8 @@
 package com.example.mypantryapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -53,6 +55,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Thread t=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences sharedPreferences = getSharedPreferences(Config.FLAG, Context.MODE_PRIVATE);
+                if(sharedPreferences.getBoolean(Config.FLAG,true)){
+                    startActivity(new Intent(MainActivity.this,DefaultIntro.class));
+                    SharedPreferences.Editor e=sharedPreferences.edit();
+                    e.putBoolean(Config.FLAG,false);
+                    e.apply();
+                }
+            }
+        });
+        t.start();
 
         // Check if there is a user already logged in
         currentUser = mAuth.getCurrentUser();
@@ -134,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
-
     }
 
     /**
