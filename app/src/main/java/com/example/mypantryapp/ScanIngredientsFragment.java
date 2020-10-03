@@ -196,6 +196,36 @@ public class ScanIngredientsFragment extends Fragment {
                         Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
                         btnConfirm.setVisibility(View.VISIBLE);
                         takeSnapshot.setText("Take Picture");
+                        try {
+                            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        requestPermissionID);
+                                return;
+                            }
+                            mCameraSource.start(mCameraView.getHolder());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (StringIndexOutOfBoundsException exception) {
+                        Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
+                        btnConfirm.setVisibility(View.VISIBLE);
+                        takeSnapshot.setText("Take Picture");
+                        try {
+                            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        requestPermissionID);
+                                return;
+                            }
+                            mCameraSource.start(mCameraView.getHolder());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });

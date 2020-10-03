@@ -44,6 +44,7 @@ public class AddItemManuallyFragment extends Fragment {
     private static final String KEY_BARCODE = "barcodeNum";
     private static final String KEY_SHELFLIFE = "shelfLife";
     private static final String KEY_VOLUME = "volume";
+    private static final String KEY_INGREDIENTS = "ingredients";
 //    private  static final String KEY_CATEGORY = "categoryName";
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
@@ -154,9 +155,14 @@ public class AddItemManuallyFragment extends Fragment {
                 // Get all the data that has been entered.
                 String name = editTextName.getText().toString();
                 String brand = editTextBrand.getText().toString();
-                Integer barcode = Integer.parseInt(editTextBarcode.getText().toString());
-                Integer shelfLife = Integer.parseInt(editTextShelfLife.getText().toString());
+                Long barcode = Long.parseLong(editTextBarcode.getText().toString());
+                String shelfLifeText = editTextShelfLife.getText().toString();
+                Integer shelfLife = null;
+                if (!shelfLifeText.equals("")) {
+                    shelfLife = Integer.parseInt(shelfLifeText);
+                } 
                 String volume = editTextQuantity.getText().toString();
+                String ingredients = enterIngredientsText.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
 //              String dietary =spinnerDietary.getSelectedItem().toString()
 //              String allergy =spinnerAllergy.getSelectedItem().toString();
@@ -166,34 +172,58 @@ public class AddItemManuallyFragment extends Fragment {
                 item.put(KEY_NAME, name);
                 item.put(KEY_BRAND, brand);
                 item.put(KEY_BARCODE, barcode);
-                item.put(KEY_SHELFLIFE, shelfLife);
-                item.put(KEY_VOLUME, volume);
+                if (shelfLife != null) {
+                    item.put(KEY_SHELFLIFE, shelfLife); // Shelf life should not be a required entry
+                }
+                if (!volume.equals("")) {
+                    item.put(KEY_VOLUME, volume); // Volume should not be a required entry
+                }
+                if (!ingredients.equals("")) {
+                    item.put(KEY_INGREDIENTS, ingredients); // Ingredients should not be a required entry
+                }
                 //        item.put(KEY_CATEGORY, category);
                 //        item.put(KEY_DIETARY, dietary);
                 //        item.put(KEY_ALLERGY, allergy);
 
-                // Put this data into the 'products' collection in Firestore.
-                db.collection("products").document().set(item)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // On success, the data should be cleared.
-                                Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
-                                editTextName.setText("");
-                                editTextBrand.setText("");
-                                editTextBarcode.setText("");
-                                editTextShelfLife.setText("");
-                                editTextQuantity.setText("");
-                                enterIngredientsText.setText("");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, e.toString());
-                            }
-                        });
+
+                if (name.equals("")) {
+                    Toast.makeText(getContext(), "Please enter a name", Toast.LENGTH_SHORT).show();
+                }
+                if (brand.equals("")) {
+                    Toast.makeText(getContext(), "Please enter the brand", Toast.LENGTH_SHORT).show();
+                }
+                if (barcode.equals("")) {
+                    Toast.makeText(getContext(), "Please enter the barcode", Toast.LENGTH_SHORT).show();
+                }
+
+                // Only proceed with adding to database if name, brand and barcode have been filled out
+                if (!name.equals("") && !brand.equals("") && !barcode.equals("")) {
+                    // Put this data into the 'products' collection in Firestore.
+                    db.collection("products").document().set(item)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // On success, the data should be cleared.
+                                    Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
+                                    editTextName.setText("");
+                                    editTextBrand.setText("");
+                                    editTextBarcode.setText("");
+                                    editTextShelfLife.setText("");
+                                    editTextQuantity.setText("");
+                                    enterIngredientsText.setText("");
+
+                                    // Redirect to AddItemFragment
+                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemFragment()).addToBackStack(null).commit();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
+                }
             }
         });
 
