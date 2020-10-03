@@ -89,7 +89,7 @@
 
             <EditText
                 android:id="@+id/barcodeInputMan"
-                android:layout_width="404dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"

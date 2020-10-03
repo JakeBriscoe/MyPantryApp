@@ -1,7 +1,10 @@
 package com.example.mypantryapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,9 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +38,7 @@ public class AddItemManuallyFragment extends Fragment {
 
     EditText enterIngredientsText;
     String updateIngredientsText;
+    TextView viewDietaryWarning;
 
     private static final String TAG = "AddItemManually";
     private static final String KEY_NAME= "name";
@@ -44,11 +46,9 @@ public class AddItemManuallyFragment extends Fragment {
     private static final String KEY_BARCODE = "barcodeNum";
     private static final String KEY_SHELFLIFE = "shelfLife";
     private static final String KEY_VOLUME = "volume";
-    private static final String KEY_INGREDIENTS = "ingredients";
 //    private  static final String KEY_CATEGORY = "categoryName";
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
-
 
     private EditText editTextName;
     private EditText editTextBrand;
@@ -61,7 +61,12 @@ public class AddItemManuallyFragment extends Fragment {
 
     private Button saveButton;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String barcodeText;
+    private CheckIngredients checkIngredients = new CheckIngredients();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     /**
      * Set any static listeners and data
@@ -74,15 +79,12 @@ public class AddItemManuallyFragment extends Fragment {
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_add_item_manually, container, false); // Initialise view
+
+        View v = inflater.inflate(R.layout.fragment_add_item_manually, container, false);
 
         // POSSIBLY NOT NEEDED. Show bottom navigation.
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
-
-        // POSSIBLY NOT NEEDED. Set toolbar title.
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
 
         // When the camera icon for 'Ingredients' is selected, the user should be navigated to the scan ingredients fragment.
         // First need to set a listener to the whole view. The camera icon is on the far right of the view.
@@ -91,11 +93,11 @@ public class AddItemManuallyFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    // Check that the right drawable was tapped.
                     int[] textLocation = new int[2];
                     ingredientsTitle.getLocationOnScreen(textLocation);
                     if (event.getRawX() >= textLocation[0] + ingredientsTitle.getWidth() - ingredientsTitle.getTotalPaddingRight()){
-                        // If it was, replace fragment.
+
+                        // Right drawable was tapped
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanIngredientsFragment()).addToBackStack(null).commit();
                         return true;
                     }
@@ -124,7 +126,20 @@ public class AddItemManuallyFragment extends Fragment {
             }
         });
 
+
         return v;
+
+    }
+
+    /**
+     * This method is called after the parent Activity's onCreate() method has completed.
+     * Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
+     * At this point, it is safe to search for activity View objects by their ID, for example.
+     * @param savedInstanceState saved instance state
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     /**
@@ -142,88 +157,72 @@ public class AddItemManuallyFragment extends Fragment {
         editTextBarcode =  (EditText) view.findViewById(R.id.barcodeInputMan);
         editTextShelfLife = (EditText) view.findViewById(R.id.shelfLifeInputMan);
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
+
         enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
+        viewDietaryWarning = (TextView) view.findViewById(R.id.viewDietaryWarning);
+
 //        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
 //        spinnerDietary = (Spinner) findViewById(R.id.DietSpinMan);
 //        spinnerAllergy = (Spinner) findViewById(R.id.AllergenSpinMan);
 
-        // Set onclick listener for save button.
-        final Button save_manually = getActivity().findViewById(R.id.button_save_man);
+
+        // Checks diets as the user types
+        enterIngredientsText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                checkIngredients.setIngredients(enterIngredientsText.getText().toString());
+                viewDietaryWarning.setText(checkIngredients.checkIngredients());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        Button save_manually = getActivity().findViewById(R.id.button_save_man);
         save_manually.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get all the data that has been entered.
                 String name = editTextName.getText().toString();
                 String brand = editTextBrand.getText().toString();
-                Long barcode = Long.parseLong(editTextBarcode.getText().toString());
-                String shelfLifeText = editTextShelfLife.getText().toString();
-                Integer shelfLife = null;
-                if (!shelfLifeText.equals("")) {
-                    shelfLife = Integer.parseInt(shelfLifeText);
-                } 
+                Integer barcode = Integer.parseInt(editTextBarcode.getText().toString());
+                Integer shelfLife = Integer.parseInt(editTextShelfLife.getText().toString());
                 String volume = editTextQuantity.getText().toString();
-                String ingredients = enterIngredientsText.getText().toString();
 //              String category = spinnerCategory.getSelectedItem().toString();
 //              String dietary =spinnerDietary.getSelectedItem().toString()
 //              String allergy =spinnerAllergy.getSelectedItem().toString();
 
-                // Put all data into a map
+
                 Map<String, Object> item = new HashMap<>();
                 item.put(KEY_NAME, name);
                 item.put(KEY_BRAND, brand);
                 item.put(KEY_BARCODE, barcode);
-                if (shelfLife != null) {
-                    item.put(KEY_SHELFLIFE, shelfLife); // Shelf life should not be a required entry
-                }
-                if (!volume.equals("")) {
-                    item.put(KEY_VOLUME, volume); // Volume should not be a required entry
-                }
-                if (!ingredients.equals("")) {
-                    item.put(KEY_INGREDIENTS, ingredients); // Ingredients should not be a required entry
-                }
+                item.put(KEY_SHELFLIFE, shelfLife);
+                item.put(KEY_VOLUME, volume);
                 //        item.put(KEY_CATEGORY, category);
                 //        item.put(KEY_DIETARY, dietary);
                 //        item.put(KEY_ALLERGY, allergy);
 
+                db.collection("products").document().set(item)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
+                                editTextName.setText("");
+                                editTextBrand.setText("");
+                                editTextBarcode.setText("");
+                                editTextShelfLife.setText("");
+                                editTextQuantity.setText("");
+                                enterIngredientsText.setText("");
 
-                if (name.equals("")) {
-                    Toast.makeText(getContext(), "Please enter a name", Toast.LENGTH_SHORT).show();
-                }
-                if (brand.equals("")) {
-                    Toast.makeText(getContext(), "Please enter the brand", Toast.LENGTH_SHORT).show();
-                }
-                if (barcode.equals("")) {
-                    Toast.makeText(getContext(), "Please enter the barcode", Toast.LENGTH_SHORT).show();
-                }
-
-                // Only proceed with adding to database if name, brand and barcode have been filled out
-                if (!name.equals("") && !brand.equals("") && !barcode.equals("")) {
-                    // Put this data into the 'products' collection in Firestore.
-                    db.collection("products").document().set(item)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // On success, the data should be cleared.
-                                    Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
-                                    editTextName.setText("");
-                                    editTextBrand.setText("");
-                                    editTextBarcode.setText("");
-                                    editTextShelfLife.setText("");
-                                    editTextQuantity.setText("");
-                                    enterIngredientsText.setText("");
-
-                                    // Redirect to AddItemFragment
-                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemFragment()).addToBackStack(null).commit();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
-                                    Log.d(TAG, e.toString());
-                                }
-                            });
-                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, e.toString());
+                            }
+                        });
             }
         });
 
@@ -236,21 +235,11 @@ public class AddItemManuallyFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Set the ingredients text
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
+            checkIngredients.setIngredients(updateIngredientsText);
+            viewDietaryWarning.setText(checkIngredients.checkIngredients());
         }
-
-        // Set a listener to see whether a barcode has just been scanned and came up blank.
-        // If so, populate the barcode field with the barcode scanned.
-        getParentFragmentManager().setFragmentResultListener("requestBarcode", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
-                // Set the text
-                String result = bundle.getString("bundleKey");
-                editTextBarcode.setText(result);
-            }
-        });
     }
 
     /**

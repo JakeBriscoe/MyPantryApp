@@ -45,8 +45,6 @@ public class ScanIngredientsFragment extends Fragment {
     private StringBuilder stringBuilder = new StringBuilder();
     SendMessage SM;
 
-    // TODO: This is the variable that can be used for dietary checks in the takeSnapshot button listener.
-    // TODO: Make sure it is in the case of "Take picture"
     String message; // Ingredients in the correct form
 
     @Nullable
@@ -165,7 +163,7 @@ public class ScanIngredientsFragment extends Fragment {
                         // If the text is "Take Picture", then pause the camera and change text.
                         mCameraSource.stop();
                         takeSnapshot.setText("Try Again");
-                        message = transformMessage(stringBuilder.toString().trim());
+//                        message = transformMessage(stringBuilder.toString().trim());
                         // Show button for user to confirm
                         btnConfirm.setVisibility(View.VISIBLE);
                     } else if (takeSnapshot.getText().equals("Try Again")) {
@@ -202,24 +200,7 @@ public class ScanIngredientsFragment extends Fragment {
                         // Navigate to AddItemManually
                         assert getFragmentManager() != null;
                         getFragmentManager().popBackStack();
-                    } catch (ArrayIndexOutOfBoundsException exception) {
-                        Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
-                        btnConfirm.setVisibility(View.VISIBLE);
-                        takeSnapshot.setText("Take Picture");
-                        try {
-                            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
-                                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-
-                                ActivityCompat.requestPermissions(getActivity(),
-                                        new String[]{Manifest.permission.CAMERA},
-                                        requestPermissionID);
-                                return;
-                            }
-                            mCameraSource.start(mCameraView.getHolder());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (StringIndexOutOfBoundsException exception) {
+                    } catch (ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException exception) {
                         Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
                         btnConfirm.setVisibility(View.VISIBLE);
                         takeSnapshot.setText("Take Picture");
@@ -338,15 +319,15 @@ public class ScanIngredientsFragment extends Fragment {
         }
 
         // Check diet
-        checkIngredients.setIngredients(ingredients + " " + contains);
-        if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
-            view.setBackgroundColor(Color.RED);
-        } else {
-            checkIngredients.setIngredients(mayContain);
-            if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
-                view.setBackgroundColor(Color.YELLOW);
-            }
-        }
+//        checkIngredients.setIngredients(ingredients + " " + contains);
+//        if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
+//            view.setBackgroundColor(Color.RED);
+//        } else {
+//            checkIngredients.setIngredients(mayContain);
+//            if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
+//                view.setBackgroundColor(Color.YELLOW);
+//            }
+//        }
 
         String result;
 
