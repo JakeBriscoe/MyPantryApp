@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (currentFragment instanceof ScanBarcodeFragment ||
-                currentFragment instanceof AddItemManually ||
+                currentFragment instanceof AddItemManuallyFragment ||
                 currentFragment instanceof ScanIngredientsFragment) {
             // For the above fragments, clicking back should pop the stack and show the previous fragment.
             getFragmentManager().popBackStack();
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void sendData(String message) {
-        AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
+        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
         assert f != null;
         f.displayReceivedData(message);
     }

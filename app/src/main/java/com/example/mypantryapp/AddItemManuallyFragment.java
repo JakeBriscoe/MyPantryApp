@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class AddItemManually extends Fragment {
+public class AddItemManuallyFragment extends Fragment {
 
 
     private Spinner spinner;
@@ -83,7 +83,7 @@ public class AddItemManually extends Fragment {
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
         mActionBarToolbar.setTitle("[Pantry 1]");
 
-        // When the camera icon is selected, the user should be navigated to the scan ingredients fragment.
+        // When the camera icon for 'Ingredients' is selected, the user should be navigated to the scan ingredients fragment.
         // First need to set a listener to the whole view. The camera icon is on the far right of the view.
         final TextView ingredientsTitle = v.findViewById(R.id.ingredientsTitle);
         ingredientsTitle.setOnTouchListener(new View.OnTouchListener() {
@@ -102,6 +102,27 @@ public class AddItemManually extends Fragment {
                 return true;
             }
         });
+
+        // When the camera icon for 'Barcode Number' is selected, the user should be navigated to the barcode fragment.
+        // First need to set a listener to the whole view. The camera icon is on the far right of the view.
+        final TextView barcodeTitle = v.findViewById(R.id.barcodeTitle);
+        barcodeTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // Check that the right drawable was tapped.
+                    int[] textLocation = new int[2];
+                    barcodeTitle.getLocationOnScreen(textLocation);
+                    if (event.getRawX() >= textLocation[0] + barcodeTitle.getWidth() - barcodeTitle.getTotalPaddingRight()){
+                        // If it was, replace fragment.
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                        return true;
+                    }
+                }
+                return true;
+            }
+        });
+
         return v;
     }
 
