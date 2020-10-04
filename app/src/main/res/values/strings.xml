@@ -17,13 +17,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome_to_mypantryapp">Welcome to MyPantryApp</string>
+    <string name="welcome_to_mypantryapp">Welcome to \nMy Pantry</string>
     <string name="your_virtual_pantry_companion">Your virtual pantry companion</string>
     <string name="view_items_in_your_pantry">View items in your pantry</string>
     <string name="example_view_of_pantry">Example view of pantry</string>
     <string name="add_items_to_your_pantry">Add items to your pantry</string>
     <string name="example_view_of_add_items">Example view of add items</string>
-    <string name="select_your_dietary_preference">Select your dietary preference</string>
+    <string name="select_your_dietary_preference">Select your dietary preferences</string>
     <string name="example_view_of_dietary_selection">Example view of dietary selection</string>
     <string name="create_shopping_lists">Create shopping lists</string>
     <string name="example_view_of_shopping_list">Example view of shopping list</string>
