@@ -127,7 +127,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                                 dietWarningsTextView.setText(dietWarningsText);
                             }
                         }
-                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+//                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                     } else {
                         Log.d("TAG", "No such document");
                     }
