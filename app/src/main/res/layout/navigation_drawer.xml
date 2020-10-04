@@ -23,7 +23,6 @@ This is the file that puts together the full navigation drawer layout, with the 
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-<!--        Toolbar title is just temporary-->
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -31,8 +30,7 @@ This is the file that puts together the full navigation drawer layout, with the 
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="4dp"
-            app:title="[Pantry 1]"/>
+            android:elevation="4dp" />
 
         <FrameLayout
             android:id="@+id/fragment_container"
