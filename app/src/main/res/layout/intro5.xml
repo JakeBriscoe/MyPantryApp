@@ -15,7 +15,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Create shopping lists"
+        android:text="@string/create_shopping_lists"
         android:textColor="#ffffff"
         android:textSize="36sp"
         android:textStyle="bold" />
@@ -33,7 +33,8 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/ic_intro_shopping"/>
+            android:src="@drawable/ic_intro_shopping"
+            android:contentDescription="@string/example_view_of_shopping_list" />
     </LinearLayout>
     <TextView
         android:layout_width="fill_parent"

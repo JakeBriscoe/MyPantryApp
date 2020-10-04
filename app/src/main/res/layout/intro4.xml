@@ -15,7 +15,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Select your dietary preference"
+        android:text="@string/select_your_dietary_preference"
         android:textColor="#ffffff"
         android:textSize="48sp"
         android:textStyle="bold" />
@@ -33,7 +33,8 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/ic_intro_settings"/>
+            android:src="@drawable/ic_intro_settings"
+            android:contentDescription="@string/example_view_of_dietary_selection" />
     </LinearLayout>
     <TextView
         android:layout_width="fill_parent"

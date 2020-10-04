@@ -15,7 +15,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Welcome to MyPantryApp"
+        android:text="@string/welcome_to_mypantryapp"
         android:textColor="#ffffff"
         android:textSize="48sp"
         android:textStyle="bold" />
@@ -30,7 +30,7 @@
         android:gravity="center"
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
-        android:text="Your virtual pantry companion"
+        android:text="@string/your_virtual_pantry_companion"
         android:textColor="#FFFFFF"
         android:textSize="36sp" />
 <TextView

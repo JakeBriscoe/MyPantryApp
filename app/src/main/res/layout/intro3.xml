@@ -15,7 +15,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Add items to your pantry"
+        android:text="@string/add_items_to_your_pantry"
         android:textColor="#ffffff"
         android:textSize="48sp"
         android:textStyle="bold" />
@@ -35,7 +35,8 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/ic_intro_add_item" />
+            android:src="@drawable/ic_intro_add_item"
+            android:contentDescription="@string/example_view_of_add_items" />
     </LinearLayout>
 
     <TextView

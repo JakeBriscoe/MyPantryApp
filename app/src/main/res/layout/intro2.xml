@@ -15,7 +15,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="View items in your pantry"
+        android:text="@string/view_items_in_your_pantry"
         android:textColor="#ffffff"
         android:textSize="48sp"
         android:textStyle="bold" />
@@ -35,7 +35,8 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/ic_intro_pantry" />
+            android:src="@drawable/ic_intro_pantry"
+            android:contentDescription="@string/example_view_of_pantry"/>
     </LinearLayout>
 
     <TextView
