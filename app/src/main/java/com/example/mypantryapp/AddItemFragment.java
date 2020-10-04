@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -186,13 +187,9 @@ public class AddItemFragment extends Fragment {
         });
 
 
-
         return v;
 
-
-
     }
-
 
 
     /**
@@ -218,31 +215,15 @@ public class AddItemFragment extends Fragment {
     }
 
 
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-
-        ArrayList<ExampleItem> mExampleList = new ArrayList<ExampleItem>();;
-        mAdapter = new ExampleAdapter(mExampleList);
-
-
-
-
-    }
     public void filter(String text) {
-        ArrayList<ExampleItem> filteredList = new ArrayList<>();
-        for (ExampleItem item : mExampleList) {
-            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
-                filteredList.add(item);
+
+
+        ArrayList<ExampleItem> mExampleList = new ArrayList<>();
+            if (text.toLowerCase().contains("t")) {
+                Log.d("myTag", "yes");
             }
+
+
         }
-        mAdapter.filterList(filteredList);
-    }
+        }
 
-    private void buildRecyclerView() {
-        mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
-
-
-
-    }
-}
