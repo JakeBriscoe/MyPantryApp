@@ -1,5 +1,7 @@
 package com.example.mypantryapp;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,8 +27,7 @@ public class CheckIngredients {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser = mAuth.getCurrentUser();
 
-    public CheckIngredients (String ingredients) {
-        this.ingredients = ingredients;
+    public CheckIngredients () {
         // Gets the diets and blacklisted ingredients from firebase
         db.collection("dietary")
                 .get()
@@ -71,9 +72,11 @@ public class CheckIngredients {
     }
 
     public String checkIngredients() {
+        Log.d("HERE", diets.toString());
+        Log.d("checkIngredients", ingredients);
         String[] ingrs = ingredients.split(" ");
         ArrayList<String> dietNames = new ArrayList<>();
-        String dietWarnings = "";
+        StringBuilder dietWarnings = new StringBuilder();
         for (Map.Entry<String, ArrayList<String>> entry : diets.entrySet()) {
             String name = entry.getKey();
             ArrayList<String> blacklist = (ArrayList<String>) entry.getValue();
@@ -88,25 +91,25 @@ public class CheckIngredients {
                         if (dietWarnings.length() != 0) {
                             // removes unwanted ", " doesn't work for last line
                             if (dietWarnings.charAt(dietWarnings.length()-2) == ',') {
-                                dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 2);
+                                dietWarnings = new StringBuilder(dietWarnings.substring(0, dietWarnings.length() - 2));
                             }
-                            dietWarnings += "\n";
+                            dietWarnings.append("\n");
                         }
-                        dietWarnings += name + ": ";
+                        dietWarnings.append(name).append(": ");
                         dietNames.add(name);
                     }
-                    dietWarnings += ingr + ", ";
+                    dietWarnings.append(ingr).append(", ");
                 }
             }
             if (dietWarnings.length() != 0 && dietWarnings.charAt(dietWarnings.length()-2) == ',') {
                 // removes final trailing ", "
-                dietWarnings = dietWarnings.substring(0, dietWarnings.length() - 2);
+                dietWarnings = new StringBuilder(dietWarnings.substring(0, dietWarnings.length() - 2));
             }
         }
-        if (dietWarnings == "") {
-            dietWarnings = "No dietary warnings";
+        if (dietWarnings.toString().equals("")) {
+            dietWarnings = new StringBuilder("No dietary warnings");
         }
-        return dietWarnings;
+        return dietWarnings.toString();
     }
 
     public void setIngredients(String ingredients) {

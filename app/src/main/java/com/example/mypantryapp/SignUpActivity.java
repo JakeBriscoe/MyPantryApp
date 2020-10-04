@@ -70,6 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                                     String userId = currentUser.getUid(); //get unique user id
 
+                                    // Set the user's current preferences to default
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                                     Map<String, Object> item = new HashMap<>();
                                     item.put("email", emailID);
@@ -87,6 +88,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     item.put("shellFish", false);
                                     item.put("soy", false);
 
+                                    // Put the user in the 'users' collection
                                     db.collection("users").document(userId).set(item)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override

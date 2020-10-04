@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class AddItemManually extends Fragment {
+public class AddItemManuallyFragment extends Fragment {
 
 
     private Spinner spinner;
@@ -51,7 +50,6 @@ public class AddItemManually extends Fragment {
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
 
-
     private EditText editTextName;
     private EditText editTextBrand;
     private EditText editTextBarcode;
@@ -63,14 +61,20 @@ public class AddItemManually extends Fragment {
 
     private Button saveButton;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
+    private CheckIngredients checkIngredients = new CheckIngredients();
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-            }
+    }
 
+    /**
+     * Set any static listeners and data
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState the saved instance state
+     * @return the view
+     */
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,14 +82,12 @@ public class AddItemManually extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_add_item_manually, container, false);
 
-        // Show bottom navigation
+        // POSSIBLY NOT NEEDED. Show bottom navigation.
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
-
-        // When the camera icon is selected, the user should be navigated to the scan ingredients fragment.
+        // When the camera icon for 'Ingredients' is selected, the user should be navigated to the scan ingredients fragment.
+        // First need to set a listener to the whole view. The camera icon is on the far right of the view.
         final TextView ingredientsTitle = v.findViewById(R.id.ingredientsTitle);
         ingredientsTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -104,19 +106,47 @@ public class AddItemManually extends Fragment {
             }
         });
 
+        // When the camera icon for 'Barcode Number' is selected, the user should be navigated to the barcode fragment.
+        // First need to set a listener to the whole view. The camera icon is on the far right of the view.
+        final TextView barcodeTitle = v.findViewById(R.id.barcodeTitle);
+        barcodeTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // Check that the right drawable was tapped.
+                    int[] textLocation = new int[2];
+                    barcodeTitle.getLocationOnScreen(textLocation);
+                    if (event.getRawX() >= textLocation[0] + barcodeTitle.getWidth() - barcodeTitle.getTotalPaddingRight()){
+                        // If it was, replace fragment.
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                        return true;
+                    }
+                }
+                return true;
+            }
+        });
+
 
         return v;
 
     }
-    // This method is called after the parent Activity's onCreate() method has completed.
-    // Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
-    // At this point, it is safe to search for activity View objects by their ID, for example.
+
+    /**
+     * This method is called after the parent Activity's onCreate() method has completed.
+     * Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
+     * At this point, it is safe to search for activity View objects by their ID, for example.
+     * @param savedInstanceState saved instance state
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
+    /**
+     * When the user submits the product, the product should go into the product collection in Firestore.
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -137,11 +167,10 @@ public class AddItemManually extends Fragment {
 
 
         // Checks diets as the user types
-        final CheckIngredients continuousCheck = new CheckIngredients(enterIngredientsText.getText().toString());
         enterIngredientsText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                continuousCheck.setIngredients(enterIngredientsText.getText().toString());
-                viewDietaryWarning.setText(continuousCheck.checkIngredients());
+                checkIngredients.setIngredients(enterIngredientsText.getText().toString());
+                viewDietaryWarning.setText(checkIngredients.checkIngredients());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -208,7 +237,7 @@ public class AddItemManually extends Fragment {
 
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
-            CheckIngredients checkIngredients = new CheckIngredients(updateIngredientsText);
+            checkIngredients.setIngredients(updateIngredientsText);
             viewDietaryWarning.setText(checkIngredients.checkIngredients());
         }
     }

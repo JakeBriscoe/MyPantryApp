@@ -30,28 +30,29 @@ public class AddItemFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
 
+    // Declarations
     private static final String TAG = "MainActivity";
-
     private static final String KEY_NAME = "name";
     private TextView textViewData;
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //Field for collection of products in the firebase.
     private CollectionReference productRef = db.collection("products");
-
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
     SendDetails SM;
 
-    //Display list of product name from firebase
+    /**
+     * Display all products in database.
+     */
     public void onStart(){
         super.onStart();
 
+        // These need to be initialised for RecyclerView and CardView
         mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
+        // Store the items
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
         productRef.get()
@@ -61,15 +62,14 @@ public class AddItemFragment extends Fragment {
 
                         for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                             Product product = documentSnapshot.toObject(Product.class);
-
                             // Add each individual product to exampleList
-                            String name = product.getName();
-                            String brand = product.getBrand();
-                            String id = documentSnapshot.getId();
-                            exampleList.add(new ExampleItem(name, brand, id));
-
+                            exampleList.add(new ExampleItem(product.getName(),
+                                    product.getBrand(),
+                                    documentSnapshot.getId(),
+                                    (String) documentSnapshot.get("volume")));
                         }
 
+                        // These need to be set so that the products are displayed
                         mAdapter = new ExampleAdapter(exampleList);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
@@ -78,29 +78,36 @@ public class AddItemFragment extends Fragment {
                         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
-                                ExampleItem selected = exampleList.get(position);
-
                                 // Open the bottom modal dialog
+                                ExampleItem selected = exampleList.get(position);
                                 SM.sendDetails(selected);
                             }
                         });
 
                     }
-        });
+                });
 
     }
 
+    /**
+     * Add onclick listeners to static items
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState the saved instance state
+     * @return the view
+     */
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Ensure that bottom navigation is visible
+        View v = inflater.inflate(R.layout.fragment_add_item, container, false); // Initialise view
+
+        // POSSIBLY NOT NEEDED. Ensure that bottom navigation is visible.
         @Nullable
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
+        // POSSIBLY NOT NEEDED. Set the toolbar title.
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
         mActionBarToolbar.setTitle("[Pantry 1]");
-
-        View v = inflater.inflate(R.layout.fragment_add_item, container, false);
 
         // When the barcode icon or text is selected, the user should be navigated to the barcode fragment.
         final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
@@ -124,26 +131,29 @@ public class AddItemFragment extends Fragment {
         manualButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
-
+                // Tag is needed for passing data between fragments
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
             }
         });
         final TextView textAddManually = v.findViewById(R.id.textAddManually);
         textAddManually.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                // Tag is needed for passing data between fragments.
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
 
             }
         });
-
         return v;
     }
 
+    /**
+     * Send the product data to BottomSheetDialog
+     * @param context the context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             SM = (SendDetails) getActivity();
         } catch (ClassCastException e) {
@@ -151,8 +161,12 @@ public class AddItemFragment extends Fragment {
         }
     }
 
+    /**
+     * Interface that MainActivity must implement to send data from
+     * AddItemFragment to BottomSheetDialog.
+     */
     public interface SendDetails {
         void sendDetails(ExampleItem item);
     }
-    
+
 }
