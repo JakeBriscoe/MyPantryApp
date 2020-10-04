@@ -8,7 +8,6 @@ public class ExampleItem {
     private String mBrand;
     private String mId;
     private String mVolume;
-    private Integer mQuantity;
 
     /**
      * Constructor to set the details

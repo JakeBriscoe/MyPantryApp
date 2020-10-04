@@ -58,7 +58,6 @@ public class AddItemFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         // Store the items
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
-        ArrayList<String> productIDDB = new ArrayList<>(); //array list for product id
         ArrayList<String> productBCDB = new ArrayList<>(); //array list for product barcode
 
         productRef.get()

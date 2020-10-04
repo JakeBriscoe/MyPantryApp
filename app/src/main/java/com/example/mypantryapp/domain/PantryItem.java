@@ -7,72 +7,59 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class PantryItem {
-    private Product product;
-    private Category category;
-    private String kitchenLocation;
-    private String expiry;
-    private int quantity;
+    private String mName;
+    private String mBrand;
+    private String mId;
+    private String mVolume;
+    private String mQuantity;
 
-    public PantryItem(Product product, String expiry, int quantity, Category category, String kitchenLocation) {
-        this.product = product;
-        this.quantity = quantity;
-        this.category = category;
-        this.kitchenLocation = kitchenLocation;
-        this.expiry = expiry;
+    /**
+     * Constructor to set the details
+     * @param name the product name
+     * @param brand the product brand
+     * @param id the product id
+     */
+    public PantryItem(String name, String brand, String id, String volume, String quantity) {
+        mName = name;
+        mBrand = brand;
+        mId = id;
+        mVolume = volume;
+        mQuantity = quantity;
     }
 
-    public PantryItem() {
+    /**
+     * Get the product name
+     * @return name
+     */
+    public String getName() {
+        return mName;
     }
 
-    public Product getProduct() {
-        return product;
+    /**
+     * Get the product brand
+     * @return brand
+     */
+    public String getBrand() {
+        return mBrand;
     }
 
-    public String getExpiry() {
-        return expiry;
+    /**
+     * Get the product id
+     * @return id
+     */
+    public String getId() {
+        return mId;
     }
 
-    public int getQuantity() {
-        return quantity;
+    /**
+     * Get the product volume
+     * @return volume
+     */
+    public String getVolume() {
+        return mVolume;
     }
 
-    public Category getCategory() { return category; }
-
-    public String getKitchenLocation() { return kitchenLocation; }
-
-    public PantryItem setProduct(Product product) {
-        this.product = product;
-        return this;
-    }
-
-    public PantryItem setCategory(Category category) {
-        this.category = category;
-        return this;
-    }
-
-    public PantryItem setKitchenLocation(String kitchenLocation) {
-        this.kitchenLocation = kitchenLocation;
-        return this;
-    }
-
-    public PantryItem setExpiry(String expiry) {
-        this.expiry = expiry;
-        return this;
-    }
-
-    public PantryItem setQuantity(int quantity) {
-        this.quantity = quantity;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "PantryItem{" +
-                "product=" + product +
-                ", category=" + category +
-                ", kitchenLocation='" + kitchenLocation + '\'' +
-                ", expiry=" + expiry +
-                ", quantity=" + quantity +
-                '}';
+    public String getQuantity() {
+        return mQuantity;
     }
 }
