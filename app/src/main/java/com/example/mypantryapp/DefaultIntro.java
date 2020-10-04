@@ -21,10 +21,12 @@ public final class DefaultIntro extends AppIntro {
         addSlide(SampleSlide.newInstance(R.layout.intro2));
         addSlide(SampleSlide.newInstance(R.layout.intro3));
         addSlide(SampleSlide.newInstance(R.layout.intro4));
+        addSlide(SampleSlide.newInstance(R.layout.intro5));
 
         showStatusBar(true);
 
         setTransformer(Depth.INSTANCE);
+        // setColorTransitionsEnabled(true); only works for plain colour backgrounds
     }
 
 
@@ -45,7 +47,7 @@ public final class DefaultIntro extends AppIntro {
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
         loadMainActivity();
-        Toast.makeText(getApplicationContext(), "Skipped", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Intro Skipped", Toast.LENGTH_SHORT).show();
     }
 
     public void getStarted(View v){
