@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.ItemClickLi
     private static final String TAG = "MainActivity";
     private static final String KEY_NAME = "name";
     private TextView textViewData;
-    
+
 
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;

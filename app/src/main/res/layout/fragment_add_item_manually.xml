@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddItemManually">
+    tools:context=".AddItemManuallyFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,15 +80,16 @@
                 tools:layout_editor_absoluteY="90dp" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/barcodeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Barcode#"
+                android:drawableRight="@drawable/ic_camera"
+                android:text="Barcode Number"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/barcodeInputMan"
-                android:layout_width="404dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
@@ -166,7 +167,27 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />
-            
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dietary Warnings"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/viewDietaryWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="No dietary warnings"
+                android:inputType="textMultiLine" />
+
+            <Spinner
+                android:id="@+id/DietContainsSpinMan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp" />
+
             <Button
                 android:id="@+id/button_save_man"
                 android:layout_width="match_parent"

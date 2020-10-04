@@ -73,6 +73,7 @@ public class AddItemFragment extends Fragment {
                                     product.getBrand(),
                                     documentSnapshot.getId(),
                                     (String) documentSnapshot.get("volume")));
+
                             Long bCode = product.getBarcodeNum();
                             if(bCode != 0){
                                 productBCDB.add(Long.toString(bCode));
@@ -146,7 +147,7 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
             }
         });
         final TextView textAddManually = v.findViewById(R.id.textAddManually);
@@ -154,7 +155,7 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments.
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
 
             }
         });

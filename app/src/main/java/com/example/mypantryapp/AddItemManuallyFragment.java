@@ -3,7 +3,8 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,9 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import com.example.mypantryapp.domain.PantryItem;
 import com.example.mypantryapp.domain.Product;
@@ -45,7 +44,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class AddItemManually extends Fragment {
+public class AddItemManuallyFragment extends Fragment {
 
 
     private Spinner spinner;
@@ -59,6 +58,7 @@ public class AddItemManually extends Fragment {
     String pantryRef;
 
 
+    TextView viewDietaryWarning;
 
     private static final String TAG = "AddItemManually";
     //Product map
@@ -80,7 +80,6 @@ public class AddItemManually extends Fragment {
 //    private static final String KEY_DIETARY = "dietaryType";
 //    private static final String KEY_ALLERGY = "allergens";
 
-
     private EditText editTextName;
     private EditText editTextBrand;
     private EditText editTextBarcode;
@@ -93,6 +92,12 @@ public class AddItemManually extends Fragment {
 
     private Button saveButton;
     private String barcodeText;
+    private CheckIngredients checkIngredients = new CheckIngredients();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     /**
      * Set any static listeners and data
@@ -105,25 +110,26 @@ public class AddItemManually extends Fragment {
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_add_item_manually, container, false); // Initialise view
+
+        View v = inflater.inflate(R.layout.fragment_add_item_manually, container, false);
 
         // POSSIBLY NOT NEEDED. Show bottom navigation.
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
 
-        // When the camera icon is selected, the user should be navigated to the scan ingredients fragment.
+        // When the camera icon for 'Ingredients' is selected, the user should be navigated to the scan ingredients fragment.
         // First need to set a listener to the whole view. The camera icon is on the far right of the view.
         final TextView ingredientsTitle = v.findViewById(R.id.ingredientsTitle);
         ingredientsTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    // Check that the right drawable was tapped.
                     int[] textLocation = new int[2];
                     ingredientsTitle.getLocationOnScreen(textLocation);
                     if (event.getRawX() >= textLocation[0] + ingredientsTitle.getWidth() - ingredientsTitle.getTotalPaddingRight()){
-                        // If it was, replace fragment.
+
+                        // Right drawable was tapped
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanIngredientsFragment()).addToBackStack(null).commit();
                         return true;
                     }
@@ -131,7 +137,41 @@ public class AddItemManually extends Fragment {
                 return true;
             }
         });
+
+        // When the camera icon for 'Barcode Number' is selected, the user should be navigated to the barcode fragment.
+        // First need to set a listener to the whole view. The camera icon is on the far right of the view.
+        final TextView barcodeTitle = v.findViewById(R.id.barcodeTitle);
+        barcodeTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // Check that the right drawable was tapped.
+                    int[] textLocation = new int[2];
+                    barcodeTitle.getLocationOnScreen(textLocation);
+                    if (event.getRawX() >= textLocation[0] + barcodeTitle.getWidth() - barcodeTitle.getTotalPaddingRight()){
+                        // If it was, replace fragment.
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                        return true;
+                    }
+                }
+                return true;
+            }
+        });
+
+
         return v;
+
+    }
+
+    /**
+     * This method is called after the parent Activity's onCreate() method has completed.
+     * Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
+     * At this point, it is safe to search for activity View objects by their ID, for example.
+     * @param savedInstanceState saved instance state
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     /**
@@ -155,14 +195,29 @@ public class AddItemManually extends Fragment {
         editTextQuantity = (EditText) view.findViewById(R.id.QuantityInputMan);
         editTextVolume = (EditText) view.findViewById(R.id.VolumeInputMan);
         enterIngredientsText = (EditText) view.findViewById(R.id.enterIngredientsText);
+        viewDietaryWarning = (TextView) view.findViewById(R.id.viewDietaryWarning);
+
 //        spinnerCategory = (Spinner) findViewById(R.id.CategorySpinMan);
 
 
-        // Set onclick listener for save button.
-        final Button save_manually = getActivity().findViewById(R.id.button_save_man);
+
+        // Checks diets as the user types
+        enterIngredientsText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                checkIngredients.setIngredients(enterIngredientsText.getText().toString());
+                viewDietaryWarning.setText(checkIngredients.checkIngredients());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        Button save_manually = getActivity().findViewById(R.id.button_save_man);
         save_manually.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Get all the data that has been entered.
                 //for product
                 String name = editTextName.getText().toString();
@@ -177,7 +232,7 @@ public class AddItemManually extends Fragment {
 //              String category = spinnerCategory.getSelectedItem().toString();
 
 
-                // Put all data into a map
+
                 Map<String, Object> item = new HashMap<>();
                 item.put(KEY_NAME, name);
                 item.put(KEY_BRAND, brand);
@@ -317,6 +372,10 @@ public class AddItemManually extends Fragment {
                                 }
                             });
                 }
+
+                //        item.put(KEY_DIETARY, dietary);
+                //        item.put(KEY_ALLERGY, allergy);
+
             }
         });
         editTextName.setText("");
@@ -336,21 +395,11 @@ public class AddItemManually extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Set the ingredients text
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
+            checkIngredients.setIngredients(updateIngredientsText);
+            viewDietaryWarning.setText(checkIngredients.checkIngredients());
         }
-
-        // Set a listener to see whether a barcode has just been scanned and came up blank.
-        // If so, populate the barcode field with the barcode scanned.
-        getParentFragmentManager().setFragmentResultListener("requestBarcode", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
-                // Set the text
-                String result = bundle.getString("bundleKey");
-                editTextBarcode.setText(result);
-            }
-        });
     }
 
     /**
