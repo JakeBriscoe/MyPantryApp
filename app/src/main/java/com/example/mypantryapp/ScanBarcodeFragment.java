@@ -58,9 +58,6 @@ public class ScanBarcodeFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        // POSSIBLY NOT NEEDED. Set toolbar title.
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
 
         // Get the camera view
         mCameraView = getActivity().findViewById(R.id.scanBarSufview);
@@ -167,10 +164,8 @@ public class ScanBarcodeFragment extends Fragment {
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 if(task.getResult().isEmpty()){
-                                                    // If the barcode doesn't exist, notify the user.
-                                                    Toast.makeText(getActivity(), "This product is not in our database", Toast.LENGTH_SHORT).show();
                                                     // Navigate to AddItemManually
-                                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
                                                     // Send the barcode to AddItemManually so it can be pre-populated.
                                                     Bundle result = new Bundle();
                                                     result.putString("bundleKey", message);

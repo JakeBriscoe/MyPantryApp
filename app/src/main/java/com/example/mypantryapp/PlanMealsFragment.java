@@ -20,9 +20,6 @@ public class PlanMealsFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        // POSSIBLY NOT NEEDED: Set toolbar title.
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
 
         return inflater.inflate(R.layout.fragment_plan_meals, container, false);
     }

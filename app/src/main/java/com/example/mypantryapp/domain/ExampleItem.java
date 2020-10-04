@@ -1,4 +1,4 @@
-package com.example.mypantryapp;
+package com.example.mypantryapp.domain;
 
 /**
  * Stores details about a product so it can be displayed dynamically in AddItemFragment.
@@ -53,5 +53,6 @@ public class ExampleItem {
     public String getVolume() {
         return mVolume;
     }
+
 
 }
