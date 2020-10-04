@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mypantryapp.R;
 import com.example.mypantryapp.domain.ExampleItem;
 
+
 import java.util.ArrayList;
 
 /**
@@ -107,5 +108,11 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     @Override
     public int getItemCount() {
         return mExampleList.size();
+    }
+
+
+    public void filterList(ArrayList<ExampleItem> filteredList) {
+        mExampleList = filteredList;
+        notifyDataSetChanged();
     }
 }

@@ -18,9 +18,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mypantryapp.adapter.ExampleAdapter;
+
 import com.example.mypantryapp.adapter.PantryAdapter;
-import com.example.mypantryapp.adapter.ProductAdapter;
+
 import com.example.mypantryapp.domain.ExampleItem;
 import com.example.mypantryapp.domain.PantryItem;
 import com.example.mypantryapp.domain.Product;

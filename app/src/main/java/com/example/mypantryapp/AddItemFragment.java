@@ -3,9 +3,12 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.adapter.ExampleAdapter;
 import com.example.mypantryapp.domain.ExampleItem;
+
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -44,12 +48,13 @@ public class AddItemFragment extends Fragment {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
+    private ArrayList<ExampleItem> exampleList;
 
 
     /**
      * Display all products in database.
      */
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         // These need to be initialised for RecyclerView and CardView
@@ -65,7 +70,7 @@ public class AddItemFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                        for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Product product = documentSnapshot.toObject(Product.class);
                             // Add each individual product to exampleList
                             exampleList.add(new ExampleItem(product.getName(),
@@ -74,7 +79,7 @@ public class AddItemFragment extends Fragment {
                                     (String) documentSnapshot.get("volume")));
 
                             Long bCode = product.getBarcodeNum();
-                            if(bCode != 0){
+                            if (bCode != 0) {
                                 productBCDB.add(Long.toString(bCode));
                             }
 
@@ -87,8 +92,6 @@ public class AddItemFragment extends Fragment {
                         Set<String> set = new HashSet<>(productBCDB);
                         getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
                                 set).apply();
-
-
 
 
                         // When the user clicks on a product, they should be prompted to enter the quantity.
@@ -108,12 +111,14 @@ public class AddItemFragment extends Fragment {
 
     /**
      * Add onclick listeners to static items
-     * @param inflater inflater
-     * @param container container
+     *
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState the saved instance state
      * @return the view
      */
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_add_item, container, false); // Initialise view
 
@@ -158,8 +163,10 @@ public class AddItemFragment extends Fragment {
 
             }
         });
+
         return v;
     }
+
 
     /**
      * Send the product data to BottomSheetDialog
