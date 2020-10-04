@@ -10,11 +10,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mypantryapp.adapter.ExampleAdapter;
+import com.example.mypantryapp.domain.ExampleItem;
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class AddItemFragment extends Fragment {
@@ -42,6 +45,7 @@ public class AddItemFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
 
+
     /**
      * Display all products in database.
      */
@@ -54,6 +58,7 @@ public class AddItemFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         // Store the items
         ArrayList<ExampleItem> exampleList = new ArrayList<>();
+        ArrayList<String> productBCDB = new ArrayList<>(); //array list for product barcode
 
         productRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -68,12 +73,23 @@ public class AddItemFragment extends Fragment {
                                     documentSnapshot.getId(),
                                     (String) documentSnapshot.get("volume")));
 
+                            Long bCode = product.getBarcodeNum();
+                            if(bCode != 0){
+                                productBCDB.add(Long.toString(bCode));
+                            }
+
                         }
 
                         // These need to be set so that the products are displayed
                         mAdapter = new ExampleAdapter(exampleList);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
+                        Set<String> set = new HashSet<>(productBCDB);
+                        getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
+                                set).apply();
+
+
+
 
                         // When the user clicks on a product, they should be prompted to enter the quantity.
                         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
@@ -106,9 +122,6 @@ public class AddItemFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
-        // POSSIBLY NOT NEEDED. Set the toolbar title.
-        Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("[Pantry 1]");
 
         // When the barcode icon or text is selected, the user should be navigated to the barcode fragment.
         final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
@@ -133,7 +146,7 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
             }
         });
         final TextView textAddManually = v.findViewById(R.id.textAddManually);
@@ -141,7 +154,7 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments.
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManually(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
 
             }
         });

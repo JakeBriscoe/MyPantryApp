@@ -19,15 +19,20 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.mypantryapp.domain.ExampleItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 
 /**
@@ -38,7 +43,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
                                                                 ScanIngredientsFragment.SendMessage,
                                                                 AddItemFragment.SendDetails,
-                                                                SettingsFragment.UpdateUser {
+                                                                SettingsFragment.UpdateUser{
     // Declarations
     private DrawerLayout drawer;
     private BottomNavigationView bottomNav;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser;
+
 
     /**
      * Everything in onCreate should happen once only, and on first creation of the activity.
@@ -79,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             // If a user is logged in, continue as normal.
+
             boolean emailVerified = currentUser.isEmailVerified();
 
             // Set up content view
@@ -95,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
+
             // Add listener so we can toggle between the menu drawer being open and closed
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -105,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                     .getBoolean("isFirstRun", true);
             String userId = currentUser.getUid(); // Get unique user id, which corresponds with userAuthId in database
+
+
 
             // Get the user from database by matching userId (from authentication) to
             // userAuthId (from 'user' collection in database).
@@ -143,8 +153,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     // Navigate to home fragment otherwise
                     fragment = new HomeFragment();
                     navigationView.setCheckedItem(R.id.nav_pantry1);
+
+                    String docRefPantry = this.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                            .getString("pantryRef", null);
+                    DocumentReference docRef = db.collection("pantries").document(docRefPantry);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Map<String, Object> data = document.getData();
+                                    if (data.get("pantryName") != null) {
+                                        toolbar.setTitle((CharSequence) data.get("pantryName"));
+                                    }
+
+                                }
+                            }
+                        }
+                    });
+                    toolbar.setTitle(docRefPantry);
                 }
+
+
+
                 // Replace fragment
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragment).addToBackStack(null).commit();
             }
@@ -272,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (currentFragment instanceof ScanBarcodeFragment ||
-                currentFragment instanceof AddItemManually ||
+                currentFragment instanceof AddItemManuallyFragment ||
                 currentFragment instanceof ScanIngredientsFragment) {
             // For the above fragments, clicking back should pop the stack and show the previous fragment.
             getFragmentManager().popBackStack();
@@ -313,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void sendData(String message) {
-        AddItemManually f = (AddItemManually) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
+        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
         assert f != null;
         f.displayReceivedData(message);
     }
@@ -345,5 +379,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // TODO: reflect email change in Firestore authentication
         currentUser = mAuth.getCurrentUser();
         currentUser.verifyBeforeUpdateEmail(email.trim());
+    }
+
+    public void setPantry(String id, String name, ArrayList<String> locations) {
+        // TODO: add content to use Pantry data
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(name);
     }
 }

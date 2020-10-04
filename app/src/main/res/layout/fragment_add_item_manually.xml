@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddItemManually">
+    tools:context=".AddItemManuallyFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,19 +80,20 @@
                 tools:layout_editor_absoluteY="90dp" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/barcodeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Barcode#"
+                android:drawableRight="@drawable/ic_camera"
+                android:text="Barcode Number"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/barcodeInputMan"
-                android:layout_width="404dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
-                android:hint="Barcode"
+                android:hint="Barcode (if no barcode enter 0)"
                 android:inputType="number"
                 android:selectAllOnFocus="true" />
 
@@ -104,13 +105,13 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/QuantityInputMan"
+                android:id="@+id/VolumeInputMan"
                 android:layout_width="159dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
-                android:hint="Volume"
-                android:inputType="numberDecimal"
+                android:hint="e.g. 200g, 500ml"
+                android:inputType="text"
                 android:selectAllOnFocus="true" />
 
 
@@ -124,12 +125,28 @@
             <EditText
                 android:id="@+id/shelfLifeInputMan"
                 android:layout_width="match_parent"
-                android:layout_height="74dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="Shelf life in days"
-                android:inputType="textMultiLine" />
+                android:hint="Shelf life in days. long life enter 1000"
+                android:inputType="number" />
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quantity"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/QuantityInputMan"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#BAB8B2B2"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Quantity"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/ingredientsTitle"
@@ -150,7 +167,27 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />
-            
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dietary Warnings"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/viewDietaryWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="No dietary warnings"
+                android:inputType="textMultiLine" />
+
+            <Spinner
+                android:id="@+id/DietContainsSpinMan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp" />
+
             <Button
                 android:id="@+id/button_save_man"
                 android:layout_width="match_parent"

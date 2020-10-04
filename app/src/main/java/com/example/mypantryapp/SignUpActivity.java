@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-
+//code for registering a user
 public class SignUpActivity extends AppCompatActivity {
 
         public EditText emailId, passwd;
@@ -40,34 +40,37 @@ public class SignUpActivity extends AppCompatActivity {
             passwd = findViewById(R.id.ETpassword);
             btnSignUp = findViewById(R.id.btnSignUp);
             signIn = findViewById(R.id.TVSignIn);
+
+
             btnSignUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String emailID = emailId.getText().toString();
                     String paswd = passwd.getText().toString();
+                    //checks for email and password entered
                     if (emailID.isEmpty()) {
                         emailId.setError("Provide your Email first!");
                         emailId.requestFocus();
                     } else if (paswd.isEmpty()) {
                         passwd.setError("Set your password");
                         passwd.requestFocus();
-                    } else if (!(emailID.isEmpty() && paswd.isEmpty())) {
+                    } else if (!(emailID.isEmpty() && paswd.isEmpty())) { //if both have content then create a firebase user with email and password
                         firebaseAuth.createUserWithEmailAndPassword(emailID, paswd).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener() {
                             @Override
                             public void onComplete(@NonNull Task task) {
 
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignUpActivity.this.getApplicationContext(),
-                                            "SignUp unsuccessful: " + task.getException().getMessage(),
+                                            "SignUp unsuccessful: " + task.getException().getMessage(), //if error for some reason (e.g. no internet) show error
                                             Toast.LENGTH_SHORT).show();
 
                                 } else {
 
                                     // Then this is the first time the user has signed in
-                                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit() //set this as first time the user has signed in
                                             .putBoolean("isFirstRun", true).apply();
 
-                                    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                                    FirebaseUser currentUser = firebaseAuth.getCurrentUser(); //get user info and id
                                     String userId = currentUser.getUid(); //get unique user id
 
                                     // Set the user's current preferences to default
@@ -103,6 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                     Log.d("TAG", e.toString());
                                                 }
                                             });
+
                                     }
 
                                     finish();
@@ -114,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 }
             });
-            signIn.setOnClickListener(new View.OnClickListener() {
+            signIn.setOnClickListener(new View.OnClickListener() { //if text to log in clicked go to log in screen
                 @Override
                 public void onClick(View view) {
                     Intent I = new Intent(SignUpActivity.this, LogInActivity.class);

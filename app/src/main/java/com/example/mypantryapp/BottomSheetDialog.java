@@ -1,6 +1,8 @@
 package com.example.mypantryapp;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +14,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentResultListener;
 
+import com.example.mypantryapp.domain.ExampleItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
-    TextView nameTextView;
-    TextView brandTextView;
-    String nameText;
-    String brandText;
-    String idText;
+    private TextView nameTextView;
+    private TextView brandTextView;
+    private TextView dietTitleTextView;
+    private TextView dietWarningsTextView;
+    private String nameText;
+    private String brandText;
+    private String idText;
+    private String ingredients;
+    private String dietWarningsText;
+
+    private CheckIngredients checkIngredients = new CheckIngredients();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
      * Set any static data/listeners
@@ -58,6 +73,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         nameTextView = view.findViewById(R.id.modalName);
         brandTextView = view.findViewById(R.id.modalBrand);
+        dietTitleTextView = view.findViewById(R.id.modalDietTitle);
+        dietWarningsTextView = view.findViewById(R.id.modalDietWarnings);
     }
 
     /**
@@ -85,6 +102,42 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         } else if (nameText != null) {
             nameTextView.setText(nameText);
         }
+
+        // Get the ingredients from the database using the product id
+        DocumentReference docRef =  db.collection("products").document(idText);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ingredients = (String) document.get("ingredients");
+
+                        if (ingredients != null) {
+                            checkIngredients.setIngredients(ingredients);
+                            dietWarningsText = checkIngredients.checkIngredients();
+
+                            if (dietWarningsText.equals("No dietary warnings")) {
+                                // Then diet is compatible
+                                dietTitleTextView.setText("Compatible with your dietary preferences!");
+                            } else {
+                                // Then diet is not compatible
+                                dietTitleTextView.setText("Incompatible with your dietary preferences:");
+                                dietTitleTextView.setTypeface(null, Typeface.BOLD);
+                                dietWarningsTextView.setVisibility(View.VISIBLE);
+                                dietWarningsTextView.setText(dietWarningsText);
+                            }
+                        }
+//                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+
     }
 
     /**
