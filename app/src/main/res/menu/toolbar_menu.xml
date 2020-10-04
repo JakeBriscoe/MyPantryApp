@@ -7,6 +7,8 @@
         android:title="Scan Barcode"
         app:showAsAction="ifRoom"/>
 
+
+
     <item android:id="@+id/toolbarShare"
     android:icon="@drawable/ic_share"
     android:title="Share Pantry"

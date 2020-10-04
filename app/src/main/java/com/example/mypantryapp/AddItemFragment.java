@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,7 +49,9 @@ public class AddItemFragment extends Fragment {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
-    private ArrayList<ExampleItem> exampleList;
+    private ArrayList<ExampleItem> mExampleList;
+
+
 
 
     /**
@@ -162,10 +165,34 @@ public class AddItemFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
 
             }
+
+
+
         });
 
+
+        EditText editText = v.findViewById(R.id.textSearchCommon);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+            }
+        });
+
+
+
         return v;
+
+
+
     }
+
 
 
     /**
@@ -190,4 +217,32 @@ public class AddItemFragment extends Fragment {
         void sendDetails(ExampleItem item);
     }
 
+
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        ArrayList<ExampleItem> mExampleList = new ArrayList<ExampleItem>();;
+        mAdapter = new ExampleAdapter(mExampleList);
+
+
+
+
+    }
+    public void filter(String text) {
+        ArrayList<ExampleItem> filteredList = new ArrayList<>();
+        for (ExampleItem item : mExampleList) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        mAdapter.filterList(filteredList);
+    }
+
+    private void buildRecyclerView() {
+        mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
+
+
+
+    }
 }
