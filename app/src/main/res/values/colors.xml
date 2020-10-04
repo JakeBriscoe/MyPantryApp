@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+<!--    <color name="colorPrimary">#6200EE</color>-->
+<!--    <color name="colorPrimaryDark">#3700B3</color>-->
+    <color name="colorPrimaryDark">#F2F3F5</color>
+    <color name="colorAccent">#6C9D9B</color>
     <color name="washedWhite">#E8EBE4</color>
     <color name="dark">#555B6E</color>
-    <color name="apricot">#FFD6BA</color>
-    <color name="offWhite">#FAF9F9</color>
+    <color name="colorPrimary">#FFD6BA</color>
+    <color name="offWhite">#F2F3F5</color>
+    <color name="darker">#484D5E</color>
+    <color name="colorAccent2">#A6AABA</color>
 </resources>

@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
+//            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.dark));
+
             // Check whether or not this is the user's first time logging in.
             Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                     .getBoolean("isFirstRun", true);
