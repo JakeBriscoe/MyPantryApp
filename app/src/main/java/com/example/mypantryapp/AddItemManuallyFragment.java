@@ -277,6 +277,7 @@ public class AddItemManuallyFragment extends Fragment {
                                         editTextQuantity.setText("");
                                         enterIngredientsText.setText("");
                                         editTextVolume.setText("");
+                                        helperPantrySet(productdocId, quantity, shelfLife); //send through to helper method, to set up pantry
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -317,7 +318,7 @@ public class AddItemManuallyFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document.exists()) { //see if the product is already in the pantry. If so add the quantity enter to pantry quantity
+                    if (document.exists() && document != null) { //see if the product is already in the pantry. If so add the quantity enter to pantry quantity
                         Log.d(TAG, "Document exists!");
                         PantryItem item = document.toObject(PantryItem.class);
                         Integer oldQ = Integer.parseInt(item.getQuantity());

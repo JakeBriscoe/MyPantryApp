@@ -27,6 +27,9 @@ public class PantryItem {
         mQuantity = quantity;
     }
 
+    public PantryItem() {
+    }
+
     /**
      * Get the product name
      * @return name
