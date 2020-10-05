@@ -1,7 +1,6 @@
 package com.example.mypantryapp;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -208,7 +207,7 @@ public class SettingsFragment extends Fragment {
                     setItem(view);
                     navigationView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
-                    navigationView.setCheckedItem(R.id.nav_pantry1);
+                    navigationView.setCheckedItem(R.id.nav_pantry);
 
                 }
             });

@@ -190,7 +190,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/lato"
-            android:text="Your Pantry"
+            android:text="Pantry Details"
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -226,8 +226,8 @@
             android:id="@+id/linearLayoutDecisions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
             android:orientation="vertical">
 
 
@@ -235,8 +235,6 @@
                 android:id="@+id/kitchen1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="@font/lato"
                 android:hint="e.g. Fridge, Pantry Shelf 1, Freezer"
                 android:inputType="text"
                 android:textColor="@color/dark"
@@ -244,20 +242,20 @@
         </LinearLayout>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="Add Another"
-            android:id="@+id/add_button"/>
-
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:layout_marginTop="15dp"
+            android:text="Add Location"
+            android:textColor="@color/dark"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
-
-
 
     </ScrollView>
 
