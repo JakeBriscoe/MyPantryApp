@@ -50,7 +50,7 @@
             android:scaleX="1.30"
             android:scaleY="1.30"
             android:layout_height="wrap_content"
-            android:layout_marginStart="150dp" />
+            android:layout_marginStart="300dp" />
 
 
     </RelativeLayout>

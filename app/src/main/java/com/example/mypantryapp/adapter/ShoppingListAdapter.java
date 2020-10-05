@@ -45,7 +45,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             mNameTextView = itemView.findViewById(R.id.checkItem_productName);
             mBrandTextView = itemView.findViewById(R.id.checkItem_brand);
             mIdTextView = itemView.findViewById(R.id.checkItem_id);
-            mVolumeTextView = itemView.findViewById(R.id.viewItems_volume);
+            //mVolumeTextView = itemView.findViewById(R.id.checkItem_volume);
 
             // Set the onclick listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +79,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @NonNull
     @Override
     public ShoppingListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.example_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.example_checkitemlist, parent, false);
         return new ShoppingListViewHolder(v, mListener);
     }
 
@@ -88,6 +88,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
      * @param holder holder
      * @param position the position of the item
      */
+
     @Override
     public void onBindViewHolder(@NonNull ShoppingListViewHolder holder, int position) {
         // Identify which item has been pressed.
@@ -97,7 +98,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.mNameTextView.setText(currentItem.getName());
         holder.mBrandTextView.setText(currentItem.getBrand());
         holder.mIdTextView.setText(currentItem.getId());
-        holder.mVolumeTextView.setText(currentItem.getVolume());
+        //holder.mVolumeTextView.setText(currentItem.getVolume());
     }
 
     /**

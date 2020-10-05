@@ -43,6 +43,7 @@ public class SettingsFragment extends Fragment {
     final String userId = currentUser.getUid();
     private int numberOfLines = 1;
     public String docRefPantry;
+    public String docRefShoppingList;
 
     // Declare the views
     EditText settingsName;
@@ -171,6 +172,8 @@ public class SettingsFragment extends Fragment {
                 .getBoolean("isFirstRun", true);
         docRefPantry = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getString("pantryRef", null);
+        docRefShoppingList = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("shoppinglistRef", null);
 
         // Set the toolbar title to 'Settings'
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -196,6 +199,12 @@ public class SettingsFragment extends Fragment {
             // Save details in shared preference
             this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putString("pantryRef",
                     docRefPantry).apply();
+
+            //Set up shoppinglist doc reference for user
+            docRefShoppingList = db.collection("shoppinglists").document().getId();
+            // Save details in shared preference
+            this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putString("shoppinglistRef",
+                    docRefShoppingList).apply();
 
             // Once details have been saved, navigate to HomeFragment and show the navigation.
             Button save = view.findViewById(R.id.saveDetails);
@@ -262,6 +271,7 @@ public class SettingsFragment extends Fragment {
                             }
                         }
                     });
+
 
             Button addButton = view.findViewById(R.id.add_button);
             addButton.setOnClickListener(new View.OnClickListener() {

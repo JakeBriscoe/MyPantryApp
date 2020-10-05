@@ -53,15 +53,16 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     private static final String KEY_QUANTITY = "quantity";
     private static final String KEY_EXPIRY = "expiry";
     private static final String KEY_LOCATION = "location";
-    private  static final String KEY_CATEGORY = "categoryName";
+    private static final String KEY_CATEGORY = "categoryName";
 
     private CheckIngredients checkIngredients = new CheckIngredients();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
      * Set any static data/listeners
-     * @param inflater inflater
-     * @param container container
+     *
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState the saved instance state
      * @return the view
      */
@@ -71,6 +72,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.bottom_sheet_layout, container, false); // Initialise view
         String pantryRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getString("pantryRef", null);
+        String shoppingListRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("shoppinglistRef", null);
 
         // If the 'save to pantry' button is pressed, the user should be notified that the product
         // has been added to their personal pantry.
@@ -93,8 +96,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                                         Integer oldQuantity = (quantity1).intValue();
                                         if (oldQuantity != null) {
                                             newQ = oldQuantity + quantity;
-                                        }
-                                        else{
+                                        } else {
                                             newQ = quantity; //if not in pantry. make the quantity entered the quantity value
                                         }
 
@@ -124,7 +126,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                  
+
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -145,12 +147,57 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
+        // If the 'add to shopping list' button is pressed, the user should be notified that the product
+        // has been added to their shopping list.
+        final Button bottomModalShoppingList = v.findViewById(R.id.bottomModalShoppingList);
+        bottomModalShoppingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String quantityText = quantityEditText.getText().toString();
+                Integer quantity = parseInt(quantityText);
+                db.collection("shoppinglists").document(shoppingListRef).collection("products").document(idText)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+
+                                    Map<String, Object> product = new HashMap<>(); //make map of pantry information
+                                    product.put(KEY_PRODUCTREF, idText);
+
+                                    //add product to shopping list
+                                    db.collection("shoppinglists").document(shoppingListRef).collection("products").document(idText).set(product)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+
+                            }
+                        });
+
+                Toast.makeText(getContext(), nameText + " added to shopping list", Toast.LENGTH_SHORT).show();
+                // Make sure to dismiss the bottom modal.
+                dismiss();
+            }
+        });
+
         return v;
     }
 
     /**
      * Initialise the TextViews so they can be accessed in onResume
-     * @param view view
+     *
+     * @param view               view
      * @param savedInstanceState saved instance state
      */
     @Override
@@ -160,7 +207,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         brandTextView = view.findViewById(R.id.modalBrand);
         dietTitleTextView = view.findViewById(R.id.modalDietTitle);
         dietWarningsTextView = view.findViewById(R.id.modalDietWarnings);
-        quantityEditText =  (EditText) view.findViewById(R.id.modalQuantity);
+        quantityEditText = (EditText) view.findViewById(R.id.modalQuantity);
     }
 
     /**
@@ -190,7 +237,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         }
 
         // Get the ingredients from the database using the product id
-        DocumentReference docRef =  db.collection("products").document(idText);
+        DocumentReference docRef = db.collection("products").document(idText);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -234,6 +281,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     /**
      * This method is called in MainActivity to receive data from AddItemFragment.
+     *
      * @param item the item selected
      */
     protected void displayReceivedData(ExampleItem item) {
