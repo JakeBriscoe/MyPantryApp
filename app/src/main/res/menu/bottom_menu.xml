@@ -21,14 +21,4 @@ This file contains the clickable items in the bottom navigation.
         android:icon="@drawable/ic_bulleted_list"
         android:title="@string/shopping_list" />
 
-    <item
-        android:id="@+id/nav_meal_plan"
-        android:icon="@drawable/ic_calendar"
-        android:title="@string/meal_plan" />
-
-    <item
-        android:id="@+id/nav_recipes"
-        android:icon="@drawable/ic_cutlery"
-        android:title="@string/recipes" />
-
 </menu>

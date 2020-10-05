@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    android:id="@+id/pantryItems_cardView"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pantryItems_cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="3dp"
     android:layout_marginBottom="3dp"
-    app:cardCornerRadius="5dp"
-    app:cardBackgroundColor="@color/washedWhite"
-    android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/offWhite"
+    app:cardCornerRadius="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
             android:text="Product Name"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/pantryItems_productName"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
             android:text="Brand Name"
             android:textColor="@android:color/black"
             android:textSize="15sp" />
@@ -48,16 +49,19 @@
             android:id="@+id/pantryItems_volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_below="@+id/pantryItems_productName"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato"
             android:text="Volume"
             android:textSize="16sp" />
+
         <TextView
             android:id="@+id/pantryItems_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_below="@+id/pantryItems_productName"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/lato"
             android:text="Quantity"
             android:textSize="20sp" />
 

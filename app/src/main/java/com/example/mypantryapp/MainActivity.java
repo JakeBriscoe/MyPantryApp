@@ -249,18 +249,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         selectedFragment).addToBackStack(null).commit();
                             }
                             break;
-                        case R.id.nav_recipes:
-                            selectedFragment = new RecipesFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
-                            break;
                         case R.id.nav_shop_list:
                             selectedFragment = new ShoppingListFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
-                            break;
-                        case R.id.nav_meal_plan:
-                            selectedFragment = new PlanMealsFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                     selectedFragment).addToBackStack(null).commit();
                             break;

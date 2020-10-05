@@ -6,24 +6,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="69dp"
-        android:orientation="horizontal"
-        android:weightSum="200"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/prata"
+        android:text="My Pantry"
+        android:textAlignment="center"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/textSearchCommon"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:drawableLeft="@drawable/ic_search"
+        android:ems="10"
+        android:fontFamily="@font/lato"
+        android:hint="Search your pantry"
+        android:inputType="textPersonName"
+        android:textColor="@color/dark" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerPantryItems"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:overScrollMode="never"
-        android:scrollbars="vertical" />
 
-</RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPantryItems"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:overScrollMode="never"
+            android:scrollbars="vertical" />
+
+    </RelativeLayout>
 
 </LinearLayout>
