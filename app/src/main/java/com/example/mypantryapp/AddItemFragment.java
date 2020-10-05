@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.adapter.ExampleAdapter;
 import com.example.mypantryapp.domain.ExampleItem;
-
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,7 +26,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.protobuf.ApiOrBuilder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,10 +47,10 @@ public class AddItemFragment extends Fragment {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
-    private ArrayList<ExampleItem> mExampleList;
+    private ArrayList<ExampleItem> mExampleList = new ArrayList<>();
 
-
-
+    public AddItemFragment() {
+    }
 
     /**
      * Display all products in database.
@@ -97,7 +93,6 @@ public class AddItemFragment extends Fragment {
                         Set<String> set = new HashSet<>(productBCDB);
                         getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
                                 set).apply();
-
 
                         // When the user clicks on a product, they should be prompted to enter the quantity.
                         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
@@ -183,7 +178,7 @@ public class AddItemFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                filter(s.toString());
+                mAdapter.getFilter().filter(s);
             }
         });
 
@@ -214,16 +209,5 @@ public class AddItemFragment extends Fragment {
     public interface SendDetails {
         void sendDetails(ExampleItem item);
     }
-
-
-    public void filter(String text) {
-
-        if ("g".contains(text.toLowerCase())) {
-                Log.d("myTag", "yes");
-            }
-
-
-
-        }
-        }
+}
 
