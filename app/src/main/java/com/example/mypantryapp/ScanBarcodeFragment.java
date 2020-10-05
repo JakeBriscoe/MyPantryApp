@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ScanBarcodeFragment extends Fragment {
     private CameraSource mCameraSource;
@@ -41,6 +42,7 @@ public class ScanBarcodeFragment extends Fragment {
 
     String message = "";
     Button btnConfirm;
+    Button btnCancel;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
@@ -74,6 +76,7 @@ public class ScanBarcodeFragment extends Fragment {
 
         mCameraView = getActivity().findViewById(R.id.scanBarSufview);
         btnConfirm = getActivity().findViewById(R.id.scanBarcode);
+        btnCancel = getActivity().findViewById(R.id.scanBarcodeCancel);
 
         //Create the Barcode Detector
         BarcodeDetector detector =
@@ -144,6 +147,13 @@ public class ScanBarcodeFragment extends Fragment {
                     }
 
 
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 }
             });
 

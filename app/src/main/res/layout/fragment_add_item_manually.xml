@@ -176,8 +176,10 @@
                 android:id="@+id/button_save_man"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#2A9815EA"
-                android:text="Add"
+                android:background="@color/dark"
+                android:fontFamily="@font/lato"
+                android:text="Add Product"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
             <Space
@@ -189,8 +191,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00E5EAE0"
-                android:backgroundTint="#D63E3E"
-                android:text="Cancel"/>
+                android:fontFamily="@font/lato"
+                android:text="Cancel" />
 
             <Space
                 android:layout_width="match_parent"
