@@ -149,7 +149,6 @@
                 android:ems="10"
                 android:fontFamily="@font/lato"
                 android:gravity="start|top"
-                android:hint="Shelf life in days"
                 android:textColor="@color/dark"
                 android:hint="Shelf life in days. Long life enter 1000"
                 android:inputType="number" />
