@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment {
     /**
      * Display all products in database.
      */
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         //get pantry information
         pantryRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
@@ -63,61 +63,60 @@ public class HomeFragment extends Fragment {
 
         db.collection("pantries").document(pantryRef).collection("products").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                          @Override
-                                          public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                              for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                  Long quant = (Long) documentSnapshot.get("quantity");
-                                                  String quantity = Long.toString(quant);
-                                                  String id = documentSnapshot.getId();
-                                                  String expiry = (String) documentSnapshot.get("expiry");
-                                                  db.collection("products").document(id).get()
-                                                          .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                              @Override
-                                                              public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                                  if (task.isSuccessful()) {
-                                                                      DocumentSnapshot document = task.getResult();
-                                                                      if (document.exists()) {
-                                                                          Product product = document.toObject(Product.class);
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Long quant = (Long) documentSnapshot.get("quantity");
+                            String quantity = Long.toString(quant);
+                            String id = documentSnapshot.getId();
+                            String expiry = (String) documentSnapshot.get("expiry");
+                            db.collection("products").document(id).get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    Product product = document.toObject(Product.class);
 
-                                                                          String name = product.getName();
-                                                                          String brand = product.getBrand();
-                                                                          String volume = (String) document.get("volume");
+                                                    String name = product.getName();
+                                                    String brand = product.getBrand();
+                                                    String volume = (String) document.get("volume");
 
-                                                                          exampleList.add(new PantryItem(name, brand, id, volume, quantity));
-                                                                            String test = name + " " + brand + " " + id + " " + volume + " " + quantity;
-                                                                            if (exampleList.size() == queryDocumentSnapshots.size()){
-                                                                                mAdapter = new PantryAdapter(exampleList);
-                                                                                mRecyclerView.setLayoutManager(mLayoutManager);
-                                                                                mRecyclerView.setAdapter(mAdapter);
-                                                                            }
+                                                    exampleList.add(new PantryItem(name, brand, id, volume, quantity));
+                                                    String test = name + " " + brand + " " + id + " " + volume + " " + quantity;
+                                                    if (exampleList.size() == queryDocumentSnapshots.size()) {
+                                                        mAdapter = new PantryAdapter(exampleList);
+                                                        mRecyclerView.setLayoutManager(mLayoutManager);
+                                                        mRecyclerView.setAdapter(mAdapter);
+                                                    }
 
-                                                                      } else {
-                                                                          Log.d(TAG, "No such document");
-                                                                      }
-
-
-                                                                  } else {
-                                                                      Log.d(TAG, "get failed with ", task.getException());
-                                                                  }
-                                                              }
-                                                              // These need to be set so that the products are displayed
-
-                                                          });
-                                              }
-
-                                          }
-                                      });
+                                                } else {
+                                                    Log.d(TAG, "No such document");
+                                                }
 
 
+                                            } else {
+                                                Log.d(TAG, "get failed with ", task.getException());
+                                            }
+                                        }
+                                        // These need to be set so that the products are displayed
 
+                                    });
+                        }
 
                     }
+                });
+
+
+    }
 
 
     /**
      * Add onclick listeners to static items
-     * @param inflater inflater
-     * @param container container
+     *
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState the saved instance state
      * @return the view
      */
