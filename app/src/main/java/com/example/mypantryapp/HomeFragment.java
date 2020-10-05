@@ -3,14 +3,16 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -131,6 +133,20 @@ public class HomeFragment extends Fragment {
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
+        EditText editText = v.findViewById(R.id.textSearchPantry);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mAdapter.getFilter().filter(s);
+            }
+        });
+
         return v;
     }
 
@@ -139,7 +155,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Set the toolbar title to pantry name
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("My Pantry");
+//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+//        toolbar.setTitle("My Pantry");
     }
 }
