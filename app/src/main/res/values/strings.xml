@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Pantry App</string>
+    <string name="app_name">My Pantry</string>
     <string name="my_pantry">My Pantry</string>
     <string name="add">Add Item</string>
     <string name="shopping_list">Shopping</string>

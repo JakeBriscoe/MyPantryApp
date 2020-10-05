@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="98">
+        android:layout_weight="96">
 
         <SurfaceView
             android:id="@+id/scanBarSufview"
@@ -25,13 +25,26 @@
         android:id="@+id/scanBarcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10sp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="10sp"
         android:layout_weight="2"
+        android:background="@color/dark"
+        android:fontFamily="@font/lato"
         android:text="Scan Barcode"
-        android:textAlignment="center"
-        android:textSize="18sp" />
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/scanBarcodeCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00E5EAE0"
+        android:fontFamily="@font/lato"
+        android:text="Cancel"
+        android:layout_marginBottom="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_weight="2"/>
 
 </LinearLayout>

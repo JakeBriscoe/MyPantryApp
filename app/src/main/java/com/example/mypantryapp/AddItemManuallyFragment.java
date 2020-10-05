@@ -150,6 +150,14 @@ public class AddItemManuallyFragment extends Fragment {
             }
         });
 
+        final Button cancelBtn = v.findViewById(R.id.button_cancel_man);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemFragment()).addToBackStack(null).commit();
+            }
+        });
+
 
         return v;
 

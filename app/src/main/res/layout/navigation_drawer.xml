@@ -17,7 +17,7 @@ This is the file that puts together the full navigation drawer layout, with the 
     bottom navigation will appear below the nav drawer.-->
     <include android:id="@+id/bottom_navigation"
         layout="@layout/bottom_navigation"/>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,57 +30,27 @@ This is the file that puts together the full navigation drawer layout, with the 
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:elevation="4dp"
+            app:titleTextColor="@color/dark"/>
             android:elevation="4dp" />
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:foregroundTint="@color/dark"/>
 
     </LinearLayout>
-    
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:id="@+id/nav_view"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu">
-
-        <!--The below commented out code will make the settings and logout
-        appear at the bottom of the navigation menu. However, I don't know
-        how to add the settings item to the same group as the pantry items if
-        the setting item is located here. I want them to be in the same group
-        so that you can only select one at a time. So currently commented out.-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            android:orientation="vertical"-->
-<!--            android:padding="16dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/nav_settings"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:drawablePadding="16dp"-->
-<!--                android:padding="8dp"-->
-<!--                android:text="@string/settings"-->
-<!--                android:textSize="16sp"-->
-<!--                app:drawableLeftCompat="@drawable/ic_settings" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/nav_logout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:drawablePadding="16dp"-->
-<!--                android:padding="8dp"-->
-<!--                android:text="@string/log_out"-->
-<!--                android:textSize="16sp"-->
-<!--                app:drawableLeftCompat="@drawable/ic_logout" />-->
-
-<!--        </LinearLayout>-->
+        app:menu="@menu/drawer_menu"
+        app:itemIconTint="@drawable/tab_color"
+        app:itemTextColor="@drawable/tab_color">
 
     </com.google.android.material.navigation.NavigationView>
 

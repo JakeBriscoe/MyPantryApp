@@ -1,65 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScanIngredientsFragment"
-    android:id="@+id/scaningredientslayout">
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    android:weightSum="100"
+    android:orientation="vertical">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="4"
-        app:layout_constraintBottom_toTopOf="@+id/btnTakePicture"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtScanTitle" />
+        android:layout_height="0dp"
+        android:layout_weight="96">
+
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtScanTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="10sp"
+        android:fontFamily="@font/lato"
+        android:text="For best results, please ensure the image is clear and that there is only one occurrence of the word 'Ingredients'."
+        android:textAlignment="center"
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/btnTakePicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginLeft="10sp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@android:color/white"
-        android:text="Take Picture"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surfaceView" />
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="10sp"
+        android:layout_weight="2"
+        android:background="@color/dark"
+        android:fontFamily="@font/lato"
+        android:text="Scan Ingredients"
+        android:textColor="@color/colorPrimary" />
 
     <Button
-        android:id="@+id/btnConfirm"
+        android:id="@+id/scanIngredientsCancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="5dp"
-        android:background="@android:color/white"
-        android:text="Confirm"
-        android:textSize="18sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTakePicture" />
+        android:background="#00E5EAE0"
+        android:fontFamily="@font/lato"
+        android:text="Cancel"
+        android:layout_marginBottom="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_weight="2"/>
 
-    <TextView
-        android:id="@+id/txtScanTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="75dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:text="For best results, please ensure the image is clear and that there is only one occurrence of the word 'Ingredients'."
-        android:textAlignment="center"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+</LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".ScanIngredientsFragment"-->
+<!--    android:id="@+id/scaningredientslayout">-->
+<!--    <SurfaceView-->
+<!--        android:id="@+id/surfaceView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="350dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_weight="4"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/btnTakePicture"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/txtScanTitle" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnTakePicture"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:background="@android:color/white"-->
+<!--        android:text="Take Picture"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/surfaceView" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnConfirm"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:background="@android:color/white"-->
+<!--        android:text="Confirm"-->
+<!--        android:textSize="18sp"-->
+<!--        android:visibility="invisible"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/btnTakePicture" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/txtScanTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_marginTop="75dp"-->
+<!--        android:paddingStart="20dp"-->
+<!--        android:paddingEnd="20dp"-->
+<!--        android:text="For best results, please ensure the image is clear and that there is only one occurrence of the word 'Ingredients'."-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="14sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

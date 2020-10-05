@@ -23,15 +23,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Your Details"
+            android:layout_marginTop="80dp"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/lato"
+            android:text="Your Details"
+            android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:text="Name"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -41,12 +44,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/lato"
             android:hint="Please enter your first name"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/dark" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:text="Email"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -56,13 +62,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/lato"
             android:hint="Please enter your email address"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/dark" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:fontFamily="@font/lato"
             android:text="Dietary Preferences"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -71,6 +80,7 @@
             android:id="@+id/checkBoxVegan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Vegan"
             android:textSize="15sp" />
@@ -79,6 +89,7 @@
             android:id="@+id/checkBoxVegetarian"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Vegetarian"
             android:textSize="15sp" />
@@ -87,6 +98,7 @@
             android:id="@+id/checkBoxDairyFree"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Dairy free"
             android:textSize="15sp" />
@@ -95,6 +107,7 @@
             android:id="@+id/checkBoxGlutenFree"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Gluten free"
             android:textSize="15sp" />
@@ -103,6 +116,7 @@
             android:id="@+id/checkBoxCeliac"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Celiac"
             android:textSize="15sp" />
@@ -111,6 +125,7 @@
             android:id="@+id/checkBoxWheat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Wheat allergy"
             android:textSize="15sp" />
@@ -119,6 +134,7 @@
             android:id="@+id/checkBoxLactose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Lactose intolerant"
             android:textSize="15sp" />
@@ -127,6 +143,7 @@
             android:id="@+id/checkBoxEgg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Egg allergy"
             android:textSize="15sp" />
@@ -135,6 +152,7 @@
             android:id="@+id/checkBoxNut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Tree nut allergy"
             android:textSize="15sp" />
@@ -143,6 +161,7 @@
             android:id="@+id/checkBoxPeanut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Peanut allergy"
             android:textSize="15sp" />
@@ -151,6 +170,7 @@
             android:id="@+id/checkBoxShellFish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Shellfish allergy"
             android:textSize="15sp" />
@@ -159,6 +179,7 @@
             android:id="@+id/checkBoxSoy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:padding="5dp"
             android:text="Soy allergy"
             android:textSize="15sp" />
@@ -166,15 +187,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Your Pantry"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/lato"
+            android:text="Your Pantry"
+            android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:text="Pantry Name"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -184,14 +208,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/lato"
             android:hint="e.g. Smith's Pantry"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColor="@color/dark" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Please Enter your Kitchen Locations"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/lato"
+            android:text="Please Enter your Kitchen Locations"
+            android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold" />
         <LinearLayout
@@ -203,14 +231,16 @@
             android:orientation="vertical">
 
 
-        <EditText
-            android:id="@+id/kitchen1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:hint="e.g. Fridge, Pantry Shelf 1, Freezer"
-            android:inputType="text"
-            android:textSize="16sp"/>
+            <EditText
+                android:id="@+id/kitchen1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/lato"
+                android:hint="e.g. Fridge, Pantry Shelf 1, Freezer"
+                android:inputType="text"
+                android:textColor="@color/dark"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <Button
@@ -232,6 +262,7 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/saveDetails"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginLeft="20dp"
@@ -239,9 +270,11 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:layout_weight="20"
+        android:fontFamily="@font/lato"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:text="Save Details"
-        android:id="@+id/saveDetails"/>
+        android:textColor="@color/colorPrimary"
+        android:background="@color/dark"/>
 
 </LinearLayout>

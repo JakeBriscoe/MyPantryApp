@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="25dp"
             android:orientation="vertical">
 
 
@@ -27,13 +27,14 @@
 
             <TextView
                 android:id="@+id/textView12"
-                android:layout_width="258dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="65dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Enter the product details:"
+                android:layout_marginBottom="25dp"
+                android:fontFamily="@font/lato"
+                android:text="Enter Product Details"
+                android:textAlignment="center"
                 android:textSize="22sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +43,7 @@
                 android:id="@+id/textView18"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
                 android:text="Product Name"
                 android:textStyle="bold" />
 
@@ -49,10 +51,13 @@
                 android:id="@+id/productNameInputMan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="#BAB8B2B2"
+                android:fontFamily="@font/lato"
                 android:hint="Name"
                 android:inputType="text"
                 android:selectAllOnFocus="true"
+                android:textColor="@color/dark"
                 android:textColorHighlight="#A6009688"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.491"
@@ -62,6 +67,7 @@
                 android:id="@+id/textView19"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
                 android:text="Brand Name"
                 android:textStyle="bold" />
 
@@ -69,11 +75,14 @@
                 android:id="@+id/brandInputMan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:fontFamily="@font/lato"
                 android:hint="Brand"
                 android:inputType="text"
                 android:selectAllOnFocus="true"
+                android:textColor="@color/dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.491"
                 app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_camera"
+                android:fontFamily="@font/lato"
                 android:text="Barcode Number"
                 android:textStyle="bold" />
 
@@ -91,16 +101,20 @@
                 android:id="@+id/barcodeInputMan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:fontFamily="@font/lato"
                 android:hint="Barcode (if no barcode enter 0)"
                 android:inputType="number"
-                android:selectAllOnFocus="true" />
+                android:selectAllOnFocus="true"
+                android:textColor="@color/dark" />
 
             <TextView
                 android:id="@+id/textView22"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
                 android:text="Volume"
                 android:textStyle="bold" />
 
@@ -108,17 +122,21 @@
                 android:id="@+id/VolumeInputMan"
                 android:layout_width="159dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:fontFamily="@font/lato"
                 android:hint="e.g. 200g, 500ml"
                 android:inputType="text"
-                android:selectAllOnFocus="true" />
+                android:selectAllOnFocus="true"
+                android:textColor="@color/dark" />
 
 
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
                 android:text="Shelf Life"
                 android:textStyle="bold" />
 
@@ -126,11 +144,15 @@
                 android:id="@+id/shelfLifeInputMan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
+                android:fontFamily="@font/lato"
                 android:gravity="start|top"
-                android:hint="Shelf life in days. long life enter 1000"
+                android:textColor="@color/dark"
+                android:hint="Shelf life in days. Long life enter 1000"
                 android:inputType="number" />
+
             <TextView
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
@@ -153,6 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_camera"
+                android:fontFamily="@font/lato"
                 android:text="Ingredients"
                 android:textStyle="bold" />
 
@@ -160,18 +183,20 @@
                 android:id="@+id/enterIngredientsText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:ems="10"
+                android:fontFamily="@font/lato"
                 android:hint="Please list ingredients separated by a comma or take a photo using the camera icon above."
-                android:inputType="textMultiLine" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                android:inputType="textMultiLine"
+                android:textColor="@color/dark" />
 
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/lato"
                 android:text="Dietary Warnings"
                 android:textStyle="bold" />
 
@@ -180,8 +205,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:text="No dietary warnings"
-                android:inputType="textMultiLine" />
+                android:fontFamily="@font/lato"
+                android:inputType="textMultiLine"
+                android:text="No dietary warnings" />
 
             <Spinner
                 android:id="@+id/DietContainsSpinMan"
@@ -192,8 +218,10 @@
                 android:id="@+id/button_save_man"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#2A9815EA"
-                android:text="Add"
+                android:background="@color/dark"
+                android:fontFamily="@font/lato"
+                android:text="Add Product"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
             <Space
@@ -205,8 +233,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00E5EAE0"
-                android:backgroundTint="#D63E3E"
-                android:text="Cancel"/>
+                android:fontFamily="@font/lato"
+                android:text="Cancel" />
 
             <Space
                 android:layout_width="match_parent"
