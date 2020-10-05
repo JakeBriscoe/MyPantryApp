@@ -3,23 +3,30 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mypantryapp.adapter.ExampleAdapter;
+import com.example.mypantryapp.adapter.PantryAdapter;
 import com.example.mypantryapp.adapter.ShoppingListAdapter;
 import com.example.mypantryapp.domain.ExampleItem;
 import com.example.mypantryapp.domain.Product;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,6 +36,7 @@ import java.util.ArrayList;
 public class ShoppingListFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
+    private static final String TAG = "MainActivity";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -68,24 +76,46 @@ public class ShoppingListFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-
-                            Product product = documentSnapshot.toObject(Product.class);
-
-                            // Add each individual product to exampleList
-                            String name = product.getName();
-                            String brand = product.getBrand();
                             String id = documentSnapshot.getId();
-                            String vol = product.getIngredients();
-                            exampleList.add(new ExampleItem(name, brand, id, vol));
+                            db.collection("products").document(id).get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
 
+                                                    Product product = document.toObject(Product.class);
+
+                                                    // Add each individual product to exampleList
+                                                    String name = product.getName();
+                                                    String brand = product.getBrand();
+                                                    //String id = documentSnapshot.getId();
+                                                    String vol = product.getIngredients();
+                                                    exampleList.add(new ExampleItem(name, brand, id, vol));
+
+                                                    if (exampleList.size() == queryDocumentSnapshots.size()) {
+                                                        mAdapter = new ShoppingListAdapter(exampleList);
+                                                        mRecyclerView.setLayoutManager(mLayoutManager);
+                                                        mRecyclerView.setAdapter(mAdapter);
+                                                    }
+
+                                                } else {
+                                                    Log.d(TAG, "No such document");
+                                                }
+
+
+                                            } else {
+                                                Log.d(TAG, "get failed with ", task.getException());
+                                            }
+                                        }
+                                        // These need to be set so that the products are displayed
+
+                                    });
                         }
-
-                        mAdapter = new ShoppingListAdapter(exampleList);
-                        mRecyclerView.setLayoutManager(mLayoutManager);
-                        mRecyclerView.setAdapter(mAdapter);
-
 
                     }
                 });
+
     }
 }
