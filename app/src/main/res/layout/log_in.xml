@@ -61,6 +61,7 @@
         android:fontFamily="@font/lato"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColor="@color/dark"
         android:textColorHint="@color/colorAccent" />
 
     <Button
@@ -79,12 +80,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="serif"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="New User? Register Here"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="20dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"/>
+        android:textSize="20dp" />
 </LinearLayout>

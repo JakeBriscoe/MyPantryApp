@@ -27,13 +27,13 @@ This is the file that puts together the full navigation drawer layout, with the 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/dark"
+            android:background="@color/colorPrimary"
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="4dp"
             app:title="[Pantry 1]"
-            app:titleTextColor="@android:color/white"/>
+            app:titleTextColor="@color/dark"/>
 
         <FrameLayout
             android:id="@+id/fragment_container"

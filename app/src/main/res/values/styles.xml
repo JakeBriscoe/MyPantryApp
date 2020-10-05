@@ -5,7 +5,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/darker</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/dark</item>
+        <item name="android:statusBarColor">@color/darker</item>
+        <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverFlow</item>
+    </style>
+
+    <style name="AppTheme.OverFlow">
+        <item name="android:src">@drawable/ic_options_menu</item>
     </style>
 
 </resources>
