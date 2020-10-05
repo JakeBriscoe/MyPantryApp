@@ -29,6 +29,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.protobuf.ApiOrBuilder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -217,11 +218,10 @@ public class AddItemFragment extends Fragment {
 
     public void filter(String text) {
 
-
-        ArrayList<ExampleItem> mExampleList = new ArrayList<>();
-            if (text.toLowerCase().contains("t")) {
+        if ("g".contains(text.toLowerCase())) {
                 Log.d("myTag", "yes");
             }
+
 
 
         }
