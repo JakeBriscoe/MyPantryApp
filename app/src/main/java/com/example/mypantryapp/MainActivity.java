@@ -306,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Ensure that the checked item in the bottom navigation corresponds.
             NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setCheckedItem(R.id.nav_pantry);
+            bottomNav.setSelectedItemId(R.id.nav_home);
         } else {
             // Exit app entirely
             Intent a = new Intent(Intent.ACTION_MAIN);
