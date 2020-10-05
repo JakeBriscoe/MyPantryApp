@@ -59,4 +59,44 @@ public class Product {
     public String getIngredients() {
         return ingredients;
     }
+
+    public Product setProductId(String productId) {
+        this.productId = productId;
+        return this;
+    }
+
+    public Product setWeight(String weight) {
+        this.weight = weight;
+        return this;
+    }
+
+    public Product setBarcodeNum(long barcodeNum) {
+        this.barcodeNum = barcodeNum;
+        return this;
+    }
+
+    public Product setShelfLife(int shelfLife) {
+        this.shelfLife = shelfLife;
+        return this;
+    }
+
+    public Product setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Product setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public Product setBrand(String brand) {
+        this.brand = brand;
+        return this;
+    }
+
+    public Product setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+        return this;
+    }
 }

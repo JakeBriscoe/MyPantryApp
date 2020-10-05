@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentResultListener;
 
+import com.example.mypantryapp.domain.ExampleItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -127,7 +128,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                                 dietWarningsTextView.setText(dietWarningsText);
                             }
                         }
-                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+//                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                     } else {
                         Log.d("TAG", "No such document");
                     }

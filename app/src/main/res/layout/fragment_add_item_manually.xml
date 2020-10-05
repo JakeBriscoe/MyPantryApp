@@ -105,7 +105,7 @@
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
                 android:fontFamily="@font/lato"
-                android:hint="Barcode"
+                android:hint="Barcode (if no barcode enter 0)"
                 android:inputType="number"
                 android:selectAllOnFocus="true"
                 android:textColor="@color/dark" />
@@ -119,14 +119,14 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/QuantityInputMan"
-                android:layout_width="160dp"
+                android:id="@+id/VolumeInputMan"
+                android:layout_width="159dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#BAB8B2B2"
                 android:ems="10"
                 android:fontFamily="@font/lato"
-                android:hint="Volume"
+                android:hint="e.g. 200g, 500ml"
                 android:inputType="text"
                 android:selectAllOnFocus="true"
                 android:textColor="@color/dark" />
@@ -142,7 +142,7 @@
 
             <EditText
                 android:id="@+id/shelfLifeInputMan"
-                android:layout_width="160dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#BAB8B2B2"
@@ -150,8 +150,26 @@
                 android:fontFamily="@font/lato"
                 android:gravity="start|top"
                 android:hint="Shelf life in days"
-                android:inputType="textMultiLine"
-                android:textColor="@color/dark" />
+                android:textColor="@color/dark"
+                android:hint="Shelf life in days. Long life enter 1000"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quantity"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/QuantityInputMan"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#BAB8B2B2"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Quantity"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/ingredientsTitle"

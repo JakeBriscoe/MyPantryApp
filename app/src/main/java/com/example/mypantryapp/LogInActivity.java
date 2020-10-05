@@ -47,7 +47,7 @@ public class LogInActivity extends AppCompatActivity {
                 }
             }
         };
-        signup.setOnClickListener(new View.OnClickListener() {
+        signup.setOnClickListener(new View.OnClickListener() { //if sign up clicked go to sign up screen
             @Override
             public void onClick(View view) {
                 Intent I = new Intent(LogInActivity.this, SignUpActivity.class);
