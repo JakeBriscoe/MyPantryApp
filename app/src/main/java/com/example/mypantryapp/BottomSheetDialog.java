@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentResultListener;
 
 import com.example.mypantryapp.domain.ExampleItem;
-import com.example.mypantryapp.domain.PantryItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -200,7 +199,11 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                     if (document.exists()) {
                         ingredients = (String) document.get("ingredients");
                         Long sLife = (Long) document.get("shelfLife");
-                        shelfLife = sLife.intValue();
+                        if (sLife != null) {
+                            shelfLife = sLife.intValue();
+                        } else {
+                            shelfLife = 1000;
+                        }
 
                         if (ingredients != null) {
                             checkIngredients.setIngredients(ingredients);

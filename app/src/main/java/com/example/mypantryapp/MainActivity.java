@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     // Navigate to home fragment otherwise
                     fragment = new HomeFragment();
-                    navigationView.setCheckedItem(R.id.nav_pantry1);
+                    navigationView.setCheckedItem(R.id.nav_pantry);
 
                     String docRefPantry = this.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                             .getString("pantryRef", null);
@@ -197,22 +197,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.nav_pantry1:
-            case R.id.nav_pantry2:
-                // This case is just to demonstrate that we want to be able to create multiple
-                // pantry's for one user. No actual functionality atm.
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new HomeFragment()).commit();
-                // Need to make sure the bottom navigation corresponds
-                bottomNav.setSelectedItemId(R.id.nav_home);
-                break;
+            case R.id.nav_pantry:
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new SettingsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.nav_add_pantry:
                 // Just a placeholder
-                Toast.makeText(this, "Add Pantry", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Add Pantry Coming Soon", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
                 mAuth.signOut();
@@ -276,11 +268,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.toolbarShare:
                 // Placeholder
-                Toast.makeText(this, "Share Pantry", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Share Pantry Coming Soon", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.toolbarDelete:
                 // Placeholder
-                Toast.makeText(this, "Delete Pantry", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Delete Pantry Coming Soon", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -309,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new HomeFragment()).addToBackStack(null).commit();
             // Ensure that the checked item in the bottom navigation corresponds.
             NavigationView navigationView = findViewById(R.id.nav_view);
-            navigationView.setCheckedItem(R.id.nav_pantry1);
+            navigationView.setCheckedItem(R.id.nav_pantry);
         } else {
             // Exit app entirely
             Intent a = new Intent(Intent.ACTION_MAIN);

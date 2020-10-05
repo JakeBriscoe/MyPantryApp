@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:fontFamily="@font/prata"
-        android:text="My Pantry"
+        android:text="Pantry"
         android:textAlignment="center"
         android:textSize="25sp" />
 

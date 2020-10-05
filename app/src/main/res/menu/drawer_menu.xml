@@ -13,13 +13,9 @@ This file contains the clickable items in the navigation drawer.
     <group android:checkableBehavior="single"
         android:id="@+id/pantries">
 
-        <item android:id="@+id/nav_pantry1"
+        <item android:id="@+id/nav_pantry"
             android:title="@string/pantry1"
             android:icon="@drawable/ic_pantry"
-            app:showAsAction="ifRoom"/>
-        <item android:id="@+id/nav_pantry2"
-            android:icon="@drawable/ic_pantry"
-            android:title="@string/pantry2"
             app:showAsAction="ifRoom"/>
         <item android:id="@+id/nav_add_pantry"
             android:title="@string/add_pantry"
