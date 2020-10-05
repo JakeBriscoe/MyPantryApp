@@ -147,13 +147,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // This if-statement ensures that rotating the screen won't restart the state.
             if (savedInstanceState == null) {
                 Fragment fragment;
+                String fragmentTag;
                 if (isFirstRun) {
                     // Navigate to settings if it is the first time user has logged in
                     fragment = new SettingsFragment();
+                    fragmentTag = "SettingsFragment";
                     navigationView.setCheckedItem(R.id.nav_settings);
                 } else {
                     // Navigate to home fragment otherwise
                     fragment = new HomeFragment();
+                    fragmentTag = "HomeFragment";
                     navigationView.setCheckedItem(R.id.nav_pantry);
 
                     String docRefPantry = this.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
@@ -177,12 +180,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     toolbar.setTitle(docRefPantry);
                 }
 
-
-
                 // Replace fragment
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        fragment).addToBackStack(null).commit();
+                        fragment).addToBackStack(fragmentTag).commit();
             }
 
         }
@@ -199,12 +199,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_pantry:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new HomeFragment()).addToBackStack(null).commit();
+                        new HomeFragment()).addToBackStack("HomeFragment").commit();
                 bottomNav.setSelectedItemId(R.id.nav_home);
                 break;
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new SettingsFragment()).addToBackStack(null).commit();
+                        new SettingsFragment()).addToBackStack("SettingsFragment").commit();
                 break;
             case R.id.nav_add_pantry:
                 // Just a placeholder
@@ -235,20 +235,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         case R.id.nav_home:
                             selectedFragment = new HomeFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
+                                    selectedFragment).addToBackStack("HomeFragment").commit();
                             break;
                         case R.id.nav_add_item:
                             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                             if (!(currentFragment instanceof AddItemFragment)) {
                                 selectedFragment = new AddItemFragment();
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        selectedFragment).addToBackStack(null).commit();
+                                        selectedFragment).addToBackStack("AddItemFragment").commit();
                             }
                             break;
                         case R.id.nav_shop_list:
                             selectedFragment = new ShoppingListFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
+                                    selectedFragment).addToBackStack("ShoppingListFragment").commit();
                             break;
                     }
                     return true;
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Ensure bottom nav corresponds to add item
                 bottomNav.setSelectedItemId(R.id.nav_add_item);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ScanBarcodeFragment()).addToBackStack(null).commit();
+                        new ScanBarcodeFragment()).addToBackStack("ScanBarcodeFragment").commit();
                 return true;
             case R.id.toolbarShare:
                 // Placeholder
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (currentFragment instanceof SettingsFragment) {
             // If back is pressed when settings is open, navigate to home fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeFragment()).addToBackStack(null).commit();
+                    new HomeFragment()).addToBackStack("HomeFragment").commit();
             // Ensure that the checked item in the bottom navigation corresponds.
             NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setCheckedItem(R.id.nav_pantry);
@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void sendData(String message) {
-        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
+        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("AddItemManually");
         assert f != null;
         f.displayReceivedData(message);
     }
