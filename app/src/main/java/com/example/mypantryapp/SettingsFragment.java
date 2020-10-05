@@ -1,7 +1,6 @@
 package com.example.mypantryapp;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -204,11 +203,11 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //TODO check this!!
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
                     setItem(view);
                     navigationView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
-                    navigationView.setCheckedItem(R.id.nav_pantry1);
+                    navigationView.setCheckedItem(R.id.nav_pantry);
 
                 }
             });

@@ -133,7 +133,7 @@ public class AddItemFragment extends Fragment {
         barcodeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack("ScanBarcodeFragment").commit();
             }
 
         });
@@ -141,7 +141,7 @@ public class AddItemFragment extends Fragment {
         barcodeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack("ScanBarcodeFragment").commit();
             }
         });
 
@@ -151,7 +151,7 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "AddItemManuallyFragment").addToBackStack(null).commit();
             }
         });
         final TextView textAddManually = v.findViewById(R.id.textAddManually);
@@ -159,7 +159,7 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments.
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "AddItemManuallyFragment").addToBackStack(null).commit();
 
             }
 

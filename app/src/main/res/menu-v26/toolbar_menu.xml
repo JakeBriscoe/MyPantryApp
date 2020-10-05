@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/toolbarScan"
+        android:icon="@drawable/ic_scan"
+        android:title="Scan Barcode"
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/dark"/>
+
+    <item android:id="@+id/toolbarShare"
+        android:icon="@drawable/ic_share"
+        android:title="Share Pantry"
+        app:showAsAction="never"
+        android:iconTint="@color/dark" />
+
+    <item
+        android:id="@+id/toolbarDelete"
+        android:icon="@drawable/ic_delete"
+        android:title="Delete Pantry"
+        app:showAsAction="never"
+        android:iconTint="@color/dark"/>
+
+</menu>

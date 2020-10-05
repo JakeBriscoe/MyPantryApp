@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import com.example.mypantryapp.domain.PantryItem;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -122,7 +123,7 @@ public class AddItemManuallyFragment extends Fragment {
                     if (event.getRawX() >= textLocation[0] + ingredientsTitle.getWidth() - ingredientsTitle.getTotalPaddingRight()){
 
                         // Right drawable was tapped
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanIngredientsFragment()).addToBackStack(null).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanIngredientsFragment()).addToBackStack("ScanIngredientsFragment").commit();
                         return true;
                     }
                 }
@@ -142,11 +143,19 @@ public class AddItemManuallyFragment extends Fragment {
                     barcodeTitle.getLocationOnScreen(textLocation);
                     if (event.getRawX() >= textLocation[0] + barcodeTitle.getWidth() - barcodeTitle.getTotalPaddingRight()){
                         // If it was, replace fragment.
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack("ScanBarcodeFragment").commit();
                         return true;
                     }
                 }
                 return true;
+            }
+        });
+
+        final Button cancelBtn = v.findViewById(R.id.button_cancel_man);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemFragment()).addToBackStack("AddItemFragment").commit();
             }
         });
 
@@ -386,6 +395,17 @@ public class AddItemManuallyFragment extends Fragment {
             checkIngredients.setIngredients(updateIngredientsText);
             viewDietaryWarning.setText(checkIngredients.checkIngredients());
         }
+
+        // Set a listener to see whether a barcode has just been scanned and came up blank.
+        // If so, populate the barcode field with the barcode scanned.
+        getParentFragmentManager().setFragmentResultListener("requestBarcode", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                // Set the text
+                String result = bundle.getString("bundleKey");
+                editTextBarcode.setText(result);
+            }
+        });
     }
 
     /**

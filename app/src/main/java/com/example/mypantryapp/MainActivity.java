@@ -2,6 +2,7 @@ package com.example.mypantryapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -61,6 +62,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Thread t=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences sharedPreferences = getSharedPreferences(Config.FLAG, Context.MODE_PRIVATE);
+                if(sharedPreferences.getBoolean(Config.FLAG,true)){
+                    startActivity(new Intent(MainActivity.this,DefaultIntro.class));
+                    SharedPreferences.Editor e=sharedPreferences.edit();
+                    e.putBoolean(Config.FLAG,false);
+                    e.apply();
+                }
+            }
+        });
+        t.start();
+
         // Check if there is a user already logged in
         currentUser = mAuth.getCurrentUser();
         if (currentUser == null){
@@ -93,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
+
+            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.dark));
 
             // Check whether or not this is the user's first time logging in.
             Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
@@ -130,14 +147,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // This if-statement ensures that rotating the screen won't restart the state.
             if (savedInstanceState == null) {
                 Fragment fragment;
+                String fragmentTag;
                 if (isFirstRun) {
                     // Navigate to settings if it is the first time user has logged in
                     fragment = new SettingsFragment();
+                    fragmentTag = "SettingsFragment";
                     navigationView.setCheckedItem(R.id.nav_settings);
                 } else {
                     // Navigate to home fragment otherwise
                     fragment = new HomeFragment();
-                    navigationView.setCheckedItem(R.id.nav_pantry1);
+                    fragmentTag = "HomeFragment";
+                    navigationView.setCheckedItem(R.id.nav_pantry);
 
                     String docRefPantry = this.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                             .getString("pantryRef", null);
@@ -160,16 +180,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     toolbar.setTitle(docRefPantry);
                 }
 
-
-
                 // Replace fragment
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        fragment).addToBackStack(null).commit();
+                        fragment).addToBackStack(fragmentTag).commit();
             }
 
         }
-
     }
 
     /**
@@ -181,22 +197,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.nav_pantry1:
-            case R.id.nav_pantry2:
-                // This case is just to demonstrate that we want to be able to create multiple
-                // pantry's for one user. No actual functionality atm.
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new HomeFragment()).commit();
-                // Need to make sure the bottom navigation corresponds
+            case R.id.nav_pantry:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HomeFragment()).addToBackStack("HomeFragment").commit();
                 bottomNav.setSelectedItemId(R.id.nav_home);
                 break;
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new SettingsFragment()).addToBackStack(null).commit();
+                        new SettingsFragment()).addToBackStack("SettingsFragment").commit();
                 break;
             case R.id.nav_add_pantry:
                 // Just a placeholder
-                Toast.makeText(this, "Add Pantry", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Add Pantry Coming Soon", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
                 mAuth.signOut();
@@ -223,30 +235,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         case R.id.nav_home:
                             selectedFragment = new HomeFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
+                                    selectedFragment).addToBackStack("HomeFragment").commit();
                             break;
                         case R.id.nav_add_item:
                             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                             if (!(currentFragment instanceof AddItemFragment)) {
                                 selectedFragment = new AddItemFragment();
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        selectedFragment).addToBackStack(null).commit();
+                                        selectedFragment).addToBackStack("AddItemFragment").commit();
                             }
-                            break;
-                        case R.id.nav_recipes:
-                            selectedFragment = new RecipesFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
                             break;
                         case R.id.nav_shop_list:
                             selectedFragment = new ShoppingListFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
-                            break;
-                        case R.id.nav_meal_plan:
-                            selectedFragment = new PlanMealsFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack(null).commit();
+                                    selectedFragment).addToBackStack("ShoppingListFragment").commit();
                             break;
                     }
                     return true;
@@ -266,15 +268,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Ensure bottom nav corresponds to add item
                 bottomNav.setSelectedItemId(R.id.nav_add_item);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ScanBarcodeFragment()).addToBackStack(null).commit();
+                        new ScanBarcodeFragment()).addToBackStack("ScanBarcodeFragment").commit();
                 return true;
             case R.id.toolbarShare:
                 // Placeholder
-                Toast.makeText(this, "Share Pantry", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Share Pantry Coming Soon", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.toolbarDelete:
                 // Placeholder
-                Toast.makeText(this, "Delete Pantry", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Delete Pantry Coming Soon", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -300,10 +302,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (currentFragment instanceof SettingsFragment) {
             // If back is pressed when settings is open, navigate to home fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeFragment()).addToBackStack(null).commit();
+                    new HomeFragment()).addToBackStack("HomeFragment").commit();
             // Ensure that the checked item in the bottom navigation corresponds.
             NavigationView navigationView = findViewById(R.id.nav_view);
-            navigationView.setCheckedItem(R.id.nav_pantry1);
+            navigationView.setCheckedItem(R.id.nav_pantry);
+            bottomNav.setSelectedItemId(R.id.nav_home);
         } else {
             // Exit app entirely
             Intent a = new Intent(Intent.ACTION_MAIN);
@@ -333,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void sendData(String message) {
-        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("addManuallyTag");
+        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("AddItemManuallyFragment");
         assert f != null;
         f.displayReceivedData(message);
     }

@@ -20,7 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_menu"
-        android:background="?android:attr/windowBackground"
+        app:itemIconTint="@drawable/tab_color_bottom"
+        app:itemTextColor="@drawable/tab_color_bottom"
+        android:background="@color/colorPrimaryDark"
         app:labelVisibilityMode="labeled"/>
+
+<!--    android:background="?android:attr/windowBackground"-->
 
 </RelativeLayout>

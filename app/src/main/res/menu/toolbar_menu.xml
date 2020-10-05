@@ -5,19 +5,22 @@
     <item android:id="@+id/toolbarScan"
         android:icon="@drawable/ic_scan"
         android:title="Scan Barcode"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/dark"/>
 
 
 
     <item android:id="@+id/toolbarShare"
     android:icon="@drawable/ic_share"
     android:title="Share Pantry"
-    app:showAsAction="never"/>
+    app:showAsAction="never"
+        android:iconTint="@color/dark"/>
 
     <item
         android:id="@+id/toolbarDelete"
         android:icon="@drawable/ic_delete"
         android:title="Delete Pantry"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:iconTint="@color/dark"/>
 
 </menu>

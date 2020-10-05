@@ -16,9 +16,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +41,7 @@ public class ScanBarcodeFragment extends Fragment {
 
     String message = "";
     Button btnConfirm;
+    Button btnCancel;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
@@ -71,6 +72,7 @@ public class ScanBarcodeFragment extends Fragment {
 
         mCameraView = getActivity().findViewById(R.id.scanBarSufview);
         btnConfirm = getActivity().findViewById(R.id.scanBarcode);
+        btnCancel = getActivity().findViewById(R.id.scanBarcodeCancel);
 
         //Create the Barcode Detector
         BarcodeDetector detector =
@@ -144,6 +146,13 @@ public class ScanBarcodeFragment extends Fragment {
                 }
             });
 
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requireActivity().getSupportFragmentManager().popBackStack();
+                }
+            });
+
             // Set the onclick listener for taking a pic of the barcode.
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
@@ -165,7 +174,14 @@ public class ScanBarcodeFragment extends Fragment {
                                             if (task.isSuccessful()) {
                                                 if(task.getResult().isEmpty()){
                                                     // Navigate to AddItemManually
-                                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
+                                                    // Pop the stack if previous fragment was AddItemManually, make a new instance otherwise
+                                                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                                                    String previousFragment = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName();
+                                                    if (previousFragment == null) {
+                                                        getActivity().getSupportFragmentManager().popBackStack();
+                                                    } else {
+                                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "AddItemManuallyFragment").addToBackStack(null).commit();
+                                                    }
                                                     // Send the barcode to AddItemManually so it can be pre-populated.
                                                     Bundle result = new Bundle();
                                                     result.putString("bundleKey", message);
