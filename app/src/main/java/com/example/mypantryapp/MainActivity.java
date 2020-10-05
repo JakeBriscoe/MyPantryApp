@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void sendData(String message) {
-        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("AddItemManually");
+        AddItemManuallyFragment f = (AddItemManuallyFragment) getSupportFragmentManager().findFragmentByTag("AddItemManuallyFragment");
         assert f != null;
         f.displayReceivedData(message);
     }
