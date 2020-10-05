@@ -17,17 +17,12 @@ This file contains the clickable items in the navigation drawer.
             android:title="@string/pantry1"
             android:icon="@drawable/ic_pantry"
             app:showAsAction="ifRoom"/>
-        <item android:id="@+id/nav_add_pantry"
+        <item
+            android:id="@+id/nav_add_pantry"
+            android:checkable="false"
+            android:icon="@drawable/ic_add"
             android:title="@string/add_pantry"
-            app:showAsAction="always"
-            android:icon="@drawable/ic_add" />
-
-        <!--This is here to separate the pantry's from the settings + logout. This is not a good
-        fix since the user will be able to click on it. Need to find a solution at some point.-->
-<!--        <item-->
-<!--            android:id="@+id/separator"-->
-<!--            android:title=""/>-->
-
+            app:showAsAction="always" />
         <item android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"
             android:title="@string/settings"
