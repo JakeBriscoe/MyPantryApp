@@ -3,22 +3,28 @@ package com.example.mypantryapp.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.R;
-import com.example.mypantryapp.domain.ExampleItem;
-import com.example.mypantryapp.domain.Pantry;
 import com.example.mypantryapp.domain.PantryItem;
-import com.example.mypantryapp.domain.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
+public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> implements Filterable {
     private ArrayList<PantryItem> mExampleList;
+    private List<PantryItem> exampleListFull;
     private PantryAdapter.OnItemClickListener mListener;
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -70,6 +76,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
      */
     public PantryAdapter(ArrayList<PantryItem> exampleList) {
         mExampleList = exampleList;
+        exampleListFull = new ArrayList<>(exampleList);
     }
 
     /**
@@ -111,4 +118,34 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     public int getItemCount() {
         return mExampleList.size();
     }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<PantryItem> filteredList = new ArrayList<>();
+
+            if (charSequence == null || charSequence.length() == 0) {
+                filteredList.addAll(exampleListFull);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for (PantryItem item : exampleListFull) {
+                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            mExampleList.clear();
+            mExampleList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 }
