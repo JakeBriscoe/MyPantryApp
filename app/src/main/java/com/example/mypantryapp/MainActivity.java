@@ -198,6 +198,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.nav_pantry:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HomeFragment()).addToBackStack(null).commit();
+                break;
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new SettingsFragment()).addToBackStack(null).commit();

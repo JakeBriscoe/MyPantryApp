@@ -20,8 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_menu"
-        app:itemIconTint="@drawable/tab_color"
-        app:itemTextColor="@drawable/tab_color"
+        app:itemIconTint="@drawable/tab_color_bottom"
+        app:itemTextColor="@drawable/tab_color_bottom"
         android:background="@color/colorPrimaryDark"
         app:labelVisibilityMode="labeled"/>
 

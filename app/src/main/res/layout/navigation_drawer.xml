@@ -32,7 +32,6 @@ This is the file that puts together the full navigation drawer layout, with the 
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="4dp"
             app:titleTextColor="@color/dark"/>
-            android:elevation="4dp" />
 
         <FrameLayout
             android:id="@+id/fragment_container"
@@ -49,8 +48,8 @@ This is the file that puts together the full navigation drawer layout, with the 
         android:id="@+id/nav_view"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"
-        app:itemIconTint="@drawable/tab_color"
-        app:itemTextColor="@drawable/tab_color">
+        app:itemIconTint="@drawable/tab_color_side"
+        app:itemTextColor="@drawable/tab_color_side">
 
     </com.google.android.material.navigation.NavigationView>
 
