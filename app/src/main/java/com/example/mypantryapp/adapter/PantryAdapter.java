@@ -44,6 +44,10 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         public TextView mIdTextView;
         public TextView mVolumeTextView;
         public TextView mQuantityTextView;
+        public TextView mIngredientsTextView;
+        public TextView mDietTitleTextView;
+        public TextView mDietTextView;
+
         public RelativeLayout expandableView;
         public CardView cardView;
 
@@ -60,6 +64,9 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             mIdTextView = itemView.findViewById(R.id.pantryItems_id);
             mVolumeTextView = itemView.findViewById(R.id.pantryItems_volume);
             mQuantityTextView = itemView.findViewById(R.id.pantryItems_quantity);
+            mIngredientsTextView = itemView.findViewById(R.id.pantryItems_ingredients);
+            mDietTitleTextView = itemView.findViewById(R.id.pantryItems_dietTitle);
+            mDietTextView = itemView.findViewById(R.id.pantryItems_diet);
 
             expandableView = itemView.findViewById(R.id.exandableProductDetails);
             cardView = itemView.findViewById(R.id.pantryItems_cardView);
@@ -125,6 +132,17 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         holder.mIdTextView.setText(currentItem.getId());
         holder.mVolumeTextView.setText(currentItem.getVolume());
         holder.mQuantityTextView.setText(currentItem.getQuantity());
+
+        String ingredients = currentItem.getIngredients();
+        if (ingredients.equals("")) {
+            holder.mIngredientsTextView.setText("No ingredients stored");
+            holder.mDietTitleTextView.setVisibility(View.GONE);
+            holder.mDietTextView.setVisibility(View.GONE);
+        } else {
+            holder.mIngredientsTextView.setText(ingredients);
+            holder.mDietTitleTextView.setText(currentItem.getDietTitle());
+            holder.mDietTextView.setText(currentItem.getDiet());
+        }
     }
 
     /**
