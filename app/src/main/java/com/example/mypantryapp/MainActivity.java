@@ -170,7 +170,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 if (document.exists()) {
                                     Map<String, Object> data = document.getData();
                                     if (data.get("pantryName") != null) {
-                                        toolbar.setTitle((CharSequence) data.get("pantryName"));
+                                        String pantryName = (String) data.get("pantryName");
+                                        toolbar.setTitle(pantryName);
+                                        // Get menu from navigationView
+                                        Menu menu = navigationView.getMenu();
+                                        MenuItem nav_pantry = menu.findItem(R.id.nav_pantry);
+                                        // Set new title to the MenuItem
+                                        nav_pantry.setTitle(pantryName);
                                     }
 
                                 }
