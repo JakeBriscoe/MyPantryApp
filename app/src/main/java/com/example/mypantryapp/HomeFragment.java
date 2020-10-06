@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                           @Override
                                           public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                              exampleList.clear();
                                               for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                                   Long quant = (Long) documentSnapshot.get("quantity");
                                                   String quantity = Long.toString(quant);
@@ -186,6 +187,69 @@ public class HomeFragment extends Fragment {
                 mAdapter.getFilter().filter(s);
             }
         });
+
+//        pantryRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+//                .getString("pantryRef", null);
+//
+//        db.collection("pantries").document(pantryRef).collection("products").get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                            Long quant = (Long) documentSnapshot.get("quantity");
+//                            String quantity = Long.toString(quant);
+//                            String id = documentSnapshot.getId();
+//                            String expiry = (String) documentSnapshot.get("expiry");
+//                            db.collection("products").document(id).get()
+//                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                            if (task.isSuccessful()) {
+//                                                DocumentSnapshot document = task.getResult();
+//                                                if (document.exists()) {
+//                                                    Product product = document.toObject(Product.class);
+//
+//                                                    String name = product.getName();
+//                                                    String brand = product.getBrand();
+//                                                    String volume = (String) document.get("volume");
+//                                                    String ingredients = (String) document.get("ingredients");
+//                                                    String dietTitle = "";
+//                                                    String diet = "";
+//
+//                                                    if (!ingredients.equals("")) {
+//                                                        checkIngredients.setIngredients(ingredients);
+//                                                        diet = checkIngredients.checkIngredients();
+//                                                        if (diet.equals("No dietary warnings")) {
+//                                                            // Then diet is compatible
+//                                                            dietTitle = "Compatible with your dietary preferences!";
+//                                                        } else {
+//                                                            // Then diet is not compatible
+//                                                            dietTitle = "Incompatible with your dietary preferences:";
+//                                                        }
+//                                                    }
+//
+//                                                    exampleList.add(new PantryItem(name, brand, id, volume, quantity, ingredients, dietTitle, diet));
+//                                                    String test = name + " " + brand + " " + id + " " + volume + " " + quantity;
+//                                                    if (exampleList.size() == queryDocumentSnapshots.size()){
+//                                                        mAdapter.notifyDataSetChanged();
+//                                                    }
+//
+//                                                } else {
+//                                                    Log.d(TAG, "No such document");
+//                                                }
+//
+//
+//                                            } else {
+//                                                Log.d(TAG, "get failed with ", task.getException());
+//                                            }
+//                                        }
+//                                        // These need to be set so that the products are displayed
+//
+//                                    });
+//                        }
+//
+//                    }
+//                });
 
         return v;
     }

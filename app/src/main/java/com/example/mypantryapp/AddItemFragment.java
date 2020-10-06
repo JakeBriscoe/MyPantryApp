@@ -65,7 +65,7 @@ public class AddItemFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
+                        exampleList.clear();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Product product = documentSnapshot.toObject(Product.class);
                             // Add each individual product to exampleList
@@ -82,11 +82,6 @@ public class AddItemFragment extends Fragment {
                         }
 
                         mAdapter.notifyDataSetChanged();
-
-//                        // These need to be set so that the products are displayed
-//                        mAdapter = new ExampleAdapter(exampleList);
-//                        mRecyclerView.setLayoutManager(mLayoutManager);
-//                        mRecyclerView.setAdapter(mAdapter);
                         Set<String> set = new HashSet<>(productBCDB);
                         getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
                                 set).apply();
