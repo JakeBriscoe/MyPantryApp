@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment {
     public PantryAdapter mAdapter;
     public RecyclerView.LayoutManager mLayoutManager;
     String pantryRef;
+    ArrayList<PantryItem> exampleList = new ArrayList<>();
 
     private CheckIngredients checkIngredients = new CheckIngredients();
 
@@ -60,13 +61,6 @@ public class HomeFragment extends Fragment {
         //get pantry information
         pantryRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
                 .getString("pantryRef", null);
-
-        // These need to be initialised for RecyclerView and CardView
-        mRecyclerView = getActivity().findViewById(R.id.recyclerPantryItems);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        // Store the items
-        ArrayList<PantryItem> exampleList = new ArrayList<>();
 
         db.collection("pantries").document(pantryRef).collection("products").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -108,9 +102,7 @@ public class HomeFragment extends Fragment {
                                                                           exampleList.add(new PantryItem(name, brand, id, volume, quantity, ingredients, dietTitle, diet));
                                                                             String test = name + " " + brand + " " + id + " " + volume + " " + quantity;
                                                                             if (exampleList.size() == queryDocumentSnapshots.size()){
-                                                                                mAdapter = new PantryAdapter(exampleList);
-                                                                                mRecyclerView.setLayoutManager(mLayoutManager);
-                                                                                mRecyclerView.setAdapter(mAdapter);
+                                                                                mAdapter.notifyDataSetChanged();
                                                                             }
 
                                                                       } else {
@@ -146,6 +138,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_home, container, false); // Initialise view
+
+        // These need to be initialised for RecyclerView and CardView
+        mRecyclerView = v.findViewById(R.id.recyclerPantryItems);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+
+        mAdapter = new PantryAdapter(exampleList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
         // POSSIBLY NOT NEEDED. Ensure that bottom navigation is visible.
         @Nullable

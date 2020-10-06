@@ -104,6 +104,12 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     }
 
     /**
+     * Empty constructor
+     */
+    public PantryAdapter() {
+    }
+
+    /**
      * Create the view holder
      * @param parent parent
      * @param viewType viewType
