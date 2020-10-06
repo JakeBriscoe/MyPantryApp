@@ -15,7 +15,7 @@
         android:textAlignment="center"
         android:textSize="25sp" />
 
-    <EditText
+    <SearchView
         android:id="@+id/textSearchPantry"
         android:layout_width="match_parent"
         android:layout_height="46dp"
@@ -27,7 +27,7 @@
         android:ems="10"
         android:fontFamily="@font/lato"
         android:hint="Search your pantry"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:textColor="@color/dark" />
 
     <RelativeLayout
@@ -44,5 +44,9 @@
             android:scrollbars="vertical" />
 
     </RelativeLayout>
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

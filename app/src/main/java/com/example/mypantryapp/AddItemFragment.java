@@ -3,13 +3,11 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -49,63 +47,6 @@ public class AddItemFragment extends Fragment {
     SendDetails SM;
     private ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
-    public AddItemFragment() {
-    }
-
-    /**
-     * Display all products in database.
-     */
-    public void onStart() {
-        super.onStart();
-
-        // Store the items
-        ArrayList<String> productBCDB = new ArrayList<>(); //array list for product barcode
-
-        productRef.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Product product = documentSnapshot.toObject(Product.class);
-                            // Add each individual product to exampleList
-                            exampleList.add(new ExampleItem(product.getName(),
-                                    product.getBrand(),
-                                    documentSnapshot.getId(),
-                                    (String) documentSnapshot.get("volume")));
-
-                            Long bCode = product.getBarcodeNum();
-                            if (bCode != 0) {
-                                productBCDB.add(Long.toString(bCode));
-                            }
-
-                        }
-
-                        mAdapter.notifyDataSetChanged();
-
-//                        // These need to be set so that the products are displayed
-//                        mAdapter = new ExampleAdapter(exampleList);
-//                        mRecyclerView.setLayoutManager(mLayoutManager);
-//                        mRecyclerView.setAdapter(mAdapter);
-                        Set<String> set = new HashSet<>(productBCDB);
-                        getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
-                                set).apply();
-
-                        // When the user clicks on a product, they should be prompted to enter the quantity.
-                        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position) {
-                                // Open the bottom modal dialog
-                                ExampleItem selected = exampleList.get(position);
-                                SM.sendDetails(selected);
-                            }
-                        });
-
-                    }
-                });
-
-    }
-
     /**
      * Add onclick listeners to static items
      *
@@ -119,22 +60,28 @@ public class AddItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_add_item, container, false); // Initialise view
 
-        // These need to be initialised for RecyclerView and CardView
-        mRecyclerView = v.findViewById(R.id.recyclerViewItems);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
+        buttons(v); // Set button listeners
+        iniRecyclerViews(v); // Initialise views for product recycler view
+        getProducts(); // Display products
 
-        // These need to be set so that the products are displayed
-        mAdapter = new ExampleAdapter(exampleList);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        SearchView searchView = v.findViewById(R.id.textSearchCommon);
+        search(searchView); // Set searchView listener
 
-        // POSSIBLY NOT NEEDED. Ensure that bottom navigation is visible.
+
+        // Ensure that bottom navigation is visible.
         @Nullable
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
 
+        return v;
 
+    }
+
+    /**
+     * Initialise and set listeners for all buttons
+     * @param v view
+     */
+    private void buttons(View v) {
         // When the barcode icon or text is selected, the user should be navigated to the barcode fragment.
         final ImageButton barcodeIcon = v.findViewById(R.id.barcodeIcon);
         barcodeIcon.setOnClickListener(new View.OnClickListener() {
@@ -170,28 +117,91 @@ public class AddItemFragment extends Fragment {
 
             }
 
-
-
         });
+    }
 
+    /**
+     * Search listener
+     * @param searchView searchView
+     */
+    private void search(SearchView searchView) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
-        EditText editText = v.findViewById(R.id.textSearchCommon);
-        editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
+            public boolean onQueryTextChange(String s) {
                 mAdapter.getFilter().filter(s);
+                return true;
             }
         });
+    }
 
+    /**
+     * Initialise views required for dynamic products
+     * @param v view
+     */
+    private void iniRecyclerViews(View v) {
+        // These need to be initialised for RecyclerView and CardView
+        mRecyclerView = v.findViewById(R.id.recyclerViewItems);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
 
-        return v;
+        // These need to be set so that the products are displayed
+        mAdapter = new ExampleAdapter(exampleList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
+    /**
+     * Display all products in database
+     */
+    private void getProducts() {
+        // Store the items
+        ArrayList<String> productBCDB = new ArrayList<>(); //array list for product barcode
+
+        productRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        exampleList.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Product product = documentSnapshot.toObject(Product.class);
+                            // Add each individual product to exampleList
+                            exampleList.add(new ExampleItem(product.getName(),
+                                    product.getBrand(),
+                                    documentSnapshot.getId(),
+                                    (String) documentSnapshot.get("volume")));
+
+                            Long bCode = product.getBarcodeNum();
+                            if (bCode != 0) {
+                                productBCDB.add(Long.toString(bCode));
+                            }
+
+                        }
+
+                        // These need to be set so that the products are displayed
+                        mAdapter = new ExampleAdapter(exampleList);
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+                        mRecyclerView.setAdapter(mAdapter);
+                        Set<String> set = new HashSet<>(productBCDB);
+                        getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
+                                set).apply();
+
+                        // When the user clicks on a product, they should be prompted to enter the quantity.
+                        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                // Open the bottom modal dialog
+                                ExampleItem selected = exampleList.get(position);
+                                SM.sendDetails(selected);
+                            }
+                        });
+
+                    }
+                });
     }
 
 

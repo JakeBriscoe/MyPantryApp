@@ -198,8 +198,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.nav_pantry:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new HomeFragment()).addToBackStack("HomeFragment").commit();
+                // Pop back stack if fragment has been created, create it otherwise
+                boolean fragmentPopped = getSupportFragmentManager().popBackStackImmediate("HomeFragment", 0);
+                if (!fragmentPopped){ //fragment not in back stack, create it.
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new HomeFragment()).addToBackStack("HomeFragment").commit();
+                }
                 bottomNav.setSelectedItemId(R.id.nav_home);
                 break;
             case R.id.nav_settings:
@@ -230,33 +234,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = new HomeFragment();
+                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                     switch (item.getItemId()) {
                         case R.id.nav_home:
-                            Fragment homeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                            if (!(homeFragment instanceof HomeFragment)) {
-                                homeFragment = new HomeFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        homeFragment).addToBackStack(null).commit();
+                            if (!(currentFragment instanceof HomeFragment)) {
+                                // Pop back stack if fragment has been created, create it otherwise
+                                boolean fragmentPopped = getSupportFragmentManager().popBackStackImmediate("HomeFragment", 0);
+                                if (!fragmentPopped){ //fragment not in back stack, create it.
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                            new HomeFragment()).addToBackStack("HomeFragment").commit();
+                                }
                             }
                             break;
+
                         case R.id.nav_add_item:
-                            Fragment addItemFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                            if (!(addItemFragment instanceof AddItemFragment)) {
-                                addItemFragment = new AddItemFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        addItemFragment).addToBackStack(null).commit();
+                            if (!(currentFragment instanceof AddItemFragment)) {
+                                // Pop back stack if fragment has been created, create it otherwise
+                                boolean fragmentPopped = getSupportFragmentManager().popBackStackImmediate("AddItemFragment", 0);
+                                if (!fragmentPopped){ //fragment not in back stack, create it.
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                            new AddItemFragment()).addToBackStack("AddItemFragment").commit();
+                                }
                             }
                             break;
+
                         case R.id.nav_shop_list:
-                            Fragment shoppingListFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                            if (!(shoppingListFragment instanceof ShoppingListFragment)) {
-                                shoppingListFragment = new ShoppingListFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        shoppingListFragment).addToBackStack(null).commit();
+                            if (!(currentFragment instanceof ShoppingListFragment)) {
+                                // Pop back stack if fragment has been created, create it otherwise
+                                boolean fragmentPopped = getSupportFragmentManager().popBackStackImmediate("ShoppingListFragment", 0);
+                                if (!fragmentPopped){ //fragment not in back stack, create it.
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                            new ShoppingListFragment()).addToBackStack("ShoppingListFragment").commit();
+                                }
                             }
                             break;
                     }
+
                     return true;
                 }
             };
