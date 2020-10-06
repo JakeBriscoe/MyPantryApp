@@ -24,9 +24,7 @@ public final class DefaultIntro extends AppIntro {
         addSlide(SampleSlide.newInstance(R.layout.intro5));
 
         showStatusBar(true);
-
         setTransformer(Depth.INSTANCE);
-        // setColorTransitionsEnabled(true); only works for plain colour backgrounds
     }
 
 
