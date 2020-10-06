@@ -3,9 +3,12 @@ package com.example.mypantryapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -44,20 +47,18 @@ public class AddItemFragment extends Fragment {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
+    private ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
+    public AddItemFragment() {
+    }
 
     /**
      * Display all products in database.
      */
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
-        // These need to be initialised for RecyclerView and CardView
-        mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
         // Store the items
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
         ArrayList<String> productBCDB = new ArrayList<>(); //array list for product barcode
 
         productRef.get()
@@ -65,7 +66,7 @@ public class AddItemFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                        for (QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Product product = documentSnapshot.toObject(Product.class);
                             // Add each individual product to exampleList
                             exampleList.add(new ExampleItem(product.getName(),
@@ -74,22 +75,21 @@ public class AddItemFragment extends Fragment {
                                     (String) documentSnapshot.get("volume")));
 
                             Long bCode = product.getBarcodeNum();
-                            if(bCode != 0){
+                            if (bCode != 0) {
                                 productBCDB.add(Long.toString(bCode));
                             }
 
                         }
 
-                        // These need to be set so that the products are displayed
-                        mAdapter = new ExampleAdapter(exampleList);
-                        mRecyclerView.setLayoutManager(mLayoutManager);
-                        mRecyclerView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+
+//                        // These need to be set so that the products are displayed
+//                        mAdapter = new ExampleAdapter(exampleList);
+//                        mRecyclerView.setLayoutManager(mLayoutManager);
+//                        mRecyclerView.setAdapter(mAdapter);
                         Set<String> set = new HashSet<>(productBCDB);
                         getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
                                 set).apply();
-
-
-
 
                         // When the user clicks on a product, they should be prompted to enter the quantity.
                         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
@@ -108,14 +108,26 @@ public class AddItemFragment extends Fragment {
 
     /**
      * Add onclick listeners to static items
-     * @param inflater inflater
-     * @param container container
+     *
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState the saved instance state
      * @return the view
      */
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_add_item, container, false); // Initialise view
+
+        // These need to be initialised for RecyclerView and CardView
+        mRecyclerView = v.findViewById(R.id.recyclerViewItems);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+
+        // These need to be set so that the products are displayed
+        mAdapter = new ExampleAdapter(exampleList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
         // POSSIBLY NOT NEEDED. Ensure that bottom navigation is visible.
         @Nullable
@@ -128,7 +140,7 @@ public class AddItemFragment extends Fragment {
         barcodeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack("ScanBarcodeFragment").commit();
             }
 
         });
@@ -136,7 +148,7 @@ public class AddItemFragment extends Fragment {
         barcodeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ScanBarcodeFragment()).addToBackStack("ScanBarcodeFragment").commit();
             }
         });
 
@@ -146,7 +158,7 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "AddItemManuallyFragment").addToBackStack(null).commit();
             }
         });
         final TextView textAddManually = v.findViewById(R.id.textAddManually);
@@ -154,12 +166,34 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Tag is needed for passing data between fragments.
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "addManuallyTag").addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddItemManuallyFragment(), "AddItemManuallyFragment").addToBackStack(null).commit();
 
             }
+
+
+
         });
+
+
+        EditText editText = v.findViewById(R.id.textSearchCommon);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mAdapter.getFilter().filter(s);
+            }
+        });
+
+
         return v;
+
     }
+
 
     /**
      * Send the product data to BottomSheetDialog
@@ -182,5 +216,5 @@ public class AddItemFragment extends Fragment {
     public interface SendDetails {
         void sendDetails(ExampleItem item);
     }
-
 }
+

@@ -3,8 +3,6 @@ package com.example.mypantryapp.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,14 +12,12 @@ import com.example.mypantryapp.R;
 import com.example.mypantryapp.domain.ExampleItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Adapter exists so products can be displayed dynamically in AddItemFragment.
  */
-public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> implements Filterable {
-    private ArrayList<ExampleItem> mExampleList;
-    private List<ExampleItem> exampleListFull;
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ExampleViewHolder> {
+    private ArrayList<ExampleItem> ExampleList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -70,9 +66,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
      * Constructor to set the example list
      * @param exampleList the exampleList passed
      */
-    public ExampleAdapter(ArrayList<ExampleItem> exampleList) {
-        mExampleList = exampleList;
-        exampleListFull = new ArrayList<>(exampleList);
+    public ProductAdapter(ArrayList<ExampleItem> exampleList) {
+        ExampleList = exampleList;
     }
 
     /**
@@ -96,7 +91,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
         // Identify which item has been pressed.
-        ExampleItem currentItem = mExampleList.get(position);
+        ExampleItem currentItem = ExampleList.get(position);
 
         // Set the text to correspond to said item.
         holder.mNameTextView.setText(currentItem.getName());
@@ -111,46 +106,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
      */
     @Override
     public int getItemCount() {
-        return mExampleList.size();
+        return ExampleList.size();
     }
-
-    public void filterList(ArrayList<ExampleItem> filteredList) {
-        mExampleList = filteredList;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public Filter getFilter() {
-        return exampleFilter;
-    }
-
-    private Filter exampleFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            List<ExampleItem> filteredList = new ArrayList<>();
-
-            if (charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(exampleListFull);
-            } else {
-                String filterPattern = charSequence.toString().toLowerCase().trim();
-
-                for (ExampleItem item : exampleListFull) {
-                    if (item.getName().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(item);
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            mExampleList.clear();
-            mExampleList.addAll((List) filterResults.values);
-            notifyDataSetChanged();
-        }
-    };
 }

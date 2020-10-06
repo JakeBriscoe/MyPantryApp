@@ -212,7 +212,7 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //TODO check this!!
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
                     setItem(view);
                     navigationView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);

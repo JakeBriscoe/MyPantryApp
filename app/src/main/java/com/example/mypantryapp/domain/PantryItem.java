@@ -1,17 +1,14 @@
 package com.example.mypantryapp.domain;
 
-import com.google.firebase.Timestamp;
-
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
-
 public class PantryItem {
     private String mName;
     private String mBrand;
     private String mId;
     private String mVolume;
     private String mQuantity;
+    private String mIngredients;
+    private String mDietTitle;
+    private String mDiet;
 
     /**
      * Constructor to set the details
@@ -19,12 +16,16 @@ public class PantryItem {
      * @param brand the product brand
      * @param id the product id
      */
-    public PantryItem(String name, String brand, String id, String volume, String quantity) {
+    public PantryItem(String name, String brand, String id, String volume, String quantity, String ingredients,
+                      String dietTitle, String diet) {
         mName = name;
         mBrand = brand;
         mId = id;
         mVolume = volume;
         mQuantity = quantity;
+        mIngredients = ingredients;
+        mDietTitle = dietTitle;
+        mDiet = diet;
     }
 
     public PantryItem() {
@@ -64,5 +65,17 @@ public class PantryItem {
 
     public String getQuantity() {
         return mQuantity;
+    }
+
+    public String getIngredients() {
+        return mIngredients;
+    }
+
+    public String getDietTitle() {
+        return mDietTitle;
+    }
+
+    public String getDiet() {
+        return mDiet;
     }
 }
