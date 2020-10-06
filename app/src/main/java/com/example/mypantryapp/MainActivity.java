@@ -198,8 +198,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.nav_pantry:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new HomeFragment()).addToBackStack("HomeFragment").commit();
+                // Pop back stack if fragment has been created, create it otherwise
+                boolean fragmentPopped = getSupportFragmentManager().popBackStackImmediate("HomeFragment", 0);
+                if (!fragmentPopped){ //fragment not in back stack, create it.
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new HomeFragment()).addToBackStack("HomeFragment").commit();
+                }
                 bottomNav.setSelectedItemId(R.id.nav_home);
                 break;
             case R.id.nav_settings:
