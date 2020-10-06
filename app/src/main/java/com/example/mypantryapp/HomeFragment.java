@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,12 +26,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class HomeFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
@@ -148,6 +151,26 @@ public class HomeFragment extends Fragment {
         @Nullable
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.VISIBLE);
+
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        String docRefPantry = getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("pantryRef", null);
+        DocumentReference docRef = db.collection("pantries").document(docRefPantry);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> data = document.getData();
+                        if (data.get("pantryName") != null) {
+                            toolbar.setTitle((CharSequence) data.get("pantryName"));
+                        }
+
+                    }
+                }
+            }
+        });
 
         EditText editText = v.findViewById(R.id.textSearchPantry);
         editText.addTextChangedListener(new TextWatcher() {
