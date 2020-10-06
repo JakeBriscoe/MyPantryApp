@@ -287,6 +287,7 @@ public class SettingsFragment extends Fragment {
                 public void onClick(View v) {
                     setItem(view);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
+                    navigationView.setCheckedItem(R.id.nav_pantry);
                 }
             });
         }
@@ -359,7 +360,7 @@ public class SettingsFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "Your Pantry is saved!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Details saved!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -375,7 +376,7 @@ public class SettingsFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
                         UU.setUser(name, email);
                     }
                 })
