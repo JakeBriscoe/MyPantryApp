@@ -233,22 +233,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Fragment selectedFragment = new HomeFragment();
                     switch (item.getItemId()) {
                         case R.id.nav_home:
-                            selectedFragment = new HomeFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack("HomeFragment").commit();
+                            Fragment homeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                            if (!(homeFragment instanceof HomeFragment)) {
+                                homeFragment = new HomeFragment();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        homeFragment).addToBackStack(null).commit();
+                            }
                             break;
                         case R.id.nav_add_item:
-                            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                            if (!(currentFragment instanceof AddItemFragment)) {
-                                selectedFragment = new AddItemFragment();
+                            Fragment addItemFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                            if (!(addItemFragment instanceof AddItemFragment)) {
+                                addItemFragment = new AddItemFragment();
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        selectedFragment).addToBackStack("AddItemFragment").commit();
+                                        addItemFragment).addToBackStack(null).commit();
                             }
                             break;
                         case R.id.nav_shop_list:
-                            selectedFragment = new ShoppingListFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    selectedFragment).addToBackStack("ShoppingListFragment").commit();
+                            Fragment shoppingListFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                            if (!(shoppingListFragment instanceof ShoppingListFragment)) {
+                                shoppingListFragment = new ShoppingListFragment();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        shoppingListFragment).addToBackStack(null).commit();
+                            }
                             break;
                     }
                     return true;

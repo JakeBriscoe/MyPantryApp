@@ -65,7 +65,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add to Pantry"
+        android:layout_marginLeft="-100dp"
         android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/bottomModalShoppingList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="-48.5dp"
+        android:text="Add to Shopping List" />
 
 
 </LinearLayout>
