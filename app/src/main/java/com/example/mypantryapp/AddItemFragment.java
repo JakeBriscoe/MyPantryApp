@@ -47,7 +47,7 @@ public class AddItemFragment extends Fragment {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
-    private ArrayList<ExampleItem> mExampleList = new ArrayList<>();
+    private ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
     public AddItemFragment() {
     }
@@ -58,12 +58,7 @@ public class AddItemFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        // These need to be initialised for RecyclerView and CardView
-        mRecyclerView = getActivity().findViewById(R.id.recyclerViewItems);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
         // Store the items
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
         ArrayList<String> productBCDB = new ArrayList<>(); //array list for product barcode
 
         productRef.get()
@@ -86,10 +81,12 @@ public class AddItemFragment extends Fragment {
 
                         }
 
-                        // These need to be set so that the products are displayed
-                        mAdapter = new ExampleAdapter(exampleList);
-                        mRecyclerView.setLayoutManager(mLayoutManager);
-                        mRecyclerView.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
+
+//                        // These need to be set so that the products are displayed
+//                        mAdapter = new ExampleAdapter(exampleList);
+//                        mRecyclerView.setLayoutManager(mLayoutManager);
+//                        mRecyclerView.setAdapter(mAdapter);
                         Set<String> set = new HashSet<>(productBCDB);
                         getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit().putStringSet("barcodesProd",
                                 set).apply();
@@ -121,6 +118,16 @@ public class AddItemFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_add_item, container, false); // Initialise view
+
+        // These need to be initialised for RecyclerView and CardView
+        mRecyclerView = v.findViewById(R.id.recyclerViewItems);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+
+        // These need to be set so that the products are displayed
+        mAdapter = new ExampleAdapter(exampleList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
         // POSSIBLY NOT NEEDED. Ensure that bottom navigation is visible.
         @Nullable
