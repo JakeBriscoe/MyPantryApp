@@ -5,10 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.example.mypantryapp.R;
 import com.example.mypantryapp.domain.PantryItem;
@@ -40,6 +44,12 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         public TextView mIdTextView;
         public TextView mVolumeTextView;
         public TextView mQuantityTextView;
+        public TextView mIngredientsTextView;
+        public TextView mDietTitleTextView;
+        public TextView mDietTextView;
+
+        public RelativeLayout expandableView;
+        public CardView cardView;
 
         /**
          * Constructor to initialise TextViews and set onclick listener.
@@ -54,6 +64,12 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             mIdTextView = itemView.findViewById(R.id.pantryItems_id);
             mVolumeTextView = itemView.findViewById(R.id.pantryItems_volume);
             mQuantityTextView = itemView.findViewById(R.id.pantryItems_quantity);
+            mIngredientsTextView = itemView.findViewById(R.id.pantryItems_ingredients);
+            mDietTitleTextView = itemView.findViewById(R.id.pantryItems_dietTitle);
+            mDietTextView = itemView.findViewById(R.id.pantryItems_diet);
+
+            expandableView = itemView.findViewById(R.id.exandableProductDetails);
+            cardView = itemView.findViewById(R.id.pantryItems_cardView);
 
             // Set the onclick listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +80,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
+                    }
+
+                    // Expand and collapse the view
+                    if (expandableView.getVisibility() == View.GONE) {
+                        TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
+                        expandableView.setVisibility(View.VISIBLE);
+                    } else {
+                        expandableView.setVisibility(View.GONE);
                     }
                 }
             });
@@ -108,6 +132,17 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         holder.mIdTextView.setText(currentItem.getId());
         holder.mVolumeTextView.setText(currentItem.getVolume());
         holder.mQuantityTextView.setText(currentItem.getQuantity());
+
+        String ingredients = currentItem.getIngredients();
+        if (ingredients.equals("")) {
+            holder.mIngredientsTextView.setText("No ingredients stored");
+            holder.mDietTitleTextView.setVisibility(View.GONE);
+            holder.mDietTextView.setVisibility(View.GONE);
+        } else {
+            holder.mIngredientsTextView.setText(ingredients);
+            holder.mDietTitleTextView.setText(currentItem.getDietTitle());
+            holder.mDietTextView.setText(currentItem.getDiet());
+        }
     }
 
     /**

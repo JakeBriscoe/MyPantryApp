@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment {
     public RecyclerView.LayoutManager mLayoutManager;
     String pantryRef;
 
+    private CheckIngredients checkIngredients = new CheckIngredients();
 
     /**
      * Display all products in database.
@@ -85,8 +86,23 @@ public class HomeFragment extends Fragment {
                                                                           String name = product.getName();
                                                                           String brand = product.getBrand();
                                                                           String volume = (String) document.get("volume");
+                                                                          String ingredients = (String) document.get("ingredients");
+                                                                          String dietTitle = "";
+                                                                          String diet = "";
 
-                                                                          exampleList.add(new PantryItem(name, brand, id, volume, quantity));
+                                                                          if (!ingredients.equals("")) {
+                                                                              checkIngredients.setIngredients(ingredients);
+                                                                              diet = checkIngredients.checkIngredients();
+                                                                              if (diet.equals("No dietary warnings")) {
+                                                                                  // Then diet is compatible
+                                                                                  dietTitle = "Compatible with your dietary preferences!";
+                                                                              } else {
+                                                                                  // Then diet is not compatible
+                                                                                  dietTitle = "Incompatible with your dietary preferences:";
+                                                                              }
+                                                                          }
+
+                                                                          exampleList.add(new PantryItem(name, brand, id, volume, quantity, ingredients, dietTitle, diet));
                                                                             String test = name + " " + brand + " " + id + " " + volume + " " + quantity;
                                                                             if (exampleList.size() == queryDocumentSnapshots.size()){
                                                                                 mAdapter = new PantryAdapter(exampleList);
