@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginBottom="5dp"
             android:fontFamily="@font/lato"
             android:text="Product Name"
             android:textColor="@android:color/black"
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/pantryItems_productName"
             android:layout_marginStart="8dp"
+            android:layout_marginBottom="15dp"
             android:fontFamily="@font/lato"
             android:text="Brand Name"
             android:textColor="@android:color/black"
@@ -49,8 +51,9 @@
             android:id="@+id/pantryItems_volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/pantryItems_productName"
-            android:layout_centerInParent="true"
+            android:layout_below="@+id/pantryItems_quantity"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/lato"
             android:text="Volume"
             android:textSize="16sp" />
@@ -60,10 +63,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/pantryItems_productName"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:fontFamily="@font/lato"
             android:text="Quantity"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/pantryItems_ingredientsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pantryItems_brand"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/lato"
+            android:text="Ingredients"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/pantryItems_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pantryItems_ingredientsTitle"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/lato"
+            android:text="The product ingredients"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/pantryItems_dietTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pantryItems_ingredients"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/lato"
+            android:text="Incompatible with your dietary preferences:"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/pantryItems_diet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pantryItems_dietTitle"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato"
+            android:text="The dietary warnings"
+            android:textSize="15sp" />
+
+
 
 
     </RelativeLayout>
