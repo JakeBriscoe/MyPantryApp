@@ -286,6 +286,7 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     setItem(view);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
                 }
             });
         }

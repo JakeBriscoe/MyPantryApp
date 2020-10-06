@@ -62,19 +62,24 @@
 
     <Button
         android:id="@+id/bottomModalConfirm"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/dark"
+        android:fontFamily="@font/lato"
         android:text="Add to Pantry"
-        android:layout_marginLeft="-100dp"
-        android:layout_marginTop="20dp"/>
+        android:textColor="@color/colorPrimary" />
 
     <Button
         android:id="@+id/bottomModalShoppingList"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="75dp"
-        android:layout_marginTop="-48.5dp"
-        android:text="Add to Shopping List" />
+        android:layout_marginBottom="15dp"
+        android:background="@color/dark"
+        android:fontFamily="@font/lato"
+        android:text="Add to Shopping List"
+        android:textColor="@color/colorPrimary" />
 
 
 </LinearLayout>
