@@ -1,5 +1,7 @@
 package com.example.mypantryapp.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,9 @@ import androidx.transition.TransitionManager;
 
 import com.example.mypantryapp.R;
 import com.example.mypantryapp.domain.PantryItem;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     private ArrayList<PantryItem> mExampleList;
     private List<PantryItem> exampleListFull;
     private PantryAdapter.OnItemClickListener mListener;
+    private PantryItem mRecentlyDeletedItem;
+    private int mRecentlyDeletedItemPosition;
 
     @Override
     public Filter getFilter() {
@@ -60,6 +67,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
          */
         public PantryViewHolder(@NonNull View itemView, PantryAdapter.OnItemClickListener listener) {
             super(itemView);
+
             // Initialise the TextViews
             mNameTextView = itemView.findViewById(R.id.pantryItems_productName);
             mBrandTextView = itemView.findViewById(R.id.pantryItems_brand);
@@ -192,5 +200,37 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             mExampleList.addAll((List) filterResults.values);
             notifyDataSetChanged();
         }
+
+        public String deleteId(int position) {
+            return mExampleList.get(position).getId();
+        }
     };
+
+    /**
+     * Remove item from dynamic list as well as underlying database
+     * @param position
+     * @param activity
+     */
+    public void deleteItem(int position, Activity activity) {
+        mRecentlyDeletedItem = mExampleList.get(position);
+        mRecentlyDeletedItemPosition = position;
+        mExampleList.remove(position);
+        notifyItemRemoved(position);
+
+        String pantryRef = activity.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("pantryRef", null);
+        String id = mRecentlyDeletedItem.getId();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("pantries").document(pantryRef).collection("products")
+                .document(id)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if(documentSnapshot.exists()) {  //wait for response
+                            documentSnapshot.getReference().delete();
+                        }
+                    }
+                });
+    }
 }

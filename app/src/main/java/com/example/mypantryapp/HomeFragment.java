@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -124,6 +125,7 @@ public class HomeFragment extends Fragment {
                             String quantity = Long.toString(quant);
                             String id = documentSnapshot.getId();
                             String expiry = (String) documentSnapshot.get("expiry");
+
                             db.collection("products").document(id).get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
@@ -151,12 +153,29 @@ public class HomeFragment extends Fragment {
                                                         }
                                                     }
 
-                                                    exampleList.add(new PantryItem(name, brand, id, volume, quantity, ingredients, dietTitle, diet));
+                                                    PantryItem pantryItem = new PantryItem(name, brand, id, volume, quantity, ingredients, dietTitle, diet);
+
+                                                    exampleList.add(pantryItem);
                                                     String test = name + " " + brand + " " + id + " " + volume + " " + quantity;
                                                     if (exampleList.size() == queryDocumentSnapshots.size()){
                                                         mAdapter = new PantryAdapter(exampleList);
                                                         mRecyclerView.setLayoutManager(mLayoutManager);
                                                         mRecyclerView.setAdapter(mAdapter);
+
+                                                        // Set uo helper to delete item when swiped on
+                                                        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                                                                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                                                            @Override
+                                                            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                                                return false;
+                                                            }
+
+                                                            @Override
+                                                            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                                                                int position = viewHolder.getAdapterPosition();
+                                                                mAdapter.deleteItem(position, getActivity());
+                                                            }
+                                                        }).attachToRecyclerView(mRecyclerView);
                                                     }
 
                                                 } else {
@@ -210,4 +229,20 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+//    private void deleteDocument(String id) {
+//        db.collection("pantries").document(pantryRef).collection("products")
+//                .document(id)
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        if(documentSnapshot.exists()) {  //wait for response
+//                            documentSnapshot.getReference().delete();
+//                            mAdapter.notifyDataSetChanged();
+//                        }
+//                    }
+//                });
+//
+//    }
 }
