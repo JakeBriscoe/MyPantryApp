@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mypantryapp.adapter.ExampleAdapter;
+import com.example.mypantryapp.adapter.ProductAdapter;
 import com.example.mypantryapp.domain.ExampleItem;
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +42,7 @@ public class AddItemFragment extends Fragment {
     //Field for collection of products in the firebase.
     private CollectionReference productRef = db.collection("products");
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private ProductAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
     private ArrayList<ExampleItem> exampleList = new ArrayList<>();
@@ -150,7 +150,7 @@ public class AddItemFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
 
         // These need to be set so that the products are displayed
-        mAdapter = new ExampleAdapter(exampleList);
+        mAdapter = new ProductAdapter(exampleList);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -183,7 +183,7 @@ public class AddItemFragment extends Fragment {
                         }
 
                         // These need to be set so that the products are displayed
-                        mAdapter = new ExampleAdapter(exampleList);
+                        mAdapter = new ProductAdapter(exampleList);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
                         Set<String> set = new HashSet<>(productBCDB);
@@ -191,7 +191,7 @@ public class AddItemFragment extends Fragment {
                                 set).apply();
 
                         // When the user clicks on a product, they should be prompted to enter the quantity.
-                        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+                        mAdapter.setOnItemClickListener(new ProductAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
                                 // Open the bottom modal dialog
