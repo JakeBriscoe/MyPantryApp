@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_intro_colour8"
+    android:background="@drawable/intro_colour8"
     android:layout_weight="10"
     android:id="@+id/main">
 
@@ -35,7 +35,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/ic_intro_add_item"
+            android:src="@drawable/intro_add_item"
             android:contentDescription="@string/example_view_of_add_items" />
     </LinearLayout>
 

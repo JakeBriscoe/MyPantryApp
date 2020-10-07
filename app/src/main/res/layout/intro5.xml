@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_intro_colour7"
+    android:background="@drawable/intro_colour7"
     android:layout_weight="10"
     android:id="@+id/main">
 
@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/ic_intro_shopping"
+            android:src="@drawable/intro_shopping"
             android:contentDescription="@string/example_view_of_shopping_list" />
     </LinearLayout>
     <TextView
