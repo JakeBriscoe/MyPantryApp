@@ -201,8 +201,8 @@ public class AddItemManuallyFragment extends Fragment {
         // Checks diets as the user types
         enterIngredientsText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                checkIngredients.setIngredients(enterIngredientsText.getText().toString());
-                viewDietaryWarning.setText(checkIngredients.checkIngredients());
+                String ingredients = enterIngredientsText.getText().toString();
+                viewDietaryWarning.setText(checkIngredients.checkIngredients(ingredients));
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -392,8 +392,7 @@ public class AddItemManuallyFragment extends Fragment {
 
         if (updateIngredientsText != null) {
             enterIngredientsText.setText(updateIngredientsText);
-            checkIngredients.setIngredients(updateIngredientsText);
-            viewDietaryWarning.setText(checkIngredients.checkIngredients());
+            viewDietaryWarning.setText(checkIngredients.checkIngredients(updateIngredientsText));
         }
 
         // Set a listener to see whether a barcode has just been scanned and came up blank.

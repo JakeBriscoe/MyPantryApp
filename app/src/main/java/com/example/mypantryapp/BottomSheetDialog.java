@@ -253,8 +253,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                         }
 
                         if (ingredients != null) {
-                            checkIngredients.setIngredients(ingredients);
-                            dietWarningsText = checkIngredients.checkIngredients();
+                            dietWarningsText = checkIngredients.checkIngredients(ingredients);
 
                             if (dietWarningsText.equals("No dietary warnings")) {
                                 // Then diet is compatible

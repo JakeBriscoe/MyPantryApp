@@ -1,7 +1,5 @@
 package com.example.mypantryapp;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,8 +22,11 @@ public class CheckIngredients {
     private Map<String, ArrayList<String>> diets = new HashMap<>();
     private Map<String, String> documentNames = new HashMap<>();
 
+    /**
+     * Stores the user selected diet information
+     */
     public CheckIngredients () {
-        // Gets the diets and blacklisted ingredients from firebase
+        // Stores all diets and blacklisted ingredients from firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("dietary")
                 .get()
@@ -45,6 +46,7 @@ public class CheckIngredients {
                     }
                 });
 
+        // Pulls all user selected diets, removes all diets the user has not selected from diet list
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
@@ -56,21 +58,17 @@ public class CheckIngredients {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d("USER FOUND", "USER FOUND");
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                 Map<String, Object> docData = document.getData();
-                                Log.d("GOT RESULT", "GOT RESULT");
                                 assert docData != null;
                                 for (Map.Entry<String, Object> entry : docData.entrySet()) {
                                     String field = entry.getKey();
                                     Object value = entry.getValue();
-                                    Log.d("field", field);
                                     // checks if field is a diet, if value false remove from diet checking
                                     if (documentNames.containsKey(field) && !((Boolean) value)) {
                                         String diet = documentNames.get(field); // Diet to remove
                                         diets.remove(diet);
-                                        Log.d("removed", field);
                                     }
                                 }
                             }
@@ -79,14 +77,15 @@ public class CheckIngredients {
                 });
     }
 
-    public String checkIngredients() {
-
-        for (String key : diets.keySet()) {
-            Log.d("diet", key);
-        }
-
-        Log.d("HERE", diets.toString());
-        Log.d("checkIngredients", ingredients);
+    /**
+     * Checks a products ingredients against the users diets.
+     *
+     * @param ingredients a String of ingredients for a product. Separated by white spaces and possibly
+     * with commas.
+     * @return dietWarnings a String containing the names of any user diets being breached, and
+     * the corresponding ingredients that aren't compatible. If no infringements returns "No dietary warnings"
+     */
+    public String checkIngredients(String ingredients) {
         String[] ingrs = ingredients.split(" ");
         ArrayList<String> dietNames = new ArrayList<>();
         StringBuilder dietWarnings = new StringBuilder();
@@ -123,9 +122,5 @@ public class CheckIngredients {
             dietWarnings = new StringBuilder("No dietary warnings");
         }
         return dietWarnings.toString();
-    }
-
-    public void setIngredients(String ingredients) {
-        this.ingredients = ingredients;
     }
 }
