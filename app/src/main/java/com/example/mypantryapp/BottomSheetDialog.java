@@ -25,6 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -281,6 +282,23 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         if (!isAddItem) {
             bottomModalShoppingList.setVisibility(View.GONE);
+
+            String shoppinglistRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                    .getString("shoppinglistRef", null);
+
+            db.collection("shoppinglists").document(shoppinglistRef).collection("products")
+                    .whereEqualTo("productRef", idText)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (DocumentSnapshot doc : queryDocumentSnapshots){
+                                if(doc.exists()) {  //wait for response
+                                    doc.getReference().delete();
+                                }
+                            }
+                        }
+                    });
         }
 
     }
