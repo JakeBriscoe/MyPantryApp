@@ -34,6 +34,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/emptyPantry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:fontFamily="@font/lato"
+            android:text="Your pantry is empty! Add to your pantry by clicking 'Add Item' below."
+            android:textAlignment="center"
+            android:textColor="@color/dark"
+            android:textSize="20sp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPantryItems"
             android:layout_width="match_parent"

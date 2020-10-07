@@ -51,6 +51,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         public RelativeLayout expandableView;
         public CardView cardView;
 
+        public TextView emptyPantry;
+
         /**
          * Constructor to initialise TextViews and set onclick listener.
          * @param itemView itemView
@@ -70,6 +72,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
 
             expandableView = itemView.findViewById(R.id.exandableProductDetails);
             cardView = itemView.findViewById(R.id.pantryItems_cardView);
+
+            emptyPantry = itemView.findViewById(R.id.emptyPantry);
 
             // Set the onclick listener
             itemView.setOnClickListener(new View.OnClickListener() {

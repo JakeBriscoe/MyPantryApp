@@ -7,12 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.mypantryapp.adapter.ExampleAdapter;
-import com.example.mypantryapp.adapter.PantryAdapter;
-import com.example.mypantryapp.adapter.ShoppingListAdapter;
-import com.example.mypantryapp.domain.ExampleItem;
-import com.example.mypantryapp.domain.Product;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +16,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mypantryapp.adapter.ShoppingListAdapter;
+import com.example.mypantryapp.domain.ExampleItem;
+import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -44,10 +41,17 @@ public class ShoppingListFragment extends Fragment {
     private ShoppingListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    ArrayList<ExampleItem> exampleList = new ArrayList<>();
+
     String shoppinglistRef;
 
 
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+
+        iniRecyclerViews(v);
+        getShoppingList();
 
         // POSSIBLY NOT NEEDED: Show bottom navigation.
         BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
@@ -56,19 +60,30 @@ public class ShoppingListFragment extends Fragment {
         // POSSIBLY NOT NEEDED: Set toolbar title.
         Toolbar mActionBarToolbar = getActivity().findViewById(R.id.toolbar);
 
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        // If no items are in the pantry, tell the user how to add to their pantry
+        TextView emptyShoppingList = v.findViewById(R.id.emptyShoppingList);
+        if (mAdapter.getItemCount() == 0) {
+            emptyShoppingList.setVisibility(View.VISIBLE);
+        } else {
+            emptyShoppingList.setVisibility(View.GONE);
+        }
+
+        return v;
     }
 
-    public void onStart() {
-        super.onStart();
-
-        shoppinglistRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
-                .getString("shoppinglistRef", null);
-
-        mRecyclerView = getActivity().findViewById(R.id.recyclerViewCheckItems);
+    private void iniRecyclerViews(View v) {
+        mRecyclerView = v.findViewById(R.id.recyclerViewCheckItems);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
-        ArrayList<ExampleItem> exampleList = new ArrayList<>();
+
+        mAdapter = new ShoppingListAdapter(exampleList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void getShoppingList() {
+        shoppinglistRef = this.getActivity().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("shoppinglistRef", null);
 
         db.collection("shoppinglists").document(shoppinglistRef).collection("products").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -116,6 +131,5 @@ public class ShoppingListFragment extends Fragment {
 
                     }
                 });
-
     }
 }

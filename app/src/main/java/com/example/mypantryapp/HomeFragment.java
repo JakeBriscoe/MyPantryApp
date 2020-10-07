@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -93,6 +94,14 @@ public class HomeFragment extends Fragment {
 
         SearchView searchView = v.findViewById(R.id.textSearchPantry);
         search(searchView);
+
+        // If no items are in the pantry, tell the user how to add to their pantry
+        TextView emptyPantry = v.findViewById(R.id.emptyPantry);
+        if (mAdapter.getItemCount() == 0) {
+            emptyPantry.setVisibility(View.VISIBLE);
+        } else {
+            emptyPantry.setVisibility(View.GONE);
+        }
 
         return v;
     }
