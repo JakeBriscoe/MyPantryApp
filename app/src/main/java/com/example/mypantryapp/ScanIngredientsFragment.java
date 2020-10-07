@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -279,17 +278,6 @@ public class ScanIngredientsFragment extends Fragment {
             contains = ingredients.substring(iContains, ingredients.indexOf(".", iContains) + 1);
         }
 
-        // Check diet
-//        checkIngredients.setIngredients(ingredients + " " + contains);
-//        if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
-//            view.setBackgroundColor(Color.RED);
-//        } else {
-//            checkIngredients.setIngredients(mayContain);
-//            if (!checkIngredients.checkIngredients().equals("No dietary warnings")) {
-//                view.setBackgroundColor(Color.YELLOW);
-//            }
-//        }
-
         String result;
 
         // Now decide where to finish the ingredients string based on "Contains ..." and "May contain ..."
@@ -331,12 +319,4 @@ public class ScanIngredientsFragment extends Fragment {
         }
         return -1; // not found
     }
-
-    /**
-     * Checks if a products ingredients do not match a users diet and updates the background color
-     * accordingly
-     * @param ingrs ingredients list
-     * @param mayContain boolean indicator of whether the ingredients are definitely in it
-     */
-
 }
