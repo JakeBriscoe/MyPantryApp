@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -173,6 +174,7 @@ public class HomeFragment extends Fragment {
                                                             @Override
                                                             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                                                                 int position = viewHolder.getAdapterPosition();
+                                                                Toast.makeText(getContext(), exampleList.get(position).getName() + " deleted from pantry", Toast.LENGTH_SHORT).show();
                                                                 mAdapter.deleteItem(position, getActivity());
                                                             }
                                                         }).attachToRecyclerView(mRecyclerView);
