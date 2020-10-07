@@ -132,8 +132,7 @@ public class HomeFragment extends Fragment {
                                                     String diet = "";
 
                                                     if (!ingredients.equals("")) {
-                                                        checkIngredients.setIngredients(ingredients);
-                                                        diet = checkIngredients.checkIngredients();
+                                                        diet = checkIngredients.checkIngredients(ingredients);
                                                         if (diet.equals("No dietary warnings")) {
                                                             // Then diet is compatible
                                                             dietTitle = "Compatible with your dietary preferences!";

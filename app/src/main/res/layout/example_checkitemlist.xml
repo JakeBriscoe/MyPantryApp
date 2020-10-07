@@ -22,7 +22,10 @@
             android:id="@+id/checkItem_productName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignRight="@id/checkItem_box"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="100dp"
             android:text="Product Name"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
@@ -47,10 +50,11 @@
         <CheckBox
             android:id="@+id/checkItem_box"
             android:layout_width="60dp"
-            android:scaleX="1.30"
-            android:scaleY="1.30"
             android:layout_height="wrap_content"
-            android:layout_marginStart="300dp" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:scaleX="1.30"
+            android:scaleY="1.30" />
 
 
     </RelativeLayout>
