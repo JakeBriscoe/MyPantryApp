@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.R;
-import com.example.mypantryapp.domain.ExampleItem;
+import com.example.mypantryapp.domain.ProductItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,8 @@ import java.util.List;
  * Adapter exists so products can be displayed dynamically in AddItemFragment.
  */
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ExampleViewHolder> implements Filterable {
-    private ArrayList<ExampleItem> mExampleList;
-    private List<ExampleItem> exampleListFull;
+    private ArrayList<ProductItem> mExampleList;
+    private List<ProductItem> exampleListFull;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -70,7 +70,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ExampleV
      * Constructor to set the example list
      * @param exampleList the exampleList passed
      */
-    public ProductAdapter(ArrayList<ExampleItem> exampleList) {
+    public ProductAdapter(ArrayList<ProductItem> exampleList) {
         mExampleList = exampleList;
         exampleListFull = new ArrayList<>(exampleList);
     }
@@ -96,7 +96,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ExampleV
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
         // Identify which item has been pressed.
-        ExampleItem currentItem = mExampleList.get(position);
+        ProductItem currentItem = mExampleList.get(position);
 
         // Set the text to correspond to said item.
         holder.mNameTextView.setText(currentItem.getName());
@@ -114,7 +114,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ExampleV
         return mExampleList.size();
     }
 
-    public void filterList(ArrayList<ExampleItem> filteredList) {
+    public void filterList(ArrayList<ProductItem> filteredList) {
         mExampleList = filteredList;
         notifyDataSetChanged();
     }
@@ -127,14 +127,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ExampleV
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            List<ExampleItem> filteredList = new ArrayList<>();
+            List<ProductItem> filteredList = new ArrayList<>();
 
             if (charSequence == null || charSequence.length() == 0) {
                 filteredList.addAll(exampleListFull);
             } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
-                for (ExampleItem item : exampleListFull) {
+                for (ProductItem item : exampleListFull) {
                     if (item.getName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }

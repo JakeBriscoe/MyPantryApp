@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.R;
-import com.example.mypantryapp.domain.ExampleItem;
+import com.example.mypantryapp.domain.ProductItem;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Adapter exists so products can be displayed dynamically in AddItemFragment.
  */
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
-    private ArrayList<ExampleItem> mExampleList;
+    private ArrayList<ProductItem> mExampleList;
     private OnItemClickListener mListener;
     private CheckBox checkBox;
 
@@ -81,7 +81,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
      * Constructor to set the example list
      * @param exampleList the exampleList passed
      */
-    public ShoppingListAdapter(ArrayList<ExampleItem> exampleList) {
+    public ShoppingListAdapter(ArrayList<ProductItem> exampleList) {
         mExampleList = exampleList;
     }
 
@@ -107,7 +107,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public void onBindViewHolder(@NonNull ShoppingListViewHolder holder, int position) {
         // Identify which item has been pressed.
-        ExampleItem currentItem = mExampleList.get(position);
+        ProductItem currentItem = mExampleList.get(position);
 
         // Set the text to correspond to said item.
         holder.mNameTextView.setText(currentItem.getName());
@@ -130,7 +130,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
      * @param activity
      */
     public void deleteItem(int position, Activity activity) {
-        ExampleItem mRecentlyDeletedItem = mExampleList.get(position);
+        ProductItem mRecentlyDeletedItem = mExampleList.get(position);
         mExampleList.remove(position);
         notifyItemRemoved(position);
 

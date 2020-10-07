@@ -19,7 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.example.mypantryapp.domain.ExampleItem;
+import com.example.mypantryapp.domain.ProductItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param item the product details
      */
     @Override
-    public void sendDetails(ExampleItem item) {
+    public void sendDetails(ProductItem item) {
         BottomSheetDialog f = new BottomSheetDialog();
         f.show(getSupportFragmentManager(), "bottomSheetTag");
         assert f != null;
@@ -402,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void sendDetailsShoppingList(ExampleItem item) {
+    public void sendDetailsShoppingList(ProductItem item) {
         BottomSheetDialog f = new BottomSheetDialog();
         f.show(getSupportFragmentManager(), "bottomSheetTag");
         f.displayReceivedData(item, false);

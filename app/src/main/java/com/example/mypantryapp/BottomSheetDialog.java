@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentResultListener;
 
-import com.example.mypantryapp.domain.ExampleItem;
+import com.example.mypantryapp.domain.ProductItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -309,7 +309,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
      * @param item the item selected
      * @param isAddItem true if displayReceived data comes from AddItemFragment, false otherwise
      */
-    protected void displayReceivedData(ExampleItem item, boolean isAddItem) {
+    protected void displayReceivedData(ProductItem item, boolean isAddItem) {
         nameText = item.getName();
         brandText = item.getBrand();
         idText = item.getId();

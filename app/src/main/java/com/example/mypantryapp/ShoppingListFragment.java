@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.adapter.ShoppingListAdapter;
-import com.example.mypantryapp.domain.ExampleItem;
+import com.example.mypantryapp.domain.ProductItem;
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,7 +43,7 @@ public class ShoppingListFragment extends Fragment {
     private ShoppingListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    ArrayList<ExampleItem> exampleList = new ArrayList<>();
+    ArrayList<ProductItem> exampleList = new ArrayList<>();
 
     String shoppinglistRef;
     SendDetailsShoppingList SM;
@@ -108,7 +108,7 @@ public class ShoppingListFragment extends Fragment {
                                                     String brand = product.getBrand();
                                                     //String id = documentSnapshot.getId();
                                                     String vol = product.getIngredients();
-                                                    exampleList.add(new ExampleItem(name, brand, id, vol));
+                                                    exampleList.add(new ProductItem(name, brand, id, vol));
 
                                                     if (exampleList.size() == queryDocumentSnapshots.size()) {
                                                         mAdapter = new ShoppingListAdapter(exampleList);
@@ -119,7 +119,7 @@ public class ShoppingListFragment extends Fragment {
                                                             @Override
                                                             public void onItemClick(int position) {
                                                                 // Open the bottom modal dialog
-                                                                ExampleItem selected = exampleList.get(position);
+                                                                ProductItem selected = exampleList.get(position);
                                                                 SM.sendDetailsShoppingList(selected);
                                                             }
                                                         });
@@ -176,6 +176,6 @@ public class ShoppingListFragment extends Fragment {
      * ShoppingListFragment to BottomSheetDialog.
      */
     public interface SendDetailsShoppingList {
-        void sendDetailsShoppingList(ExampleItem item);
+        void sendDetailsShoppingList(ProductItem item);
     }
 }

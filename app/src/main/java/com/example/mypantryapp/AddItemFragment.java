@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.adapter.ProductAdapter;
-import com.example.mypantryapp.domain.ExampleItem;
+import com.example.mypantryapp.domain.ProductItem;
 import com.example.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -45,7 +45,7 @@ public class AddItemFragment extends Fragment {
     private ProductAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
-    private ArrayList<ExampleItem> exampleList = new ArrayList<>();
+    private ArrayList<ProductItem> exampleList = new ArrayList<>();
 
     /**
      * Add onclick listeners to static items
@@ -170,7 +170,7 @@ public class AddItemFragment extends Fragment {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Product product = documentSnapshot.toObject(Product.class);
                             // Add each individual product to exampleList
-                            exampleList.add(new ExampleItem(product.getName(),
+                            exampleList.add(new ProductItem(product.getName(),
                                     product.getBrand(),
                                     documentSnapshot.getId(),
                                     (String) documentSnapshot.get("volume")));
@@ -195,7 +195,7 @@ public class AddItemFragment extends Fragment {
                             @Override
                             public void onItemClick(int position) {
                                 // Open the bottom modal dialog
-                                ExampleItem selected = exampleList.get(position);
+                                ProductItem selected = exampleList.get(position);
                                 SM.sendDetails(selected);
                             }
                         });
@@ -224,7 +224,7 @@ public class AddItemFragment extends Fragment {
      * AddItemFragment to BottomSheetDialog.
      */
     public interface SendDetails {
-        void sendDetails(ExampleItem item);
+        void sendDetails(ProductItem item);
     }
 }
 
