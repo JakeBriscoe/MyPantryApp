@@ -44,7 +44,8 @@
             android:text="Your pantry is empty! Add to your pantry by clicking 'Add Item' below."
             android:textAlignment="center"
             android:textColor="@color/dark"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPantryItems"

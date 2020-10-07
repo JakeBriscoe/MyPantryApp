@@ -1,5 +1,7 @@
 package com.example.mypantryapp.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypantryapp.R;
 import com.example.mypantryapp.domain.ExampleItem;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -116,5 +122,34 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public int getItemCount() {
         return mExampleList.size();
+    }
+
+    /**
+     * Remove item from dynamic list as well as underlying database
+     * @param position
+     * @param activity
+     */
+    public void deleteItem(int position, Activity activity) {
+        ExampleItem mRecentlyDeletedItem = mExampleList.get(position);
+        mExampleList.remove(position);
+        notifyItemRemoved(position);
+
+        String shoppinglistRef = activity.getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+                .getString("shoppinglistRef", null);
+        String id = mRecentlyDeletedItem.getId();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("shoppinglists").document(shoppinglistRef).collection("products")
+                .whereEqualTo("productRef", id)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                            if (doc.exists()) {  //wait for response
+                                doc.getReference().delete();
+                            }
+                        }
+                    }
+                });
     }
 }

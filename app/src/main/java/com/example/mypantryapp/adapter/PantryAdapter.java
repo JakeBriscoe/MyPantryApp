@@ -29,8 +29,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     private ArrayList<PantryItem> mExampleList;
     private List<PantryItem> exampleListFull;
     private PantryAdapter.OnItemClickListener mListener;
-    private PantryItem mRecentlyDeletedItem;
-    private int mRecentlyDeletedItemPosition;
 
     @Override
     public Filter getFilter() {
@@ -212,8 +210,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
      * @param activity
      */
     public void deleteItem(int position, Activity activity) {
-        mRecentlyDeletedItem = mExampleList.get(position);
-        mRecentlyDeletedItemPosition = position;
+        PantryItem mRecentlyDeletedItem = mExampleList.get(position);
         mExampleList.remove(position);
         notifyItemRemoved(position);
 
