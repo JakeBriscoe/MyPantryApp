@@ -44,8 +44,7 @@ public class ShoppingListFragment extends Fragment {
     ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
     String shoppinglistRef;
-
-
+    SendDetailsShoppingList SM;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_shopping_list, container, false);
@@ -113,6 +112,15 @@ public class ShoppingListFragment extends Fragment {
                                                         mAdapter = new ShoppingListAdapter(exampleList);
                                                         mRecyclerView.setLayoutManager(mLayoutManager);
                                                         mRecyclerView.setAdapter(mAdapter);
+
+                                                        mAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
+                                                            @Override
+                                                            public void onItemClick(int position) {
+                                                                // Open the bottom modal dialog
+                                                                ExampleItem selected = exampleList.get(position);
+                                                                SM.sendDetailsShoppingList(selected);
+                                                            }
+                                                        });
                                                     }
 
                                                 } else {
@@ -124,12 +132,32 @@ public class ShoppingListFragment extends Fragment {
                                                 Log.d(TAG, "get failed with ", task.getException());
                                             }
                                         }
-                                        // These need to be set so that the products are displayed
-
                                     });
                         }
 
                     }
                 });
+    }
+
+    /**
+     * Send the product data to BottomSheetDialog
+     * @param context the context
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            SM = (SendDetailsShoppingList) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+    }
+
+    /**
+     * Interface that MainActivity must implement to send data from
+     * ShoppingListFragment to BottomSheetDialog.
+     */
+    public interface SendDetailsShoppingList {
+        void sendDetailsShoppingList(ExampleItem item);
     }
 }

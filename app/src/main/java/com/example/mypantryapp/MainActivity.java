@@ -43,7 +43,8 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
                                                                 ScanIngredientsFragment.SendMessage,
                                                                 AddItemFragment.SendDetails,
-                                                                SettingsFragment.UpdateUser{
+                                                                SettingsFragment.UpdateUser,
+                                                                ShoppingListFragment.SendDetailsShoppingList {
     // Declarations
     private DrawerLayout drawer;
     private BottomNavigationView bottomNav;
@@ -375,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         BottomSheetDialog f = new BottomSheetDialog();
         f.show(getSupportFragmentManager(), "bottomSheetTag");
         assert f != null;
-        f.displayReceivedData(item);
+        f.displayReceivedData(item, true);
     }
 
     /**
@@ -399,5 +400,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // TODO: add content to use Pantry data
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(name);
+    }
+
+    @Override
+    public void sendDetailsShoppingList(ExampleItem item) {
+        BottomSheetDialog f = new BottomSheetDialog();
+        f.show(getSupportFragmentManager(), "bottomSheetTag");
+        f.displayReceivedData(item, false);
     }
 }

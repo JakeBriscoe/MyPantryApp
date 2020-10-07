@@ -3,6 +3,7 @@ package com.example.mypantryapp.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder> {
     private ArrayList<ExampleItem> mExampleList;
     private OnItemClickListener mListener;
+    private CheckBox checkBox;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -32,7 +34,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         public TextView mNameTextView;
         public TextView mBrandTextView;
         public TextView mIdTextView;
-        public TextView mVolumeTextView;
+        public CheckBox mCheckBox;
 
         /**
          * Constructor to initialise TextViews and set onclick listener.
@@ -45,7 +47,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             mNameTextView = itemView.findViewById(R.id.checkItem_productName);
             mBrandTextView = itemView.findViewById(R.id.checkItem_brand);
             mIdTextView = itemView.findViewById(R.id.checkItem_id);
-            //mVolumeTextView = itemView.findViewById(R.id.checkItem_volume);
+            mCheckBox = itemView.findViewById(R.id.checkItem_box);
 
             // Set the onclick listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +58,13 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
+                    }
+
+                    // Toggle check item
+                    if (mCheckBox.isSelected()) {
+                        mCheckBox.setSelected(false);
+                    } else {
+                        mCheckBox.setChecked(true);
                     }
                 }
             });
@@ -98,7 +107,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.mNameTextView.setText(currentItem.getName());
         holder.mBrandTextView.setText(currentItem.getBrand());
         holder.mIdTextView.setText(currentItem.getId());
-        //holder.mVolumeTextView.setText(currentItem.getVolume());
     }
 
     /**

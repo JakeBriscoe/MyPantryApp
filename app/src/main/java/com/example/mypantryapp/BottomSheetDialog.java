@@ -46,7 +46,10 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     private String ingredients;
     private String dietWarningsText;
     private Integer shelfLife;
+    private boolean isAddItem;
     Integer newQ;
+
+    Button bottomModalShoppingList;
 
     //Pantry Product Map
     private static final String KEY_PRODUCTREF = "productRef";
@@ -149,7 +152,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         // If the 'add to shopping list' button is pressed, the user should be notified that the product
         // has been added to their shopping list.
-        final Button bottomModalShoppingList = v.findViewById(R.id.bottomModalShoppingList);
+        bottomModalShoppingList = v.findViewById(R.id.bottomModalShoppingList);
         bottomModalShoppingList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,17 +279,23 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
+        if (!isAddItem) {
+            bottomModalShoppingList.setVisibility(View.GONE);
+        }
+
     }
 
     /**
      * This method is called in MainActivity to receive data from AddItemFragment.
      *
      * @param item the item selected
+     * @param isAddItem true if displayReceived data comes from AddItemFragment, false otherwise
      */
-    protected void displayReceivedData(ExampleItem item) {
+    protected void displayReceivedData(ExampleItem item, boolean isAddItem) {
         nameText = item.getName();
         brandText = item.getBrand();
         idText = item.getId();
+        this.isAddItem = isAddItem;
     }
 
 }
