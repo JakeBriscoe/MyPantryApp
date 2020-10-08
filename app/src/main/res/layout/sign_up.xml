@@ -8,7 +8,7 @@
     android:background="@color/colorPrimary"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    tools:context="com.example.mypantryapp.SignUpActivity">
+    tools:context="com.info301.mypantryapp.SignUpActivity">
 
 
     <ImageView
