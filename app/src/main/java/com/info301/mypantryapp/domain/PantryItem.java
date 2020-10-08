@@ -1,5 +1,7 @@
 package com.info301.mypantryapp.domain;
 
+import com.info301.mypantryapp.CheckIngredients;
+
 public class PantryItem {
     private String mName;
     private String mBrand;
@@ -7,8 +9,7 @@ public class PantryItem {
     private String mVolume;
     private String mQuantity;
     private String mIngredients;
-    private String mDietTitle;
-    private String mDiet;
+    private CheckIngredients mCheckIngredients;
 
     /**
      * Constructor to set the details
@@ -17,15 +18,14 @@ public class PantryItem {
      * @param id the product id
      */
     public PantryItem(String name, String brand, String id, String volume, String quantity, String ingredients,
-                      String dietTitle, String diet) {
+                      CheckIngredients checkIngredients) {
         mName = name;
         mBrand = brand;
         mId = id;
         mVolume = volume;
         mQuantity = quantity;
         mIngredients = ingredients;
-        mDietTitle = dietTitle;
-        mDiet = diet;
+        mCheckIngredients = checkIngredients;
     }
 
     public PantryItem() {
@@ -71,11 +71,7 @@ public class PantryItem {
         return mIngredients;
     }
 
-    public String getDietTitle() {
-        return mDietTitle;
-    }
-
-    public String getDiet() {
-        return mDiet;
+    public CheckIngredients getCheckIngredients() {
+        return mCheckIngredients;
     }
 }

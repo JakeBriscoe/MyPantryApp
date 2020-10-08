@@ -56,8 +56,9 @@ public class HomeFragment extends Fragment {
 
     /**
      * Add onclick listeners to static items
-     * @param inflater inflater
-     * @param container container
+     *
+     * @param inflater           inflater
+     * @param container          container
      * @param savedInstanceState the saved instance state
      * @return the view
      */
@@ -140,25 +141,12 @@ public class HomeFragment extends Fragment {
                                                     String brand = product.getBrand();
                                                     String volume = (String) document.get("volume");
                                                     String ingredients = (String) document.get("ingredients");
-                                                    String dietTitle = "";
-                                                    String diet = "";
 
-                                                    if (!ingredients.equals("")) {
-                                                        diet = checkIngredients.checkIngredients(ingredients);
-                                                        if (diet.equals("No dietary warnings")) {
-                                                            // Then diet is compatible
-                                                            dietTitle = "Compatible with your dietary preferences!";
-                                                        } else {
-                                                            // Then diet is not compatible
-                                                            dietTitle = "Incompatible with your dietary preferences:";
-                                                        }
-                                                    }
-
-                                                    PantryItem pantryItem = new PantryItem(name, brand, id, volume, quantity, ingredients, dietTitle, diet);
+                                                    PantryItem pantryItem = new PantryItem(name, brand, id, volume, quantity, ingredients, checkIngredients);
 
                                                     exampleList.add(pantryItem);
                                                     String test = name + " " + brand + " " + id + " " + volume + " " + quantity;
-                                                    if (exampleList.size() == queryDocumentSnapshots.size()){
+                                                    if (exampleList.size() == queryDocumentSnapshots.size()) {
                                                         mAdapter = new PantryAdapter(exampleList);
                                                         mRecyclerView.setLayoutManager(mLayoutManager);
                                                         mRecyclerView.setAdapter(mAdapter);
@@ -200,6 +188,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Initialise the views required for the dynamic CardView
+     *
      * @param v view
      */
     private void iniRecyclerViews(View v) {
@@ -215,6 +204,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Search listener
+     *
      * @param searchView searchView
      */
     private void search(SearchView searchView) {
@@ -231,20 +221,4 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
-//    private void deleteDocument(String id) {
-//        db.collection("pantries").document(pantryRef).collection("products")
-//                .document(id)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        if(documentSnapshot.exists()) {  //wait for response
-//                            documentSnapshot.getReference().delete();
-//                            mAdapter.notifyDataSetChanged();
-//                        }
-//                    }
-//                });
-//
-//    }
 }

@@ -2,6 +2,7 @@ package com.info301.mypantryapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.info301.mypantryapp.R;
-import com.info301.mypantryapp.domain.PantryItem;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.info301.mypantryapp.R;
+import com.info301.mypantryapp.domain.PantryItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,8 +157,19 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             holder.mDietTextView.setVisibility(View.GONE);
         } else {
             holder.mIngredientsTextView.setText(ingredients);
-            holder.mDietTitleTextView.setText(currentItem.getDietTitle());
-            holder.mDietTextView.setText(currentItem.getDiet());
+            String diet = currentItem.getCheckIngredients().checkIngredients(ingredients);
+            String dietTitle;
+            if (diet.equals("No dietary warnings")) {
+                // Then diet is compatible
+                dietTitle = "Compatible with your dietary preferences!";
+                holder.mDietTextView.setVisibility(View.GONE);
+            } else {
+                // Then diet is not compatible
+                dietTitle = "Incompatible with your dietary preferences:";
+                holder.mDietTitleTextView.setTypeface(null, Typeface.BOLD);
+                holder.mDietTextView.setText(diet);
+            }
+            holder.mDietTitleTextView.setText(dietTitle);
         }
     }
 
