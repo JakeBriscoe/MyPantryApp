@@ -377,7 +377,7 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
 //                        Toast.makeText(getContext(), "Your details are saved!", Toast.LENGTH_SHORT).show();
-                        UU.setUser(name, email);
+                        UU.setUser(name, email, String.valueOf(settingsPantryName.getText()));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -410,7 +410,7 @@ public class SettingsFragment extends Fragment {
      * updated accordingly.
      */
     interface UpdateUser {
-        void setUser(String name, String email);
+        void setUser(String name, String email, String pantryName);
     }
 
 

@@ -376,15 +376,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param email the user's email
      */
     @Override
-    public void setUser(String name, String email) {
+    public void setUser(String name, String email, String pantryName) {
         TextView headerUser = findViewById(R.id.headerUser);
         TextView headerEmail = findViewById(R.id.headerEmail);
         headerUser.setText(name);
         headerEmail.setText(email);
 
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
         MenuItem nav_pantry = menu.findItem(R.id.nav_pantry);
+        nav_pantry.setTitle(pantryName);
+
         // TODO: reflect email change in Firestore authentication
         currentUser = mAuth.getCurrentUser();
         currentUser.verifyBeforeUpdateEmail(email.trim());
