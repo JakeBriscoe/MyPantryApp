@@ -203,6 +203,7 @@ public class ScanBarcodeFragment extends Fragment {
                                                             results.putString("bundleBrand", (String) document.get("brand"));
                                                             results.putString("bundleId", document.getId());
                                                             results.putLong("bundleShelfLife", (Long) document.get("shelfLife"));
+                                                            results.putString("bundleDietWarnings", dietWarnings);
                                                             getParentFragmentManager().setFragmentResult("requestProductDetails", results);
                                                         }
                                                     }
