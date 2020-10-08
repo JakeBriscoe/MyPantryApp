@@ -3,7 +3,6 @@ package com.info301.mypantryapp;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentResultListener;
 
-import com.info301.mypantryapp.domain.ProductItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.info301.mypantryapp.domain.ProductItem;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -229,6 +227,13 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 nameText = bundle.getString("bundleName");
                 brandText = bundle.getString("bundleBrand");
                 idText = bundle.getString("bundleId");
+                dietWarningsText = bundle.getString("bundleDietWarnings");
+                Long sLife = bundle.getLong("bundleShelfLife");
+                if (sLife != null) {
+                    shelfLife = sLife.intValue();
+                } else {
+                    shelfLife = 1000;
+                }
             }
         });
 
@@ -240,45 +245,16 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             nameTextView.setText(nameText);
         }
 
-        // Get the ingredients from the database using the product id
-        DocumentReference docRef = db.collection("products").document(idText);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        ingredients = (String) document.get("ingredients");
-                        Long sLife = (Long) document.get("shelfLife");
-                        if (sLife != null) {
-                            shelfLife = sLife.intValue();
-                        } else {
-                            shelfLife = 1000;
-                        }
-
-                        if (ingredients != null) {
-                            dietWarningsText = checkIngredients.checkIngredients(ingredients);
-
-                            if (dietWarningsText.equals("No dietary warnings")) {
-                                // Then diet is compatible
-                                dietTitleTextView.setText("Compatible with your dietary preferences!");
-                            } else {
-                                // Then diet is not compatible
-                                dietTitleTextView.setText("Incompatible with your dietary preferences:");
-                                dietTitleTextView.setTypeface(null, Typeface.BOLD);
-                                dietWarningsTextView.setVisibility(View.VISIBLE);
-                                dietWarningsTextView.setText(dietWarningsText);
-                            }
-                        }
-//                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d("TAG", "No such document");
-                    }
-                } else {
-                    Log.d("TAG", "get failed with ", task.getException());
-                }
-            }
-        });
+        if (dietWarningsText.equals("No dietary warnings")) {
+            // Then diet is compatible
+            dietTitleTextView.setText("Compatible with your dietary preferences!");
+        } else {
+            // Then diet is not compatible
+            dietTitleTextView.setText("Incompatible with your dietary preferences:");
+            dietTitleTextView.setTypeface(null, Typeface.BOLD);
+            dietWarningsTextView.setVisibility(View.VISIBLE);
+            dietWarningsTextView.setText(dietWarningsText);
+        }
 
         if (!isAddItem) {
             bottomModalShoppingList.setVisibility(View.GONE);
@@ -309,11 +285,35 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
      * @param item the item selected
      * @param isAddItem true if displayReceived data comes from AddItemFragment, false otherwise
      */
-    protected void displayReceivedData(ProductItem item, boolean isAddItem) {
+//    protected void displayReceivedData(ProductItem item, boolean isAddItem) {
+//        nameText = item.getName();
+//        brandText = item.getBrand();
+//        idText = item.getId();
+//        this.isAddItem = isAddItem;
+//        dietWarningsText = item.getDietWarnings();
+//        Long sLife = item.getShelfLife();
+//        if (sLife != null) {
+//            shelfLife = sLife.intValue();
+//        } else {
+//            shelfLife = 1000;
+//        }
+//    }
+
+    protected void displayReceivedData(ProductItem item, boolean isAddItem, CheckIngredients checkIngredients) {
         nameText = item.getName();
         brandText = item.getBrand();
         idText = item.getId();
         this.isAddItem = isAddItem;
+        dietWarningsText = item.getDietWarnings();
+        Long sLife = item.getShelfLife();
+        if (sLife != null) {
+            shelfLife = sLife.intValue();
+        } else {
+            shelfLife = 1000;
+        }
+
+        dietWarningsText = checkIngredients.checkIngredients(item.getDietWarnings());
+
     }
 
 }

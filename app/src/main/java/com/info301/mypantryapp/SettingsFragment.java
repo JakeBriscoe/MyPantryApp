@@ -62,6 +62,7 @@ public class SettingsFragment extends Fragment {
     CheckBox checkBoxSoy;
     EditText settingsPantryName;
     Button addButton;
+    BottomNavigationView navBar;
 
 
     UpdateUser UU;
@@ -79,7 +80,7 @@ public class SettingsFragment extends Fragment {
 
         // Make sure that the bottom nav is not displayed.
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        BottomNavigationView navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
+        navBar = getActivity().findViewById(R.id.bottom_navigation_drawer);
         navBar.setVisibility(View.GONE);
 
         // Initialise the view
@@ -211,13 +212,11 @@ public class SettingsFragment extends Fragment {
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO check this!!
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
                     setItem(view);
                     navigationView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                     navigationView.setCheckedItem(R.id.nav_pantry);
-
                 }
             });
 
@@ -288,6 +287,7 @@ public class SettingsFragment extends Fragment {
                     setItem(view);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
                     navigationView.setCheckedItem(R.id.nav_pantry);
+                    navBar.setSelectedItemId(R.id.nav_home);
                 }
             });
         }

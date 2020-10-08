@@ -43,6 +43,7 @@ public class ScanBarcodeFragment extends Fragment {
     Button btnConfirm;
     Button btnCancel;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CheckIngredients checkIngredients = new CheckIngredients();
 
     /**
      * Set up any static views
@@ -192,13 +193,16 @@ public class ScanBarcodeFragment extends Fragment {
                                                     // and display the product details.
                                                     for (DocumentSnapshot document : task.getResult()) {
                                                         if (document.exists()) {
+                                                            String dietWarnings = checkIngredients.checkIngredients((String) document.get("ingredients"));
+
                                                             BottomSheetDialog f = new BottomSheetDialog();
                                                             f.show(getFragmentManager(), "bottomSheetTag");
                                                             // Send the barcode information to BottomSheetDialog
                                                             Bundle results = new Bundle();
                                                             results.putString("bundleName", (String) document.get("name"));
                                                             results.putString("bundleBrand", (String) document.get("brand"));
-                                                            results.putString("bundleId", (String) document.getId());
+                                                            results.putString("bundleId", document.getId());
+                                                            results.putLong("bundleShelfLife", (Long) document.get("shelfLife"));
                                                             getParentFragmentManager().setFragmentResult("requestProductDetails", results);
                                                         }
                                                     }

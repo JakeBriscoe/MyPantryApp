@@ -15,15 +15,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.info301.mypantryapp.adapter.ProductAdapter;
-import com.info301.mypantryapp.domain.ProductItem;
-import com.info301.mypantryapp.domain.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.info301.mypantryapp.adapter.ProductAdapter;
+import com.info301.mypantryapp.domain.Product;
+import com.info301.mypantryapp.domain.ProductItem;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,6 +46,7 @@ public class AddItemFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     SendDetails SM;
     private ArrayList<ProductItem> exampleList = new ArrayList<>();
+    CheckIngredients checkIngredients = new CheckIngredients();
 
     /**
      * Add onclick listeners to static items
@@ -173,7 +174,9 @@ public class AddItemFragment extends Fragment {
                             exampleList.add(new ProductItem(product.getName(),
                                     product.getBrand(),
                                     documentSnapshot.getId(),
-                                    (String) documentSnapshot.get("volume")));
+                                    (String) documentSnapshot.get("volume"),
+                                    (String) documentSnapshot.get("ingredients"),
+                                    (Long) documentSnapshot.get("shelfLife")));
 
                             Long bCode = product.getBarcodeNum();
                             if (bCode != 0) {
@@ -196,7 +199,7 @@ public class AddItemFragment extends Fragment {
                             public void onItemClick(int position) {
                                 // Open the bottom modal dialog
                                 ProductItem selected = exampleList.get(position);
-                                SM.sendDetails(selected);
+                                SM.sendDetails(selected, true, checkIngredients);
                             }
                         });
 
@@ -224,7 +227,7 @@ public class AddItemFragment extends Fragment {
      * AddItemFragment to BottomSheetDialog.
      */
     public interface SendDetails {
-        void sendDetails(ProductItem item);
+        void sendDetails(ProductItem item, boolean isAddItem, CheckIngredients checkIngredients);
     }
 }
 

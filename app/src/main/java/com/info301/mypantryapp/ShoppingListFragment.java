@@ -47,6 +47,7 @@ public class ShoppingListFragment extends Fragment {
 
     String shoppinglistRef;
     SendDetailsShoppingList SM;
+    CheckIngredients checkIngredients = new CheckIngredients();
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_shopping_list, container, false);
@@ -108,7 +109,9 @@ public class ShoppingListFragment extends Fragment {
                                                     String brand = product.getBrand();
                                                     //String id = documentSnapshot.getId();
                                                     String vol = product.getIngredients();
-                                                    exampleList.add(new ProductItem(name, brand, id, vol));
+                                                    String dietWarnings = checkIngredients.checkIngredients(product.getIngredients());
+                                                    Long shelfLife = product.getShelfLife();
+                                                    exampleList.add(new ProductItem(name, brand, id, vol, dietWarnings, shelfLife));
 
                                                     if (exampleList.size() == queryDocumentSnapshots.size()) {
                                                         mAdapter = new ShoppingListAdapter(exampleList);
@@ -120,7 +123,7 @@ public class ShoppingListFragment extends Fragment {
                                                             public void onItemClick(int position) {
                                                                 // Open the bottom modal dialog
                                                                 ProductItem selected = exampleList.get(position);
-                                                                SM.sendDetailsShoppingList(selected);
+                                                                SM.sendDetailsShoppingList(selected, checkIngredients);
                                                             }
                                                         });
 
@@ -176,6 +179,6 @@ public class ShoppingListFragment extends Fragment {
      * ShoppingListFragment to BottomSheetDialog.
      */
     public interface SendDetailsShoppingList {
-        void sendDetailsShoppingList(ProductItem item);
+        void sendDetailsShoppingList(ProductItem item, CheckIngredients checkIngredients);
     }
 }

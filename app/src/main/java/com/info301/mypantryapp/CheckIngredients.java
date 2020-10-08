@@ -1,5 +1,7 @@
 package com.info301.mypantryapp;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +30,9 @@ public class CheckIngredients {
     public CheckIngredients () {
         // Stores all diets and blacklisted ingredients from firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userId = currentUser.getUid(); //get unique user id
         db.collection("dietary")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -38,39 +43,27 @@ public class CheckIngredients {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                  String name = document.getString("name");
+                                 String id = document.getId();
                                  ArrayList<String> blacklist = (ArrayList<String>) document.get("blacklist");
-                                 diets.put(name, blacklist);
-                                 documentNames.put(document.getId(), name);
-                            }
-                        }
-                    }
-                });
 
-        // Pulls all user selected diets, removes all diets the user has not selected from diet list
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        String userId = currentUser.getUid(); //get unique user id
-        db.collection("users")
-                .whereEqualTo("userAuthId", userId) //looks for the corresponding value with the field
-                // in the database
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                Map<String, Object> docData = document.getData();
-                                assert docData != null;
-                                for (Map.Entry<String, Object> entry : docData.entrySet()) {
-                                    String field = entry.getKey();
-                                    Object value = entry.getValue();
-                                    // checks if field is a diet, if value false remove from diet checking
-                                    if (documentNames.containsKey(field) && !((Boolean) value)) {
-                                        String diet = documentNames.get(field); // Diet to remove
-                                        diets.remove(diet);
-                                    }
-                                }
+                                db.collection("users")
+                                        .whereEqualTo("userAuthId", userId) //looks for the corresponding value with the field
+                                        // in the database
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+
+                                                    for (DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                                        boolean checkIfUserDiet = (boolean) document.get(id);
+                                                        if (checkIfUserDiet) {
+                                                            diets.put(name, blacklist);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
                             }
                         }
                     }
@@ -91,6 +84,7 @@ public class CheckIngredients {
         StringBuilder dietWarnings = new StringBuilder();
         for (Map.Entry<String, ArrayList<String>> entry : diets.entrySet()) {
             String name = entry.getKey();
+            Log.i("DIETS", name);
             ArrayList<String> blacklist = entry.getValue();
             for (String ingr : ingrs) {
                 ingr = ingr.toLowerCase();

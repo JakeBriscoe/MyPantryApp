@@ -206,11 +206,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_pantry:
                 // Pop back stack if fragment has been created, create it otherwise
-                boolean fragmentPopped = getSupportFragmentManager().popBackStackImmediate("HomeFragment", 0);
-                if (!fragmentPopped){ //fragment not in back stack, create it.
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new HomeFragment()).addToBackStack("HomeFragment").commit();
-                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HomeFragment()).addToBackStack("HomeFragment").commit();
                 bottomNav.setSelectedItemId(R.id.nav_home);
                 break;
             case R.id.nav_settings:
@@ -244,12 +241,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     switch (item.getItemId()) {
                         case R.id.nav_home:
                             if (!(currentFragment instanceof HomeFragment)) {
-                                // Pop back stack if fragment has been created, create it otherwise
-                                boolean fragmentPopped = getSupportFragmentManager().popBackStackImmediate("HomeFragment", 0);
-                                if (!fragmentPopped){ //fragment not in back stack, create it.
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                            new HomeFragment()).addToBackStack("HomeFragment").commit();
-                                }
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        new HomeFragment()).addToBackStack("HomeFragment").commit();
                             }
                             break;
 
@@ -371,11 +364,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param item the product details
      */
     @Override
-    public void sendDetails(ProductItem item) {
+    public void sendDetails(ProductItem item, boolean isAddItem, CheckIngredients checkIngredients) {
         BottomSheetDialog f = new BottomSheetDialog();
         f.show(getSupportFragmentManager(), "bottomSheetTag");
-        assert f != null;
-        f.displayReceivedData(item, true);
+        f.displayReceivedData(item, true, checkIngredients);
     }
 
     /**
@@ -390,6 +382,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerUser.setText(name);
         headerEmail.setText(email);
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_pantry = menu.findItem(R.id.nav_pantry);
         // TODO: reflect email change in Firestore authentication
         currentUser = mAuth.getCurrentUser();
         currentUser.verifyBeforeUpdateEmail(email.trim());
@@ -402,9 +397,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void sendDetailsShoppingList(ProductItem item) {
+    public void sendDetailsShoppingList(ProductItem item, CheckIngredients checkIngredients) {
         BottomSheetDialog f = new BottomSheetDialog();
         f.show(getSupportFragmentManager(), "bottomSheetTag");
-        f.displayReceivedData(item, false);
+        f.displayReceivedData(item, false, checkIngredients);
     }
 }

@@ -8,6 +8,8 @@ public class ProductItem {
     private String mBrand;
     private String mId;
     private String mVolume;
+    private String mIngredients;
+    private Long mShelfLife;
 
     /**
      * Constructor to set the details
@@ -15,11 +17,29 @@ public class ProductItem {
      * @param brand the product brand
      * @param id the product id
      */
-    public ProductItem(String name, String brand, String id, String volume) {
+    public ProductItem(String name, String brand, String id, String volume, String ingredients, Long shelfLife) {
         mName = name;
         mBrand = brand;
         mId = id;
         mVolume = volume;
+        mIngredients = ingredients;
+        mShelfLife = shelfLife;
+    }
+
+    /**
+     * Get the product shelf life
+     * @return diet warnings
+     */
+    public Long getShelfLife() {
+        return mShelfLife;
+    }
+
+    /**
+     * Get the product ingredients
+     * @return ingredients
+     */
+    public String getDietWarnings() {
+        return mIngredients;
     }
 
     /**
